@@ -20,6 +20,13 @@
                 android:maxLines="2"/>
         </TableRow>
         <TableRow>
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds ="true"
+                android:src="@drawable/icons8_person_24"/>
             <android.support.design.widget.TextInputLayout
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -44,10 +51,18 @@
                 android:text="@string/error_invalid_email"/>
         </TableRow>
         <TableRow>
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds ="true"
+                android:src="@drawable/icons8_password_24"/>
             <android.support.design.widget.TextInputLayout
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
                 <EditText
                     android:id="@+id/activity_login_et_password"
                     android:layout_width="match_parent"
@@ -69,7 +84,7 @@
         </TableRow>
         <TableRow>
             <CheckBox
-                android:id="@+id/activity_login_chk_remember"
+                android:id="@+id/activity_login_chk_remember_me"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -83,7 +98,8 @@
                 android:id="@+id/activity_login_btn_sign_in"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:text="@string/action_sign_in"/>
+                android:text="@string/action_sign_in"
+                android:drawableLeft="@drawable/icons8_import_24"/>
         </TableRow>
         <TableRow>
             <TextView
@@ -97,6 +113,5 @@
                 android:text="@string/error_incorrect_credentials"/>
         </TableRow>
     </TableLayout>
-
 
 </android.support.constraint.ConstraintLayout>

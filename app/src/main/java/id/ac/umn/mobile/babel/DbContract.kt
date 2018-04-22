@@ -53,14 +53,18 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
     class Items : BaseColumns{
         var TABLE_NAME = "items"
         var COL_ITEM_NAME = "item_name"
-        var COL_QUANTITY = "quantity"
+        var COL_STOCK = "stock"
+        var COL_SAFETY_STOCK = "safety_stock"
         var COL_UNIT_ID = "unit_id"
+        var COL_LOCATION = "location"
         var SYNTAX_CREATE = String.format(
                 "CREATE TABLE %s(%s, %s, %s, %s);",
                 TABLE_NAME,
                 String.format("%s INTEGER PRIMARY KEY AUTOINCREMENT", BaseColumns._ID),
                 String.format("%s VARCHAR(255) NOT NULL", COL_ITEM_NAME),
-                String.format("%s DOUBLE NOT NULL", COL_QUANTITY),
+                String.format("%s DOUBLE NOT NULL", COL_STOCK),
+                String.format("%s DOUBLE", COL_SAFETY_STOCK),
+                String.format("%s VARCHAR(100) NOT NULL", COL_LOCATION),
                 String.format("%s INTEGER NOT NULL FOREIGN KEY REFERENCES units(_id)", COL_UNIT_ID)
         )
         var SYNTAX_DROP = String.format(
@@ -90,14 +94,14 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
             var TABLE_NAME = "item_history_details"
             var COL_ITEM_HISTORY_ID = "item_history_id"
             var COL_ITEM_ID = "item_id"
-            var COL_QUANTITY_CHANGE = "quantity_change"
+            var COL_STOCK_CHANGE = "stock_change"
             var SYNTAX_CREATE = String.format(
                     "CREATE TABLE %s(%s, %s, %s, %s);",
                     TABLE_NAME,
                     String.format("%s INTEGER PRIMARY KEY AUTOINCREMENT", BaseColumns._ID),
                     String.format("%s INTEGER NOT NULL FOREIGN KEY REFERENCES item_histories(_id)", COL_ITEM_HISTORY_ID),
                     String.format("%s INTEGER NOT NULL FOREIGN KEY REFERENCES items(_id)", COL_ITEM_ID),
-                    String.format("%s DOUBLE", COL_QUANTITY_CHANGE)
+                    String.format("%s DOUBLE", COL_STOCK_CHANGE)
             )
             var SYNTAX_DROP = String.format(
                     "DROP TABLE IF EXISTS %s;",

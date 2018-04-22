@@ -1,10 +1,13 @@
 package id.ac.umn.mobile.babel
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 
@@ -13,10 +16,14 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        title = getString(R.string.activity_login_label)
         var emailET = findViewById<EditText>(R.id.activity_login_et_email)
         var emailErrorTV = findViewById<TextView>(R.id.activity_login_tv_email_errors)
         var passwordET = findViewById<EditText>(R.id.activity_login_et_password)
         var passwordErrorTV = findViewById<TextView>(R.id.activity_login_tv_password_errors)
+        var rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me)
+        var credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors)
+        var signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in)
 
         emailET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
@@ -32,5 +39,13 @@ class LoginActivity : AppCompatActivity() {
                 passwordErrorTV.visibility = if(passwordET.text.length<8) View.VISIBLE else View.GONE
             }
         })
+        signInBtn.setOnClickListener {
+//            var valid = true
+//            TODO("IMPLEMENT ONLIEN DATABASE & FETCH")
+//            if(valid)startActivity(Intent(this,UserActivity::class.java))
+//            else credentialErrorTV.visibility = View.VISIBLE
+//            finish()
+            startActivity(Intent(this,UserActivity::class.java))
+        }
     }
 }

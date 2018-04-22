@@ -13,8 +13,13 @@
         <item>000 000 11280</item>
         <item>000 000 08457</item>
     </string-array>
+    <string-array name="credits">
+        <item>https://icons8.com</item>
+        <item>https://google.github.io/material-design-icons/#icons-for-android</item>
+    </string-array>
 
     <!-- Login Activity -->
+    <string name="activity_login_label">Sign In | &app_name;</string>
     <string name="text_welcome"><big><b>Welcome to &app_name;!</b></big>\n<i>Use your &app_name;
         account to continue</i></string>
     <string name="prompt_email">Email</string>
@@ -26,4 +31,16 @@
     <string name="error_incorrect_credentials">Incorrect login credentials</string>
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_login2">Sign in</string>
+
+    <!--User Activity-->
+    <string name="activity_user_label">User Panel | &app_name;</string>
+    <string name="text_logged_in_as"><big><b>Welcome, %1$s!</b></big>\n<i>(as %2$s)</i></string>
+    <string name="action_manage_items">Manage Items</string>
+    <string name="action_find_items">Find Items</string>
+    <string name="action_incoming_items">Incoming Items</string>
+    <string name="action_outgoing_items">Outgoing Items</string>
+    <string name="action_relocate_items">Relocate Items</string>
+    <string name="action_stock_adjustments">Stock Adjustments</string>
+    <string name="action_manage_users">Manage Users</string>
+    <string name="action_view_report">View Report</string>
 </resources>
