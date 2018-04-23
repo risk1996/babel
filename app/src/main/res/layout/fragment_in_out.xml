@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ManageFragment">
+    tools:context=".InOutFragment">
     <TableLayout
         android:id="@+id/fragment_manage_items_tl_layout"
         android:layout_width="match_parent"

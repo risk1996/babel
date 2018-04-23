@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:title="Database Host"
+        android:summary="Host of your database server"
+        android:key="db_host"/>
+    <EditTextPreference
+        android:title="Database Username"
+        android:summary="Username of your database server"
+        android:key="db_username"/>
+    <EditTextPreference
+        android:title="Database Password"
+        android:summary="Password to your account of your database server"
+        android:key="db_password"/>
+    <EditTextPreference
+        android:title="Database Name"
+        android:summary="Name of your database"
+        android:key="db_name"/>
+</PreferenceScreen>

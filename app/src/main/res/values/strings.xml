@@ -18,6 +18,8 @@
         <item>https://google.github.io/material-design-icons/#icons-for-android</item>
     </string-array>
 
+    <!--Preference Settings-->
+
     <!-- Login Activity -->
     <string name="activity_login_label">Sign In | &app_name;</string>
     <string name="text_welcome"><big><b>Welcome to &app_name;!</b></big>\n<i>Use your &app_name;
@@ -31,12 +33,16 @@
     <string name="error_incorrect_credentials">Incorrect login credentials</string>
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_login2">Sign in</string>
+    <string name="menu_settings">Settings</string>
 
     <!--Main Activity-->
     <string name="tab_manage">Manage</string>
     <string name="tab_in_out">In/Out</string>
     <string name="tab_report">Report</string>
     <string name="tab_user">User</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_sign_out">Sign Out</string>
+    <string name="menu_about">About</string>
 
     <!--User Activity-->
     <string name="activity_user_label">User Panel | &app_name;</string>

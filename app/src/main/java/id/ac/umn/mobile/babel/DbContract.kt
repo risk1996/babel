@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 
+class Item(val itemName: String, val stock: Double, val safetyStock: Double, val unit_id: Int, val location: String, var thumbnail: String)
 class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
     class Accounts : BaseColumns{
         var TABLE_NAME = "accounts"
@@ -36,14 +37,18 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
         var TABLE_NAME = "units"
         var COL_MEASURE = "measure"
         var COL_UNIT_NAME = "unit_name"
-        var COL_VALUE = "value"
+        var COL_VALUE = "val"
+        var COL_INCREMENT = "increment"
+        var COL_UNIT_THUMBNAIL = "unit_thumbnail"
         var SYNTAX_CREATE = String.format(
-                "CREATE TABLE %s(%s, %s, %s, %s);",
+                "CREATE TABLE %s(%s, %s, %s, %s, %s, %s, %s);",
                 TABLE_NAME,
                 String.format("%s INTEGER PRIMARY KEY AUTOINCREMENT", BaseColumns._ID),
                 String.format("%s VARCHAR(100) NOT NULL", COL_MEASURE),
                 String.format("%s VARCHAR(100) NOT NULL UNIQUE", COL_UNIT_NAME),
-                String.format("%s DOUBLE NOT NULL", COL_VALUE)
+                String.format("%s DOUBLE NOT NULL", COL_VALUE),
+                String.format("%s DOUBLE NOT NULL", COL_INCREMENT),
+                String.format("%s VARCHAR(100)", COL_UNIT_THUMBNAIL)
         )
         var SYNTAX_DROP = String.format(
                 "DROP TABLE IF EXISTS %s;",
@@ -57,15 +62,17 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
         var COL_SAFETY_STOCK = "safety_stock"
         var COL_UNIT_ID = "unit_id"
         var COL_LOCATION = "location"
+        var COL_ITEM_THUMBNAIL = "item_thumbnail"
         var SYNTAX_CREATE = String.format(
-                "CREATE TABLE %s(%s, %s, %s, %s);",
+                "CREATE TABLE %s(%s, %s, %s, %s, %s, %s, %s);",
                 TABLE_NAME,
                 String.format("%s INTEGER PRIMARY KEY AUTOINCREMENT", BaseColumns._ID),
-                String.format("%s VARCHAR(255) NOT NULL", COL_ITEM_NAME),
+                String.format("%s VARCHAR(255) NOT NULL UNIQUE", COL_ITEM_NAME),
                 String.format("%s DOUBLE NOT NULL", COL_STOCK),
                 String.format("%s DOUBLE", COL_SAFETY_STOCK),
+                String.format("%s INTEGER NOT NULL FOREIGN KEY REFERENCES units(_id)", COL_UNIT_ID),
                 String.format("%s VARCHAR(100) NOT NULL", COL_LOCATION),
-                String.format("%s INTEGER NOT NULL FOREIGN KEY REFERENCES units(_id)", COL_UNIT_ID)
+                String.format("%s VARCHAR(100)", COL_ITEM_THUMBNAIL)
         )
         var SYNTAX_DROP = String.format(
                 "DROP TABLE IF EXISTS %s;",
@@ -75,14 +82,16 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
     class ItemHistories : BaseColumns{
         var TABLE_NAME = "item_histories"
         val COL_ACCOUNT_ID = "account_id"
-        var COL_ACTION = "action"
+        var COL_OPERATION = "operation"
+        var COL_REASON = "reason"
         var COL_OCCURRENCE = "occurrence"
         var SYNTAX_CREATE = String.format(
                 "CREATE TABLE %s(%s, %s, %s, %s);",
                 TABLE_NAME,
                 String.format("%s INTEGER PRIMARY KEY AUTOINCREMENT", BaseColumns._ID),
                 String.format("%s INTEGER NOT NULL FOREIGN KEY REFERENCES accounts(_id)", COL_ACCOUNT_ID),
-                String.format("%s VARCHAR(100) NOT NULL", COL_ACTION),
+                String.format("%s VARCHAR(100) NOT NULL", COL_OPERATION),
+                String.format("%s TEXT", COL_REASON),
                 String.format("%s DATETIME NOT NULL", COL_OCCURRENCE)
         )
         var SYNTAX_DROP = String.format(
@@ -101,7 +110,7 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
                     String.format("%s INTEGER PRIMARY KEY AUTOINCREMENT", BaseColumns._ID),
                     String.format("%s INTEGER NOT NULL FOREIGN KEY REFERENCES item_histories(_id)", COL_ITEM_HISTORY_ID),
                     String.format("%s INTEGER NOT NULL FOREIGN KEY REFERENCES items(_id)", COL_ITEM_ID),
-                    String.format("%s DOUBLE", COL_STOCK_CHANGE)
+                    String.format("%s DOUBLE NOT NULL", COL_STOCK_CHANGE)
             )
             var SYNTAX_DROP = String.format(
                     "DROP TABLE IF EXISTS %s;",

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -47,5 +48,9 @@ class LoginActivity : AppCompatActivity() {
 //            finish()
             startActivity(Intent(this, MainActivity::class.java))
         }
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.activity_login_menu_appbar, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }
