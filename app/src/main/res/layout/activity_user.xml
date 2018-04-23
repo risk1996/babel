@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/activity_horizontal_margin"
             android:paddingVertical="@dimen/activity_vertical_margin">
             <TableRow>
@@ -63,12 +63,12 @@
                     android:drawableTop="@drawable/icons8_move_stock_48"
                     android:text="@string/action_relocate_items"/>
                 <Button
-                    android:id="@+id/activity_user_btn_stock_adjustments"
+                    android:id="@+id/activity_user_btn_adjust_items"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:drawableTop="@drawable/icons8_adjust_48"
-                    android:text="@string/action_stock_adjustments"/>
+                    android:text="@string/action_adjust_items"/>
             </TableRow>
             <TableRow>
                 <Button

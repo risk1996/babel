@@ -17,13 +17,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         title = getString(R.string.activity_login_label)
-        var emailET = findViewById<EditText>(R.id.activity_login_et_email)
-        var emailErrorTV = findViewById<TextView>(R.id.activity_login_tv_email_errors)
-        var passwordET = findViewById<EditText>(R.id.activity_login_et_password)
-        var passwordErrorTV = findViewById<TextView>(R.id.activity_login_tv_password_errors)
-        var rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me)
-        var credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors)
-        var signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in)
+        val emailET = findViewById<EditText>(R.id.activity_login_et_email)
+        val emailErrorTV = findViewById<TextView>(R.id.activity_login_tv_email_errors)
+        val passwordET = findViewById<EditText>(R.id.activity_login_et_password)
+        val passwordErrorTV = findViewById<TextView>(R.id.activity_login_tv_password_errors)
+        val rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me)
+        val credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors)
+        val signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in)
 
         emailET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}

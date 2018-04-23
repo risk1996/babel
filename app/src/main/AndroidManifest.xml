@@ -19,12 +19,22 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".UserActivity"
-            android:label="@string/activity_user_label"/>
+            android:label="@string/activity_user_label" />
+        <activity android:name=".TestActivity" />
+        <activity
+            android:name=".ManageItemsActivity"
+            android:label="@string/activity_manage_items_label"
+            android:parentActivityName=".UserActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="id.ac.umn.mobile.babel.UserActivity" />
+        </activity>
     </application>
 
 </manifest>
