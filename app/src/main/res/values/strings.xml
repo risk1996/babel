@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE resources [<!ENTITY app_name "Babel">]>
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY app_name "Babel">]>
 
 <resources>
     <!--Application Info-->
@@ -33,6 +32,12 @@
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_login2">Sign in</string>
 
+    <!--Main Activity-->
+    <string name="tab_manage">Manage</string>
+    <string name="tab_in_out">In/Out</string>
+    <string name="tab_report">Report</string>
+    <string name="tab_user">User</string>
+
     <!--User Activity-->
     <string name="activity_user_label">User Panel | &app_name;</string>
     <string name="text_logged_in_as"><big><b>Welcome, %1$s!</b></big>\n<i>(as %2$s)</i></string>
@@ -47,4 +52,7 @@
 
     <!--Manage Items Activity-->s
     <string name="activity_manage_items_label">Manage Items | &app_name;</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

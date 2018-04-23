@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
 //            if(valid)startActivity(Intent(this,UserActivity::class.java))
 //            else credentialErrorTV.visibility = View.VISIBLE
 //            finish()
-            startActivity(Intent(this,UserActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 }
