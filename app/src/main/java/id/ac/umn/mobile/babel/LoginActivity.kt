@@ -1,25 +1,31 @@
 package id.ac.umn.mobile.babel
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
-import java.sql.DriverManager
+import android.widget.*
+import com.google.android.gms.common.util.Hex
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.security.MessageDigest
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         title = getString(R.string.activity_login_label)
         val emailET = findViewById<EditText>(R.id.activity_login_et_email)
@@ -29,7 +35,13 @@ class LoginActivity : AppCompatActivity() {
         val rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me)
         val credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors)
         val signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in)
+        val pref = getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
 
+        if(pref.getBoolean("REMEMBER_ME", false)){
+            emailET.setText(pref.getString("EMAIL",""))
+            passwordET.setText(pref.getString("PASSWORD", ""))
+            rememberMeChk.isChecked = pref.getBoolean("REMEMBER_ME", false)
+        }
         emailET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -45,14 +57,50 @@ class LoginActivity : AppCompatActivity() {
             }
         })
         signInBtn.setOnClickListener {
-//            var valid = true
-//            TODO("IMPLEMENT ONLINE DATABASE & FETCH")
-//            if(valid)startActivity(Intent(this,UserActivity::class.java))
-//            else credentialErrorTV.visibility = View.VISIBLE
-//            finish()
+            val prefEd = getSharedPreferences("LOGIN", Context.MODE_PRIVATE).edit()
+            if(rememberMeChk.isChecked){
+                prefEd.putString("EMAIL", emailET.text.toString())
+                prefEd.putString("PASSWORD", passwordET.text.toString())
+                prefEd.putBoolean("REMEMBER_ME", rememberMeChk.isChecked)
+            }else{
+                prefEd.clear()
+            }
+            prefEd.apply()
             val pref = PreferenceManager.getDefaultSharedPreferences(this)
-            DriverManager.getConnection()
-            startActivity(Intent(this, MainActivity::class.java))
+            val db = FirebaseDatabase.getInstance().reference.child("accounts")
+            db.orderByChild("email").equalTo(emailET.text.toString()).addValueEventListener(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError?) {}
+                override fun onDataChange(p0: DataSnapshot?) {
+                    if(emailErrorTV.visibility == View.VISIBLE || passwordErrorTV.visibility == View.VISIBLE){
+                        credentialErrorTV.visibility = View.VISIBLE
+                    }else{
+                        p0!!
+                        if(p0.children.any()){
+                            val salt = p0.children.first().child("salt").value.toString()
+                            val password = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((passwordET.text.toString()+salt).toByteArray()))
+                            if(p0.children.first().child("password").value.toString().toLowerCase() == password){
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                credentialErrorTV.visibility = View.GONE
+                            }else {
+                                credentialErrorTV.visibility = View.VISIBLE
+                            }
+                        }else{
+                            credentialErrorTV.visibility = View.VISIBLE
+                        }
+                        p0.children.forEach{
+                            val acc = Account(
+                                    it.child("email").value.toString(),
+                                    it.child("password").value.toString(),
+                                    it.child("salt").value.toString(),
+                                    it.child("role").value.toString(),
+                                    it.child("dob").value.toString(),
+                                    it.child("reg_date").value.toString()
+                            )
+                            Log.d("DATA SNAPSHOT", acc.salt)
+                        }
+                    }
+                }
+            })
         }
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
