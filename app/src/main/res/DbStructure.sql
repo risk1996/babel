@@ -18,7 +18,7 @@ CREATE TABLE accounts(
 CREATE TABLE units(
     _id INTEGER PRIMARY KEY AUTO_INCREMENT,
     measure VARCHAR(100) NOT NULL,
-    unit_name VARCHAR(100) NOT NULL UNIQUE,
+    unit_name VARCHAR(100) NOT NULL,
     val DOUBLE NOT NULL,
     increment DOUBLE NOT NULL,
     unit_thumbnail VARCHAR(100)

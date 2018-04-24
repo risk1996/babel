@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="activity_login_act_settings"
+        android:id="@+id/menu_login_act_settings"
         android:title="@string/menu_settings"
         android:icon="@drawable/icons8_settings_24"
         app:showAsAction="always"/>

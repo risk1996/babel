@@ -19,7 +19,7 @@ class ManageFragment : Fragment() {
         prepareList(list)
         val rView = activity.findViewById<RecyclerView>(R.id.fragment_manage_items_rv_items)
         rView.adapter = RVAdapter(activity, list)
-        rView.layoutManager = GridLayoutManager(activity, list.size, GridLayoutManager.HORIZONTAL, false)
+//        rView.layoutManager = GridLayoutManager(activity, list.size, GridLayoutManager.HORIZONTAL, false)
 
         val moreFAB = activity.findViewById<FloatingActionButton>(R.id.fragment_manage_items_fab_new)
         moreFAB.setOnClickListener{

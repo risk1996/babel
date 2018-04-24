@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "382954702230",
+    "firebase_url": "https://babelproj.firebaseio.com",
+    "project_id": "babelproj",
+    "storage_bucket": "babelproj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382954702230:android:e6402947a85984e1",
+        "android_client_info": {
+          "package_name": "id.ac.umn.mobile.babel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382954702230-oqfhclf3nphgc292qqur3ahokln9va2b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDomHvik78P9W7Ue6mQos_8Q-p8Ey9obCg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

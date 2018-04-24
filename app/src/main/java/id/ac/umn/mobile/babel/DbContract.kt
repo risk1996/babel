@@ -45,7 +45,7 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
                 TABLE_NAME,
                 String.format("%s INTEGER PRIMARY KEY AUTOINCREMENT", BaseColumns._ID),
                 String.format("%s VARCHAR(100) NOT NULL", COL_MEASURE),
-                String.format("%s VARCHAR(100) NOT NULL UNIQUE", COL_UNIT_NAME),
+                String.format("%s VARCHAR(100) NOT NULL", COL_UNIT_NAME),
                 String.format("%s DOUBLE NOT NULL", COL_VALUE),
                 String.format("%s DOUBLE NOT NULL", COL_INCREMENT),
                 String.format("%s VARCHAR(100)", COL_UNIT_THUMBNAIL)
@@ -120,11 +120,16 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
 
     override fun onCreate(p0: SQLiteDatabase?) {
         p0!!
+        p0.execSQL(ItemHistoryDetails().SYNTAX_DROP)
+        p0.execSQL(ItemHistories().SYNTAX_DROP)
+        p0.execSQL(Items().SYNTAX_DROP)
+        p0.execSQL(Units().SYNTAX_DROP)
+        p0.execSQL(Accounts().SYNTAX_DROP)
         p0.execSQL(Accounts().SYNTAX_CREATE)
         p0.execSQL(Units().SYNTAX_CREATE)
         p0.execSQL(Items().SYNTAX_CREATE)
         p0.execSQL(ItemHistories().SYNTAX_CREATE)
         p0.execSQL(ItemHistoryDetails().SYNTAX_CREATE)
     }
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {}
+    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) = onCreate(p0)
 }
