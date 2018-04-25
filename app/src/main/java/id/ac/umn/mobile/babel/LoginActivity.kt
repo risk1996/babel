@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Base64
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -25,7 +24,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         title = getString(R.string.activity_login_label)
         val emailET = findViewById<EditText>(R.id.activity_login_et_email)
@@ -66,7 +64,6 @@ class LoginActivity : AppCompatActivity() {
                 prefEd.clear()
             }
             prefEd.apply()
-            val pref = PreferenceManager.getDefaultSharedPreferences(this)
             val db = FirebaseDatabase.getInstance().reference.child("accounts")
             db.orderByChild("email").equalTo(emailET.text.toString()).addValueEventListener(object : ValueEventListener{
                 override fun onCancelled(p0: DatabaseError?) {}
@@ -87,31 +84,30 @@ class LoginActivity : AppCompatActivity() {
                         }else{
                             credentialErrorTV.visibility = View.VISIBLE
                         }
-                        p0.children.forEach{
-                            val acc = Account(
-                                    it.child("email").value.toString(),
-                                    it.child("password").value.toString(),
-                                    it.child("salt").value.toString(),
-                                    it.child("role").value.toString(),
-                                    it.child("dob").value.toString(),
-                                    it.child("reg_date").value.toString()
-                            )
-                            Log.d("DATA SNAPSHOT", acc.salt)
-                        }
+//                        p0.children.forEach{
+//                            val acc = Account(
+//                                    it.child("email").value.toString(),
+//                                    it.child("password").value.toString(),
+//                                    it.child("salt").value.toString(),
+//                                    it.child("role").value.toString(),
+//                                    it.child("dob").value.toString(),
+//                                    it.child("reg_date").value.toString()
+//                            )
+//                        }
                     }
                 }
             })
         }
     }
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.activity_login_menu_appbar, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item!!.itemId){
-            R.id.menu_login_act_settings -> startActivity(Intent(this, SettingsActivity::class.java))
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.activity_login_menu_appbar, menu)
+//        return super.onCreateOptionsMenu(menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        when(item!!.itemId){
+//            R.id.menu_login_act_settings -> startActivity(Intent(this, SettingsActivity::class.java))
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 }

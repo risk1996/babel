@@ -7,7 +7,7 @@ import android.support.design.widget.TabLayout
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     var showOverflow = true
@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onStart() {
         val tabsTL = findViewById<TabLayout>(R.id.activity_main_tl_tabs)
+        val moreFAB = findViewById<MovableFloatingActionButton>(R.id.activity_main_fab_more)
         tabsTL.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {}
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -34,6 +35,9 @@ class MainActivity : AppCompatActivity() {
             }
         })
         fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ManageFragment()).commit()
+        moreFAB.setOnClickListener {
+            Toast.makeText(this, "CIE MORE", Toast.LENGTH_SHORT).show()
+        }
         super.onStart()
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

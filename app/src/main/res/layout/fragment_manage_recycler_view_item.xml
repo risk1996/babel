@@ -36,7 +36,10 @@
                             android:paddingRight="10dp"
                             android:paddingTop="5dp"
                             android:textSize="15sp"
-                            android:text="HAHAHAHA"/>
+                            android:text="@string/item_name"
+                            android:scrollHorizontally="true"
+                            android:ellipsize="end"
+                            android:maxLines="1"/>
                     </TableRow>
                     <TableRow>
                         <TextView
@@ -48,7 +51,7 @@
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:textSize="12sp"
-                            android:text="HIHIHIHI"/>
+                            android:text="@string/item_stock"/>
                         <TextView
                             android:id="@+id/fragment_manage_recycler_view_tv_location"
                             android:layout_weight="1"
@@ -58,7 +61,7 @@
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:textSize="12sp"
-                            android:text="HIHIHIHI"/>
+                            android:text="@string/item_location"/>
                     </TableRow>
                 </TableLayout>
                 <android.support.v7.widget.Toolbar

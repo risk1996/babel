@@ -5,47 +5,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <TableLayout
+        android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <TableRow>
+
             <android.support.design.widget.TabLayout
                 android:id="@+id/activity_main_tl_tabs"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
                 <android.support.design.widget.TabItem
                     android:id="@+id/activity_main_ti_manage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_manage"
-                    android:icon="@drawable/icons8_box_24"/>
+                    android:icon="@drawable/icons8_box_24"
+                    android:text="@string/tab_manage" />
+
                 <android.support.design.widget.TabItem
                     android:id="@+id/activity_main_ti_in_out"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_in_out"
-                    android:icon="@drawable/icons8_trolley_24"/>
+                    android:icon="@drawable/icons8_trolley_24"
+                    android:text="@string/tab_in_out" />
+
                 <android.support.design.widget.TabItem
                     android:id="@+id/activity_main_ti_report"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_report"
-                    android:icon="@drawable/icons8_combo_chart_24"/>
+                    android:icon="@drawable/icons8_combo_chart_24"
+                    android:text="@string/tab_report" />
+
                 <android.support.design.widget.TabItem
                     android:id="@+id/activity_main_ti_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_user"
-                    android:icon="@drawable/icons8_user_account_24"/>
+                    android:icon="@drawable/icons8_user_account_24"
+                    android:text="@string/tab_user" />
             </android.support.design.widget.TabLayout>
         </TableRow>
+
         <TableRow>
+
             <FrameLayout
                 android:id="@+id/activity_main_fl_frame"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </TableRow>
     </TableLayout>
+
+    <id.ac.umn.mobile.babel.MovableFloatingActionButton
+        android:id="@+id/activity_main_fab_more"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="center"
+        android:src="@drawable/icons8_more_24"
+        android:tint="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>

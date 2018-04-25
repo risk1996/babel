@@ -1,11 +1,19 @@
 package id.ac.umn.mobile.babel
 
+import android.app.Application
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
-class Account(val email: String, val password: String, val salt: String, val role: String, val dob: String, val reg_date: String){}
-class Item(val itemName: String, val stock: Double, val safetyStock: Double, val unit_id: Int, val location: String, var thumbnail: String)
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.util.concurrent.Semaphore
+
+class Account(val _id: Int, val email: String, val password: String, val salt: String, val role: String, val dob: String, val reg_date: String)
+class Unit(val _id: Int, val measure: String, val unit_name: String, val value: Double, val increment: Double, val unit_thumbnail: String)
+class Item(val _id: Int, val itemName: String, val stock: Double, val safetyStock: Double, val unit_id: Int, val location: String, var thumbnail: String)
 class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
     class Accounts : BaseColumns{
         var TABLE_NAME = "accounts"
@@ -132,4 +140,62 @@ class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.Curso
         p0.execSQL(ItemHistoryDetails().SYNTAX_CREATE)
     }
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) = onCreate(p0)
+}
+class FirebaseDb : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+    }
+}
+abstract class Data{
+    var accounts = ArrayList<Account>()
+    var units = ArrayList<Unit>()
+    var items = ArrayList<Item>()
+    var dbEventListener = object: ValueEventListener {
+        override fun onCancelled(p0: DatabaseError?) {}
+        override fun onDataChange(p0: DataSnapshot?) {
+            p0!!
+            accounts.clear()
+            p0.child("accounts").children.forEach{
+                accounts.add(Account(
+                        it.key.toInt(),
+                        it.child("email").value.toString(),
+                        it.child("password").value.toString(),
+                        it.child("salt").value.toString(),
+                        it.child("role").value.toString(),
+                        it.child("dob").value.toString(),
+                        it.child("reg_date").value.toString()
+                ))
+            }
+            units.clear()
+            p0.child("units").children.forEach{
+                units.add(Unit(
+                        it.key.toInt(),
+                        it.child("measure").value.toString(),
+                        it.child("unit_name").value.toString(),
+                        it.child("val").value.toString().toDouble(),
+                        it.child("increment").value.toString().toDouble(),
+                        it.child("unit_thumbnail").value.toString()
+                ))
+            }
+            items.clear()
+            p0.child("items").children.forEach{
+                items.add(Item(
+                        it.key.toInt(),
+                        it.child("item_name").value.toString(),
+                        it.child("stock").value.toString().toDouble(),
+                        it.child("safety_stock").value.toString().toDouble(),
+                        it.child("unit_id").value.toString().toInt(),
+                        it.child("location").value.toString(),
+                        it.child("item_thumbnail").value.toString()
+                ))
+            }
+            onComplete()
+        }
+    }
+    init {
+        val db = FirebaseDatabase.getInstance().reference
+        db.addValueEventListener(dbEventListener)
+    }
+    abstract fun onComplete()
 }
