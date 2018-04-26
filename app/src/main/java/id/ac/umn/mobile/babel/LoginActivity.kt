@@ -57,12 +57,12 @@ class LoginActivity : AppCompatActivity() {
         signInBtn.setOnClickListener {
             val prefEd = getSharedPreferences("LOGIN", Context.MODE_PRIVATE).edit()
             if(rememberMeChk.isChecked){
-                prefEd.putString("EMAIL", emailET.text.toString())
                 prefEd.putString("PASSWORD", passwordET.text.toString())
                 prefEd.putBoolean("REMEMBER_ME", rememberMeChk.isChecked)
             }else{
                 prefEd.clear()
             }
+            prefEd.putString("EMAIL", emailET.text.toString())
             prefEd.apply()
             val db = FirebaseDatabase.getInstance().reference.child("accounts")
             db.orderByChild("email").equalTo(emailET.text.toString()).addValueEventListener(object : ValueEventListener{
@@ -84,30 +84,9 @@ class LoginActivity : AppCompatActivity() {
                         }else{
                             credentialErrorTV.visibility = View.VISIBLE
                         }
-//                        p0.children.forEach{
-//                            val acc = Account(
-//                                    it.child("email").value.toString(),
-//                                    it.child("password").value.toString(),
-//                                    it.child("salt").value.toString(),
-//                                    it.child("role").value.toString(),
-//                                    it.child("dob").value.toString(),
-//                                    it.child("reg_date").value.toString()
-//                            )
-//                        }
                     }
                 }
             })
         }
     }
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.activity_login_menu_appbar, menu)
-//        return super.onCreateOptionsMenu(menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        when(item!!.itemId){
-//            R.id.menu_login_act_settings -> startActivity(Intent(this, SettingsActivity::class.java))
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 }

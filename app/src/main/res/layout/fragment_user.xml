@@ -4,5 +4,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserFragment">
-
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TableRow>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/icons8_user_96"/>
+            <TableLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TableRow>
+                    <TextView
+                        android:id="@+id/fragment_user_tv_name"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Example"
+                        android:textSize="36sp"
+                        android:textColor="@android:color/black"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/fragment_user_tv_email"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="example@example.com"
+                        android:textSize="14sp"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/fragment_user_tv_role"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Role"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/black"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/fragment_user_tv_reg_date"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="1 Jan 1970"
+                        android:textSize="14sp"/>
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+        <TableRow>
+            <Button
+                android:id="@+id/fragment_user_btn_change_password"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Change Password"/>
+        </TableRow>
+        <TableRow>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/icons8_user_account_24"
+                android:tint="@android:color/darker_gray"/>
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="Other Users"/>
+        </TableRow>
+        <TableRow>
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+        </TableRow>
+        <TableRow>
+            <ListView
+                android:id="@+id/fragment_user_lv_other_users"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+    </TableLayout>
 </FrameLayout>

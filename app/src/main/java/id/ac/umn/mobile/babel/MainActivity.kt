@@ -34,11 +34,20 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
-        fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ManageFragment()).commit()
         moreFAB.setOnClickListener {
             Toast.makeText(this, "CIE MORE", Toast.LENGTH_SHORT).show()
         }
         super.onStart()
+    }
+    override fun onResume() {
+        super.onResume()
+        val tabsTL = findViewById<TabLayout>(R.id.activity_main_tl_tabs)
+        when(tabsTL.selectedTabPosition){
+            0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ManageFragment()).commit()
+            1 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, InOutFragment()).commit()
+            2 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ReportFragment()).commit()
+            3 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, UserFragment()).commit()
+        }
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.activity_main_menu_appbar, menu)

@@ -65,10 +65,11 @@ class InOutFragment : Fragment() {
         override fun onBindViewHolder(holder : InOutFragmentRVAdapter.ViewHolder, position : Int){
             Log.d("POSITION", position.toString())
             var item : Item = data.items.single { it._id==inOutItems[position] }
+            var unit : Unit = data.units.single { it._id==item.unit_id }
             holder.nameTV.text = item.itemName
             holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                    DecimalFormat("0.#").format((item.stock / data.units.find { it._id==item.unit_id }!!.value)),
-                    DecimalFormat("0.#").format((item.stock / data.units.find { it._id==item.unit_id }!!.value)),
+                    DecimalFormat("0.#").format((item.stock / unit.value)),
+                    DecimalFormat("0.#").format((item.stock / unit.value)),
                     data.units.find { it._id==item.unit_id }!!.unit_name
             )
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
@@ -82,17 +83,15 @@ class InOutFragment : Fragment() {
             holder.amountNP.displayedValues = values
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                        DecimalFormat("0.#").format((item.stock / data.units.find { it._id==item.unit_id }!!.value)),
-                        DecimalFormat("0.#").format((item.stock / data.units.find { it._id==item.unit_id }!!.value) + numberPicker.value),
-                        data.units.find { it._id==item.unit_id }!!.unit_name
+                        DecimalFormat("0.#").format((item.stock / unit.value)),
+                        DecimalFormat("0.#").format((item.stock / unit.value) + numberPicker.value),
+                        unit.unit_name
                 )
             }
-            val availUnit = ArrayList<String>()
-            data.units.filter { it.measure==data.units.single { it._id==item.unit_id }.measure }.forEach { availUnit.add(it.unit_name) }
-            val unit = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item)
-            availUnit.forEach { unit.add(it) }
-            holder.unitSpn.adapter = unit
-            holder.unitSpn.setSelection(availUnit.indexOf(data.units.single { it._id==item.unit_id }.unit_name))
+            val units = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item)
+            data.units.filter { it.measure==data.units.single { it._id==item.unit_id }.measure }.forEach { units.add(it.unit_name) }
+            holder.unitSpn.adapter = units
+            holder.unitSpn.setSelection(units.getPosition(data.units.single { it._id==item.unit_id }.unit_name))
         }
         override fun getItemCount() : Int{
             return inOutItems.size

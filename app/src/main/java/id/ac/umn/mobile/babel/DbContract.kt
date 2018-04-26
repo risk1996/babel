@@ -11,7 +11,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.util.concurrent.Semaphore
 
-class Account(val _id: Int, val email: String, val password: String, val salt: String, val role: String, val dob: String, val reg_date: String)
+class Company(val status: String, val statusShort: String, val name: String, val logo: String, val site: String, val officeMain: String, val officeSecondary: String)
+class Account(val _id: Int, val email: String, val password: String, val salt: String, val name: String, val role: String, val dob: String, val reg_date: String)
 class Unit(val _id: Int, val measure: String, val unit_name: String, val value: Double, val increment: Double, val unit_thumbnail: String)
 class Item(val _id: Int, val itemName: String, val stock: Double, val safetyStock: Double, val unit_id: Int, val location: String, var thumbnail: String)
 class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
@@ -148,6 +149,7 @@ class FirebaseDb : Application() {
     }
 }
 abstract class Data{
+    var company = ArrayList<Company>()
     var accounts = ArrayList<Account>()
     var units = ArrayList<Unit>()
     var items = ArrayList<Item>()
@@ -155,13 +157,22 @@ abstract class Data{
         override fun onCancelled(p0: DatabaseError?) {}
         override fun onDataChange(p0: DataSnapshot?) {
             p0!!
-            accounts.clear()
+            company.add(Company(
+                    p0.child("_company").child("company_status").value.toString(),
+                    p0.child("_company").child("company_status_short").value.toString(),
+                    p0.child("_company").child("company_name").value.toString(),
+                    p0.child("_company").child("company_logo").value.toString(),
+                    p0.child("_company").child("company_site").value.toString(),
+                    p0.child("_company").child("company_office_main").value.toString(),
+                    p0.child("_company").child("company_office_secondary").value.toString()
+            ))
             p0.child("accounts").children.forEach{
                 accounts.add(Account(
                         it.key.toInt(),
                         it.child("email").value.toString(),
                         it.child("password").value.toString(),
                         it.child("salt").value.toString(),
+                        it.child("name").value.toString(),
                         it.child("role").value.toString(),
                         it.child("dob").value.toString(),
                         it.child("reg_date").value.toString()
