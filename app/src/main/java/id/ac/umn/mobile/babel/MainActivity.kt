@@ -1,5 +1,6 @@
 package id.ac.umn.mobile.babel
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TabItem
@@ -76,5 +77,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
         return super.onCreateOptionsMenu(menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            R.id.menu_main_act_sign_out -> finish()
+            R.id.menu_main_act_about -> startActivity(Intent(this, AboutActivity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

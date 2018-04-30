@@ -1,5 +1,6 @@
 package id.ac.umn.mobile.babel
 
+import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
