@@ -1,5 +1,6 @@
 package id.ac.umn.mobile.babel
 
+import android.app.Fragment
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -49,6 +50,10 @@ class MainActivity : AppCompatActivity() {
             2 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ReportFragment()).commit()
             3 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, UserFragment()).commit()
         }
+    }
+    override fun onPause() {
+        super.onPause()
+        fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, Fragment()).commit()
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.activity_main_menu_appbar, menu)

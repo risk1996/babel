@@ -25,7 +25,7 @@ class ManageFragment : Fragment() {
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_manage_items_rv_items)
         var data = object : Data(){
             override fun onComplete() {
-                itemsRV.layoutManager = GridLayoutManager(activity, items.size, GridLayoutManager.HORIZONTAL, false)
+                if(isAdded) itemsRV.layoutManager = GridLayoutManager(activity, items.size, GridLayoutManager.HORIZONTAL, false)
             }
         }
         itemsRV.adapter = ManageFragmentRVAdapter(activity, data)

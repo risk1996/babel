@@ -29,9 +29,11 @@ class InOutFragment : Fragment() {
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
         inOutSpn.adapter = ArrayAdapter.createFromResource(activity, R.array.spinner_in_out, android.R.layout.simple_spinner_item)
         var data = object : Data(){override fun onComplete() {
-            val r = Random()
-            items.forEach { if(r.nextInt(100)>55)inOutItems.add(it._id) }
-            itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
+            if(isAdded){
+                val r = Random()
+                items.forEach { if(r.nextInt(100)>55)inOutItems.add(it._id) }
+                itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
+            }
         }}
         itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
     }
