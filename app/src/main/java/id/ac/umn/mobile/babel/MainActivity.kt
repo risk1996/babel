@@ -42,14 +42,14 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
     }
     override fun onResume() {
-        super.onResume()
         val tabsTL = findViewById<TabLayout>(R.id.activity_main_tl_tabs)
-        when(tabsTL.selectedTabPosition){
+        when(tabsTL!!.selectedTabPosition){
             0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ManageFragment()).commit()
             1 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, InOutFragment()).commit()
             2 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ReportFragment()).commit()
             3 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, UserFragment()).commit()
         }
+        super.onResume()
     }
     override fun onPause() {
         super.onPause()
@@ -84,10 +84,22 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
         when(item!!.itemId){
-            R.id.menu_main_act_sign_out -> finish()
-            R.id.menu_main_act_about -> startActivity(Intent(this, AboutActivity::class.java))
+            R.id.menu_main_act_sign_out -> {
+                val dialog = LogoutDialog()
+                dialog.isCancelable = false
+                dialog.show(fragmentManager, "Logout Dialog")
+            }
+            R.id.menu_main_act_about -> {
+                startActivity(Intent(this, AboutActivity::class.java))
+            }
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onBackPressed() {
+
+    }
+
 }
