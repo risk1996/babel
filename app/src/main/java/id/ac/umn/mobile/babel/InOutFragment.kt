@@ -27,7 +27,7 @@ class InOutFragment : Fragment() {
 
         val inOutSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_in_out)
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
-        inOutSpn.adapter = ArrayAdapter.createFromResource(activity, R.array.spinner_in_out, android.R.layout.simple_spinner_item)
+        inOutSpn.adapter = ArrayAdapter.createFromResource(activity, R.array.spinner_in_out, android.R.layout.simple_spinner_dropdown_item)
         var data = object : Data(){override fun onComplete() {
             if(isAdded){
                 val r = Random()
