@@ -29,21 +29,19 @@
             android:paddingTop="15dp"
             android:layout_gravity="end" >
             <TableRow>
-                <TextView
+                <Button
                     android:id="@+id/logout_yes"
                     android:text="Yes"
-                    android:textStyle="bold"
                     android:textSize="18sp"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="20dp"
+                    android:background="@android:color/transparent"
                     android:textColor="@color/common_google_signin_btn_text_light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <TextView
+                <Button
                     android:id="@+id/logout_no"
                     android:text="No"
-                    android:textStyle="bold"
                     android:textSize="18sp"
+                    android:background="@android:color/transparent"
                     android:textColor="@color/common_google_signin_btn_text_light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
