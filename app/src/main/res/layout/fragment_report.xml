@@ -59,7 +59,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"
+                            android:text="@string/report_placeholder"
                             android:textSize="16sp"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
@@ -78,7 +78,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"
+                            android:text="@string/report_placeholder"
                             android:textSize="16sp"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
@@ -97,7 +97,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"
+                            android:text="@string/report_placeholder"
                             android:textSize="16sp"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"
@@ -117,7 +117,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"
+                            android:text="@string/report_placeholder"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
                     </TableRow>
@@ -135,7 +135,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"
+                            android:text="@string/report_placeholder"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
                     </TableRow>
@@ -145,6 +145,8 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/colorAccent"
                             android:text="@string/report_company_detail"/>
                     </TableRow>
                 </TableLayout>
@@ -165,7 +167,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
-                            android:text="Items"
+                            android:text="@string/report_item_head"
                             android:textColor="@android:color/black"/>
                     </TableRow>
                     <TableRow>
@@ -180,14 +182,14 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Number of items:"/>
+                            android:text="@string/report_item_item_num"/>
                         <TextView
                             android:id="@+id/fragment_report_tv_item_num"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"
+                            android:text="@string/report_placeholder"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
                     </TableRow>
@@ -205,14 +207,14 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Number of shortage items:"/>
+                            android:text="@string/report_item_item_shortage"/>
                         <TextView
                             android:id="@+id/fragment_report_tv_item_shortage"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"
+                            android:text="@string/report_placeholder"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
                     </TableRow>
@@ -230,7 +232,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Storage summary:"/>
+                            android:text="@string/report_item_item_storage"/>
                     </TableRow>
                     <TableRow>
                         <TableLayout
@@ -240,6 +242,16 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp">
                         </TableLayout>
+                    </TableRow>
+                    <TableRow>
+                        <Button
+                            android:id="@+id/fragment_report_btn_item_details"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/colorAccent"
+                            android:text="@string/report_item_item_detail"/>
                     </TableRow>
                 </TableLayout>
             </TableRow>
@@ -253,14 +265,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/icons8_length_24"
-                            android:tint="@android:color/darker_gray"/>
+                            android:src="@drawable/icons8_length_24"/>
                         <TextView
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
-                            android:text="Units"/>
+                            android:text="Units"
+                            android:textColor="@android:color/black"/>
                     </TableRow>
                     <TableRow>
                         <View
@@ -281,7 +293,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"/>
+                            android:text="@string/report_placeholder"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"/>
                     </TableRow>
                     <TableRow
                         android:layout_marginStart="24dp">
@@ -304,14 +318,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/icons8_user_account_24"
-                            android:tint="@android:color/darker_gray"/>
+                            android:src="@drawable/icons8_user_account_24"/>
                         <TextView
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
-                            android:text="Users"/>
+                            android:text="Users"
+                            android:textColor="@android:color/black"/>
                     </TableRow>
                     <TableRow>
                         <View
@@ -332,7 +346,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="viewEnd"
-                            android:text="xxx"/>
+                            android:text="@string/report_placeholder"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"/>
                     </TableRow>
                     <TableRow
                         android:layout_marginStart="24dp">
