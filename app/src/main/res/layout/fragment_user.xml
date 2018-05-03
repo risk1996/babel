@@ -57,7 +57,9 @@
                 </TableRow>
             </TableLayout>
         </TableRow>
-        <TableRow>
+        <TableRow
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp">
             <Button
                 android:id="@+id/fragment_user_btn_change_password"
                 android:layout_weight="1"

@@ -1,15 +1,12 @@
 package id.ac.umn.mobile.babel
 
+import android.app.Dialog
 import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.content.Intent
+import android.view.*
+import android.widget.*
 import java.text.SimpleDateFormat
 
 class UserFragment : Fragment() {
@@ -23,6 +20,8 @@ class UserFragment : Fragment() {
         val roleTV = activity.findViewById<TextView>(R.id.fragment_user_tv_role)
         val regDateTV = activity.findViewById<TextView>(R.id.fragment_user_tv_reg_date)
         val otherUsersLV = activity.findViewById<ListView>(R.id.fragment_user_lv_other_users)
+        val changePassB = activity.findViewById<Button>(R.id.fragment_user_btn_change_password)
+
         val data = object : Data(){
             override fun onComplete() {
                 if(isAdded){
@@ -37,5 +36,22 @@ class UserFragment : Fragment() {
                 }
             }
         }
+
+        changePassB.setOnClickListener{
+            changePass(context)
+        }
+    }
+
+    private fun changePass(context : Context) {
+        val dialog = Dialog(context)
+        dialog.setContentView(R.layout.activity_change_password)
+
+        val lp = WindowManager.LayoutParams();
+        lp.copyFrom(dialog.window.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        dialog.show()
+        dialog.window.attributes = lp
     }
 }

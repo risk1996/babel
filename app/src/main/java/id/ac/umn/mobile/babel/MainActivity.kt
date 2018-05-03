@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
     class LogOutDialog : YesNoDialog(){
-        override fun onYesClicked() { activity.finish() }
+        override fun onYesClicked() { activity.finish(); startActivity(Intent(activity, LoginActivity::class.java)) }
         override fun onNoClicked() {}
     }
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -103,6 +103,8 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-    override fun onBackPressed() {}
+    override fun onBackPressed() {
+        //masukin snack bar
+    }
 
 }
