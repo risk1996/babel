@@ -98,8 +98,11 @@
                 android:id="@+id/activity_login_btn_sign_in"
                 android:layout_weight="1"
                 android:layout_width="0dp"
+                android:background="@android:color/transparent"
+                android:textColor="@color/colorAccent"
                 android:text="@string/action_sign_in"
-                android:drawableLeft="@drawable/icons8_import_24"/>
+                android:drawableLeft="@drawable/icons8_import_24"
+                android:drawableTint="@color/colorAccent"/>
         </TableRow>
         <TableRow>
             <TextView
@@ -111,6 +114,16 @@
                 android:textColor="#ff0000"
                 android:visibility="gone"
                 android:text="@string/error_incorrect_credentials"/>
+        </TableRow>
+        <TableRow>
+            <ProgressBar
+                android:id="@+id/activity_login_pb_progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"/>
         </TableRow>
     </TableLayout>
 

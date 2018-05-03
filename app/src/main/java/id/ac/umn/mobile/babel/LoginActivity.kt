@@ -1,5 +1,6 @@
 package id.ac.umn.mobile.babel
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -55,36 +56,33 @@ class LoginActivity : AppCompatActivity() {
             }
         })
         signInBtn.setOnClickListener {
+            val progressPB = findViewById<ProgressBar>(R.id.activity_login_pb_progress)
+            progressPB.visibility = View.VISIBLE
             val prefEd = getSharedPreferences("LOGIN", Context.MODE_PRIVATE).edit()
             if(rememberMeChk.isChecked){
                 prefEd.putString("PASSWORD", passwordET.text.toString())
                 prefEd.putBoolean("REMEMBER_ME", rememberMeChk.isChecked)
-            }else{
-                prefEd.clear()
-            }
+            } else prefEd.clear()
             prefEd.putString("EMAIL", emailET.text.toString())
             prefEd.apply()
             val db = FirebaseDatabase.getInstance().reference.child("accounts")
             db.orderByChild("email").equalTo(emailET.text.toString()).addValueEventListener(object : ValueEventListener{
                 override fun onCancelled(p0: DatabaseError?) {}
                 override fun onDataChange(p0: DataSnapshot?) {
-                    if(emailErrorTV.visibility == View.VISIBLE || passwordErrorTV.visibility == View.VISIBLE){
-                        credentialErrorTV.visibility = View.VISIBLE
-                    }else{
+                    if(emailErrorTV.visibility == View.VISIBLE || passwordErrorTV.visibility == View.VISIBLE) credentialErrorTV.visibility = View.VISIBLE
+                    else{
                         p0!!
                         if(p0.children.any()){
                             val salt = p0.children.first().child("salt").value.toString()
                             val password = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((passwordET.text.toString()+salt).toByteArray()))
                             if(p0.children.first().child("password").value.toString().toLowerCase() == password){
+                                finish()
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                 credentialErrorTV.visibility = View.GONE
-                            }else {
-                                credentialErrorTV.visibility = View.VISIBLE
-                            }
-                        }else{
-                            credentialErrorTV.visibility = View.VISIBLE
-                        }
+                            } else { credentialErrorTV.visibility = View.VISIBLE }
+                        } else{ credentialErrorTV.visibility = View.VISIBLE }
                     }
+                    if(credentialErrorTV.visibility == View.VISIBLE) progressPB.visibility = View.GONE
                 }
             })
         }

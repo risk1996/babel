@@ -3,6 +3,8 @@
 <resources>
     <!--Application Info-->
     <string name="app_name">&app_name;</string>
+    <string name="app_name_long">Project &app_name;</string>
+    <string name="app_purpose">Android Mobile Programming Final Assignment</string>
     <string-array name="developer_names">
         <item>William Darian</item>
         <item>Jonathan Kennard</item>
@@ -48,8 +50,31 @@
         <item>Outgoing Item(s)</item>
     </string-array>
 
-    <!--Item Placeholder-->
+    <!--Manage Fragment-->
+
+    <!--In Out Fragment-->
+
+    <!--Report Fragment-->
+    <string name="report_company_head">Company Information</string>
+    <string name="report_company_name">Company name:</string>
+    <string name="report_company_status">Company status:</string>
+    <string name="report_company_site">Company website:</string>
+    <string name="report_company_main_office">Company main office:</string>
+    <string name="report_company_secondary_office">Company secondary office:</string>
+    <string name="report_company_detail">Details</string>
+
+    <!--About Fragment-->
+    <string name="about_developers">Developers:</string>
+    <string name="about_credits">Made Possible by:</string>
+
+    <!--Dialog-->
+    <string name="action_yes">Yes</string>
+    <string name="action_no">No</string>
+
+    <!--Placeholders-->
     <string name="item_name">&lt;ITEM NAME&gt;</string>
     <string name="item_stock">&lt;ITEM STOCK&gt;</string>
     <string name="item_location">&lt;ITEM LOCATION&gt;</string>
+    <string name="dialog_heading">&lt;DIALOG HEADING&gt;</string>
+    <string name="dialog_message">&lt;DIALOG MESSAGE&gt;</string>
 </resources>

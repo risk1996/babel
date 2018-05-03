@@ -83,13 +83,19 @@ class MainActivity : AppCompatActivity() {
         })
         return super.onCreateOptionsMenu(menu)
     }
+    class LogOutDialog : YesNoDialog(){
+        override fun onYesClicked() { activity.finish() }
+        override fun onNoClicked() {}
+    }
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-
         when(item!!.itemId){
             R.id.menu_main_act_sign_out -> {
-                val dialog = LogoutDialog()
+                val dialog = LogOutDialog()
                 dialog.isCancelable = false
-                dialog.show(fragmentManager, "Logout Dialog")
+                dialog.heading = "Log Out"
+                dialog.message = "Are you sure you want to log out?"
+                dialog.highlight = dialog.HIGHLIGHT_NO
+                dialog.show(fragmentManager, "Dialog Yes No")
             }
             R.id.menu_main_act_about -> {
                 startActivity(Intent(this, AboutActivity::class.java))
@@ -97,9 +103,6 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun onBackPressed() {
-
-    }
+    override fun onBackPressed() {}
 
 }
