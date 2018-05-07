@@ -2,12 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
     <item
-        android:id="@+id/menu_main_act_search"
-        android:title="@string/menu_search"
-        android:icon="@drawable/icons8_search_24"
-        yourapp:showAsAction="always|collapseActionView"
-        yourapp:actionViewClass="android.support.v7.widget.SearchView" />
-    <item
         android:id="@+id/menu_main_act_sign_out"
         android:title="@string/menu_sign_out"
         android:icon="@drawable/icons8_export_24"

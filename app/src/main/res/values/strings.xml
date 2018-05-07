@@ -42,7 +42,6 @@
     <string name="tab_in_out">In/Out</string>
     <string name="tab_report">Report</string>
     <string name="tab_user">User</string>
-    <string name="menu_search">Search</string>
     <string name="menu_sign_out">Sign Out</string>
     <string name="menu_about">About</string>
     <string-array name="spinner_in_out">
@@ -51,6 +50,7 @@
     </string-array>
 
     <!--Manage Fragment-->
+    <string name="manage_prompt_search_items">Search</string>
 
     <!--In Out Fragment-->
 

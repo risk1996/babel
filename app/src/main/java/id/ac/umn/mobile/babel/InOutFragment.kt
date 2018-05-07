@@ -24,7 +24,6 @@ class InOutFragment : Fragment() {
     }
     override fun onStart() {
         super.onStart()
-
         val inOutSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_in_out)
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
         inOutSpn.adapter = ArrayAdapter.createFromResource(activity, R.array.spinner_in_out, android.R.layout.simple_spinner_dropdown_item)

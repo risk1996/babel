@@ -9,6 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TableRow>
+            <EditText
+                android:id="@+id/fragment_manage_items_et_search"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/manage_prompt_search_items"/>
+        </TableRow>
+        <TableRow>
             <ScrollView
                 android:layout_weight="1"
                 android:layout_width="match_parent"
