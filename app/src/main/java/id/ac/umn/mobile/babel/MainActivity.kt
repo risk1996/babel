@@ -4,11 +4,15 @@ import android.app.Fragment
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.TabItem
 import android.support.design.widget.TabLayout
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +41,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
         moreFAB.setOnClickListener {
-            Toast.makeText(this, "CIE MORE", Toast.LENGTH_SHORT).show()
+            val bottomModal = MainModal()
+            bottomModal.show(supportFragmentManager, bottomModal.tag)
         }
         super.onStart()
     }
@@ -104,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
     override fun onBackPressed() {
-        //masukin snack bar
+//        TODO("masukin snack bar")
     }
 
 }

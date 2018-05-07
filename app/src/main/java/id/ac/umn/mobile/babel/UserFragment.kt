@@ -48,7 +48,7 @@ class UserFragment : Fragment() {
         }
 
         changePassF.setOnClickListener{
-            val dialog = Dialog(context)
+            val dialog = Dialog(activity)
             dialog.setContentView(R.layout.activity_change_password)
 
             val lp = WindowManager.LayoutParams()

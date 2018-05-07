@@ -68,7 +68,20 @@
     <string name="report_item_item_storage">Storage summary:</string>
     <string name="report_item_item_detail">Item Details</string>
 
-    <!--About Fragment-->
+    <!--User Fragment-->
+
+    <!--Change Password Activity-->
+    <string name="password_title">Change Password</string>
+    <string name="password_prompt_current_password">Current Password</string>
+    <string name="password_prompt_new_password">New Password</string>
+    <string name="password_prompt_confirm_new_password">Confirm New Password</string>
+    <string name="password_action_cancel">Cancel</string>
+    <string name="password_action_change_password">Change Password</string>
+    <string name="password_error_password_incorrect">Password is incorrect</string>
+    <string name="password_error_password_minimum_length">Password must at least contain 8 characters</string>
+    <string name="password_error_password_mismatch">New password did not match</string>
+
+    <!--About Activity-->
     <string name="about_developers">Developers:</string>
     <string name="about_credits">Made Possible by:</string>
 

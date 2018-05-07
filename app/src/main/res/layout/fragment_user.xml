@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:textColor="@color/colorAccent"
-                android:text="Change Password"/>
+                android:text="@string/password_action_change_password"/>
         </TableRow>
         <TableRow>
             <ImageView
