@@ -23,6 +23,7 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/icons8_box_48"/>
                 <TableLayout
+                    android:id="@+id/fragment_manage_recycler_view_tl_items_locations"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content">
@@ -36,32 +37,11 @@
                             android:paddingRight="10dp"
                             android:paddingTop="5dp"
                             android:textSize="15sp"
+                            android:textStyle="bold"
                             android:text="@string/item_name"
                             android:scrollHorizontally="true"
                             android:ellipsize="end"
                             android:maxLines="1"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:id="@+id/fragment_manage_recycler_view_tv_stock"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:textSize="12sp"
-                            android:text="@string/item_stock"/>
-                        <TextView
-                            android:id="@+id/fragment_manage_recycler_view_tv_location"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:textSize="12sp"
-                            android:text="@string/item_location"/>
                     </TableRow>
                 </TableLayout>
                 <android.support.v7.widget.Toolbar

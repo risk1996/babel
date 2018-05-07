@@ -3,6 +3,9 @@ package id.ac.umn.mobile.babel
 import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
@@ -13,10 +16,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import java.text.DecimalFormat
 
 class ManageFragment : Fragment() {
     val filterItems = ArrayList<Int>()
@@ -47,19 +48,10 @@ class ManageFragment : Fragment() {
     }
     inner class ManageFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<ManageFragmentRVAdapter.ViewHolder>(){
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var thumbnailIV : ImageView
-            var nameTV: TextView
-            var stockTV: TextView
-            var locationTV : TextView
-            var itemContextTb : Toolbar
-
-            init {
-                thumbnailIV = itemView.findViewById(R.id.fragment_manage_recycler_view_iv_thumbnail)
-                nameTV = itemView.findViewById(R.id.fragment_manage_recycler_view_tv_name)
-                stockTV = itemView.findViewById(R.id.fragment_manage_recycler_view_tv_stock)
-                locationTV = itemView.findViewById(R.id.fragment_manage_recycler_view_tv_location)
-                itemContextTb = itemView.findViewById(R.id.fragment_manage_recycler_view_tb_item_context)
-            }
+            var thumbnailIV : ImageView         = itemView.findViewById(R.id.fragment_manage_recycler_view_iv_thumbnail)
+            var nameTV: TextView                = itemView.findViewById(R.id.fragment_manage_recycler_view_tv_name)
+            var itemLocationsTL : TableLayout   = itemView.findViewById(R.id.fragment_manage_recycler_view_tl_items_locations)
+            var itemContextTb : Toolbar         = itemView.findViewById(R.id.fragment_manage_recycler_view_tb_item_context)
         }
         override fun onCreateViewHolder(parent : ViewGroup, type : Int) : ManageFragmentRVAdapter.ViewHolder{
             val view : View = LayoutInflater.from(parent.context).inflate(R.layout.fragment_manage_recycler_view_item, parent, false)
@@ -69,10 +61,30 @@ class ManageFragment : Fragment() {
             return ViewHolder(view)
         }
         override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){
-            var item : Item = data.items.single { it._id==filterItems[position] }
+            val item : Item = data.items.single { it._id==filterItems[position] }
+            val unit : Unit = data.units.find { it._id==item.unit_id }!!
             holder.nameTV.text = item.itemName
-            holder.stockTV.text = String.format("%1\$.2f %2\$s", (item.stock / data.units.find { it._id==item.unit_id }!!.value), data.units.find { it._id==item.unit_id }!!.unit_name)
-            holder.locationTV.text = item.location
+            data.locations.forEach {
+                val rowTR = TableRow(activity)
+                val locTV = TextView(activity)
+                val stkTV = TextView(activity)
+                val oosIV = ImageView(activity)
+                val param = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+                locTV.layoutParams = param
+                locTV.text = String.format("%1\$s    : ", it.code)
+                locTV.setPadding(40, 0, 10, 5)
+                rowTR.addView(locTV)
+                stkTV.layoutParams = param
+                stkTV.text = String.format("%1\$s %2\$s", DecimalFormat("0.#").format(item.stocks[it._id] / unit.value), unit.unit_name)
+                stkTV.setPadding(40, 0, 10, 5)
+                rowTR.addView(stkTV)
+                oosIV.setImageResource(R.drawable.icons8_error_24)
+                oosIV.setColorFilter(Color.rgb(255, 0, 0))
+                if(item.stocks[it._id] >= item.safetyStock) oosIV.visibility = View.INVISIBLE
+                oosIV.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 0f)
+                rowTR.addView(oosIV)
+                holder.itemLocationsTL.addView(rowTR)
+            }
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
             holder.itemContextTb.inflateMenu(R.menu.fragment_manage_menu_item)
             holder.itemContextTb.setOnMenuItemClickListener {
@@ -89,10 +101,7 @@ class ManageFragment : Fragment() {
                         Toast.makeText(context, "CIE DELETE", Toast.LENGTH_SHORT).show()
                         true
                     }
-                    else -> {
-                        Toast.makeText(context, "CIE GTW", Toast.LENGTH_SHORT).show()
-                        true
-                    }
+                    else -> {true }
                 }
             }
         }
