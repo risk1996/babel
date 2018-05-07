@@ -13,10 +13,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.util.concurrent.Semaphore
 
-class Company(val status: String, val statusShort: String, val name: String, val logo: String, val site: String, val officeMain: String, val officeSecondary: String)
-class Account(val _id: Int, val email: String, val password: String, val salt: String, val name: String, val role: String, val dob: String, val reg_date: String)
-class Unit(val _id: Int, val measure: String, val unit_name: String, val value: Double, val increment: Double, val unit_thumbnail: String)
-class Item(val _id: Int, val itemName: String, val stock: Double, val safetyStock: Double, val unit_id: Int, val location: String, var thumbnail: String)
+class Company(var status: String, var statusShort: String, var name: String, var logo: String, var site: String, var officeMain: String, var officeSecondary: String)
+class Account(var _id: Int, var email: String, var password: String, var salt: String, var name: String, var role: String, var dob: String, var reg_date: String)
+class Unit(var _id: Int, var measure: String, var unit_name: String, var value: Double, var increment: Double, var unit_thumbnail: String)
+class Item(var _id: Int, var itemName: String, var stock: Double, var safetyStock: Double, var unit_id: Int, var location: String, var thumbnail: String)
 class DbContract(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
     class Accounts : BaseColumns{
         var TABLE_NAME = "accounts"
@@ -155,62 +155,61 @@ abstract class Data{
     var accounts = ArrayList<Account>()
     var units = ArrayList<Unit>()
     var items = ArrayList<Item>()
-    var dbEventListener = object: ValueEventListener {
-        override fun onCancelled(p0: DatabaseError?) {}
-        override fun onDataChange(p0: DataSnapshot?) {
-            p0!!
-            company.clear()
-            company.add(Company(
-                    p0.child("_company").child("company_status").value.toString(),
-                    p0.child("_company").child("company_status_short").value.toString(),
-                    p0.child("_company").child("company_name").value.toString(),
-                    p0.child("_company").child("company_logo").value.toString(),
-                    p0.child("_company").child("company_site").value.toString(),
-                    p0.child("_company").child("company_office_main").value.toString(),
-                    p0.child("_company").child("company_office_secondary").value.toString()
-            ))
-            accounts.clear()
-            p0.child("accounts").children.forEach{
-                accounts.add(Account(
-                        it.key.toInt(),
-                        it.child("email").value.toString(),
-                        it.child("password").value.toString(),
-                        it.child("salt").value.toString(),
-                        it.child("name").value.toString(),
-                        it.child("role").value.toString(),
-                        it.child("dob").value.toString(),
-                        it.child("reg_date").value.toString()
-                ))
-            }
-            units.clear()
-            p0.child("units").children.forEach{
-                units.add(Unit(
-                        it.key.toInt(),
-                        it.child("measure").value.toString(),
-                        it.child("unit_name").value.toString(),
-                        it.child("val").value.toString().toDouble(),
-                        it.child("increment").value.toString().toDouble(),
-                        it.child("unit_thumbnail").value.toString()
-                ))
-            }
-            items.clear()
-            p0.child("items").children.forEach{
-                items.add(Item(
-                        it.key.toInt(),
-                        it.child("item_name").value.toString(),
-                        it.child("stock").value.toString().toDouble(),
-                        it.child("safety_stock").value.toString().toDouble(),
-                        it.child("unit_id").value.toString().toInt(),
-                        it.child("location").value.toString(),
-                        it.child("item_thumbnail").value.toString()
-                ))
-            }
-            onComplete()
-        }
-    }
     init {
         val db = FirebaseDatabase.getInstance().reference
-        db.addValueEventListener(dbEventListener)
+        db.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) {}
+            override fun onDataChange(p0: DataSnapshot?) {
+                p0!!
+                company.clear()
+                company.add(Company(
+                        p0.child("_company").child("company_status").value.toString(),
+                        p0.child("_company").child("company_status_short").value.toString(),
+                        p0.child("_company").child("company_name").value.toString(),
+                        p0.child("_company").child("company_logo").value.toString(),
+                        p0.child("_company").child("company_site").value.toString(),
+                        p0.child("_company").child("company_office_main").value.toString(),
+                        p0.child("_company").child("company_office_secondary").value.toString()
+                ))
+                accounts.clear()
+                p0.child("accounts").children.forEach{
+                    accounts.add(Account(
+                            it.key.toInt(),
+                            it.child("email").value.toString(),
+                            it.child("password").value.toString(),
+                            it.child("salt").value.toString(),
+                            it.child("name").value.toString(),
+                            it.child("role").value.toString(),
+                            it.child("dob").value.toString(),
+                            it.child("reg_date").value.toString()
+                    ))
+                }
+                units.clear()
+                p0.child("units").children.forEach{
+                    units.add(Unit(
+                            it.key.toInt(),
+                            it.child("measure").value.toString(),
+                            it.child("unit_name").value.toString(),
+                            it.child("val").value.toString().toDouble(),
+                            it.child("increment").value.toString().toDouble(),
+                            it.child("unit_thumbnail").value.toString()
+                    ))
+                }
+                items.clear()
+                p0.child("items").children.forEach{
+                    items.add(Item(
+                            it.key.toInt(),
+                            it.child("item_name").value.toString(),
+                            it.child("stock").value.toString().toDouble(),
+                            it.child("safety_stock").value.toString().toDouble(),
+                            it.child("unit_id").value.toString().toInt(),
+                            it.child("location").value.toString(),
+                            it.child("item_thumbnail").value.toString()
+                    ))
+                }
+                onComplete()
+            }
+        })
     }
     abstract fun onComplete()
 }
