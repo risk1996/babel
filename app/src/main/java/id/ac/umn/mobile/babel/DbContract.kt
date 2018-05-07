@@ -159,6 +159,7 @@ abstract class Data{
         override fun onCancelled(p0: DatabaseError?) {}
         override fun onDataChange(p0: DataSnapshot?) {
             p0!!
+            company.clear()
             company.add(Company(
                     p0.child("_company").child("company_status").value.toString(),
                     p0.child("_company").child("company_status_short").value.toString(),
@@ -168,6 +169,7 @@ abstract class Data{
                     p0.child("_company").child("company_office_main").value.toString(),
                     p0.child("_company").child("company_office_secondary").value.toString()
             ))
+            accounts.clear()
             p0.child("accounts").children.forEach{
                 accounts.add(Account(
                         it.key.toInt(),
