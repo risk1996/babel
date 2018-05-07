@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextWatcher
@@ -95,41 +96,24 @@ class UserFragment : Fragment() {
             })
 
             changePassB.setOnClickListener{
-                val db = FirebaseDatabase.getInstance().reference.child("accounts")
-                db.orderByChild("email").equalTo(emailTV.text.toString()).addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError?) {}
-                    override fun onDataChange(p0: DataSnapshot?) {
-                        if (currPassET.length() <= 1) requiredFieldErrorTV.visibility = View.VISIBLE
-                        else if (newPassET.length() <= 1) newPassErrorTV.visibility = View.VISIBLE
-                        else if (confirmNewPassET.length() <= 1) confirmNewPassErrorTV.visibility = View.VISIBLE
-                        else {
-                            p0!!
-                            if (p0.children.any()) {
-                                val salt = p0.children.first().child("salt").value.toString()
-                                val password = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))
-                                if (p0.children.first().child("password").value.toString().toLowerCase() == password) {
-                                    currPassErrorTV.visibility = View.GONE
-                                    dialog.dismiss()
-                                    if(isAdded){
-                                        Snackbar.make(
-                                                activity.findViewById(android.R.id.content),
-                                                "Password successfully changed",
-                                                Snackbar.LENGTH_LONG
-                                        ).show()
-                                    }
-//                                    Toast.makeText(
-//                                            activity,
-//                                            view.toString(),
-//                                            Toast.LENGTH_SHORT
-//                                    ).show()
-                                    db.child(p0.children.first().key).child("password").setValue(
-                                            Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + salt).toByteArray()))
-                                    )
-                                } else { currPassErrorTV.visibility = View.VISIBLE }
-                            } else { currPassErrorTV.visibility = View.VISIBLE }
-                        }
-                    }
-                })
+                if (currPassET.length() <= 0) requiredFieldErrorTV.visibility = View.VISIBLE
+                else if (newPassET.length() <= 0) newPassErrorTV.visibility = View.VISIBLE
+                else if (confirmNewPassET.length() <= 0) confirmNewPassErrorTV.visibility = View.VISIBLE
+                else {
+                    val pref = activity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
+                    val account = data.accounts.single() { it.email == pref.getString("EMAIL", "") }
+                    val salt = account.salt
+                    val oldPassword = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))
+                    if (account.password != oldPassword/* && newPassET.text == confirmNewPassET.text*/) {
+                        currPassErrorTV.visibility = View.GONE
+                        dialog.dismiss()
+                        Snackbar.make(view, "Password successfully changed", Snackbar.LENGTH_LONG).show()
+                        val db = FirebaseDatabase.getInstance().reference.child("accounts")
+                        db.child(account._id.toString()).child("password").setValue(
+                                Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + salt).toByteArray()))
+                        )
+                    } else { currPassErrorTV.visibility = View.VISIBLE }
+                }
             }
             cancelChangePassB.setOnClickListener{
                 dialog.dismiss()
