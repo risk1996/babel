@@ -18,7 +18,7 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="<TITLE>"
+                    android:text="TITLE"
                     android:textAlignment="center"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -137,7 +137,7 @@
                     android:layout_gravity="end"
                     android:layout_margin="5dp"
                     android:background="@android:color/transparent"
-                    android:text="<OK BUTTON>"
+                    android:text="OK"
                     android:textColor="@color/colorAccent"/>
             </TableRow>
         </TableLayout>

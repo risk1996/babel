@@ -64,18 +64,13 @@ class InOutFragment : Fragment() {
             holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                     DecimalFormat("0.#").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
                     DecimalFormat("0.#").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
-                    data.units.find { it._id == item.unit_id }!!.unit_name
+                    unitFrom.unit_name
             )
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
             holder.signTV.text = if (sign == 1) "+" else "-"
             holder.amountNP.minValue = 0
-            holder.amountNP.maxValue = 999
-            val values = arrayOfNulls<String>(1000)
-            for (i in 0..999) values[i] = String.format("%1\$s",
-                    DecimalFormat("0.#").format(i.toDouble() * data.units.find { it._id == item.unit_id }!!.increment),
-                    data.units.find { it._id == item.unit_id }!!.unit_name
-            )
-            holder.amountNP.displayedValues = values
+            holder.amountNP.maxValue = 9999
+            holder.amountNP.setFormatter { DecimalFormat("0.#").format(it.toDouble() * unitFrom.increment) }
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                         DecimalFormat("0.#").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),

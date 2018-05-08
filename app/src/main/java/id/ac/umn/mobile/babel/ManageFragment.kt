@@ -64,6 +64,7 @@ class ManageFragment : Fragment() {
             val item : Item = data.items.single { it._id==filterItems[position] }
             val unit : Unit = data.units.find { it._id==item.unit_id }!!
             holder.nameTV.text = item.itemName
+            holder.itemLocationsTL.removeViews(1, holder.itemLocationsTL.childCount-1)
             data.locations.forEach {
                 val rowTR = TableRow(activity)
                 val locTV = TextView(activity)
