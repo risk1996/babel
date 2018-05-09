@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".ManageFragment">
+
     <TableLayout
         android:id="@+id/fragment_manage_items_tl_layout"
         android:layout_width="match_parent"

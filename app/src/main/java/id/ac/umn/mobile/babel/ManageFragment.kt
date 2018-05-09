@@ -32,7 +32,8 @@ class ManageFragment : Fragment() {
             override fun onComplete() {
                 filterItems.clear()
                 items.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
-                if(isAdded) itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
+//                if(isAdded)
+                    itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         }
         itemsRV.adapter = ManageFragmentRVAdapter(activity, data)

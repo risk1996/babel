@@ -6,14 +6,18 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.common.util.Hex
+import com.google.firebase.FirebaseError
+import com.google.firebase.FirebaseException
 import com.google.firebase.database.*
 import java.security.MessageDigest
+import java.util.*
 
 class ChangePasswordDialog : DialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -54,34 +58,38 @@ class ChangePasswordDialog : DialogFragment(){
                 newPassET.length() <= 0 -> newPassErrorTV.visibility = View.VISIBLE
                 confirmNewPassET.length() <= 0 -> confirmNewPassErrorTV.visibility = View.VISIBLE
                 else -> {
+                    val pref = activity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
                     val data = object : Data(){ override fun onComplete() {
-                    if(isAdded){
-                        val pref = activity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
-                        val account = accounts.single { it.email == pref.getString("EMAIL", "") }
-                        val salt = account.salt
-                        val oldPassword = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))
-                        if (account.password == oldPassword/* && newPassET.text == confirmNewPassET.text*/) {
-                            currPassErrorTV.visibility = View.GONE
-                            dismiss()
-                            val db = FirebaseDatabase.getInstance().reference.child("accounts")
-                            db.runTransaction(object : Transaction.Handler{
-                                override fun onComplete(p0: DatabaseError?, p1: Boolean, p2: DataSnapshot?) {
-                                    Snackbar.make(view, "Password successfully changed", Snackbar.LENGTH_LONG).show()
-                                }
-                                override fun doTransaction(p0: MutableData?): Transaction.Result {
-                                    p0!!.child(account._id.toString()).child("password").value =
-                                            Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + salt).toByteArray()))
-                                    return Transaction.success(p0)
-                                }
-                            })
-                        } else { currPassErrorTV.visibility = View.VISIBLE }
-                    }
-                }}}
+                        if(isAdded) {
+                            val account = accounts.single { it.email == pref.getString("EMAIL", "") }
+                            val salt = account.salt
+                            val newSalt = UUID.randomUUID().toString().substring(25, 30)
+                            val oldPassword = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))
+                            if (account.password == oldPassword/* && newPassET.text == confirmNewPassET.text*/) {
+                                currPassErrorTV.visibility = View.GONE
+                                Snackbar.make(activity.findViewById(android.R.id.content), "Password successfully changed", Snackbar.LENGTH_LONG).show()
+                                dismissAllowingStateLoss()
+                                val db = FirebaseDatabase.getInstance().reference.child("accounts")
+                                db.child(account._id.toString()).child("salt").setValue(newSalt)
+                                db.child(account._id.toString()).child("password")
+                                        .setValue(Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + newSalt).toByteArray())))
+//                                db.runTransaction(object : Transaction.Handler {
+//                                    override fun onComplete(p0: DatabaseError?, p1: Boolean, p2: DataSnapshot?) {}
+//                                    override fun doTransaction(p0: MutableData?): Transaction.Result {
+//                                        p0!!.child(account._id.toString()).child("salt").value = newSalt
+//                                        p0.child(account._id.toString()).child("password").value =
+//                                                Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + newSalt).toByteArray()))
+//                                        return Transaction.success(p0)
+//                                    }
+//                                })
+                            } else { currPassErrorTV.visibility = View.VISIBLE }
+                        }
+                    }}}
             }
         }
         cancelChangePassB.setOnClickListener{
             Snackbar.make( activity.findViewById(android.R.id.content), "Password did not change", Snackbar.LENGTH_LONG).show()
-            dismiss()
+            dismissAllowingStateLoss()
         }
         return view
     }
