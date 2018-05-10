@@ -88,6 +88,7 @@ class ManageFragment : Fragment() {
                 holder.itemLocationsTL.addView(rowTR)
             }
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
+            holder.itemContextTb.menu.clear()
             holder.itemContextTb.inflateMenu(R.menu.fragment_manage_menu_item)
             holder.itemContextTb.setOnMenuItemClickListener {
                 when(it.itemId){

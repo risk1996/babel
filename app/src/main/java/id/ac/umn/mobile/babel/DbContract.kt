@@ -12,6 +12,7 @@ class Account(val _id: Int, val email: String, val password: String, val salt: S
 class Unit(val _id: Int, val measure: String, val unit_name: String, val value: Double, val increment: Double, val unit_thumbnail: String)
 class Item(val _id: Int, val itemName: String, val stocks: List<Double>, val safetyStock: Double, val unit_id: Int, val thumbnail: String)
 class Location(val _id: Int, val code: String, val position: String)
+class ThirdParty(val _id: Int, val type: String, val tp_name: String)
 class FirebaseDb : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -24,6 +25,7 @@ abstract class Data{
     var units = ArrayList<Unit>()
     var items = ArrayList<Item>()
     var locations = ArrayList<Location>()
+    var thirdParties = ArrayList<ThirdParty>()
     init {
         val db = FirebaseDatabase.getInstance().reference
         db.addValueEventListener(object : ValueEventListener {
@@ -80,6 +82,14 @@ abstract class Data{
                             it.key.toInt(),
                             it.child("code").value.toString(),
                             it.child("position").value.toString()
+                    ))
+                }
+                thirdParties.clear()
+                p0.child("third_parties").children.forEach {
+                    thirdParties.add(ThirdParty(
+                            it.key.toInt(),
+                            it.child("type").value.toString(),
+                            it.child("tp_name").value.toString()
                     ))
                 }
                 onComplete()

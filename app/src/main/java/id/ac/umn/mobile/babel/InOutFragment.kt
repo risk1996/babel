@@ -19,6 +19,7 @@ import kotlin.collections.ArrayList
 
 class InOutFragment : Fragment() {
     val inOutItems = ArrayList<Int>()
+    var action = ""
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_in_out, container, false)
     }
@@ -34,6 +35,7 @@ class InOutFragment : Fragment() {
                 inOutSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locations.map { String.format("%1\$s: %2\$s", it.code, it.position) }.toList())
             }
         }}
+        action = "incoming"
         itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
     }
     inner class InOutFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<InOutFragmentRVAdapter.ViewHolder>(){
@@ -59,7 +61,13 @@ class InOutFragment : Fragment() {
             val unitFrom: Unit = data.units.single { it._id == item.unit_id }
             val unitAvail = data.units.filter { it.measure == unitFrom.measure }
             var unitTo: Unit = unitFrom
-            val sign = 1
+            val sign = if(action == "incoming") 1 else -1
+            holder.removeBtn.setOnClickListener {
+                holder.itemView.visibility = View.GONE
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, inOutSpn.count)
+                inOutItems.removeAt(position)
+            }
             holder.nameTV.text = item.itemName
             holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                     DecimalFormat("0.#").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
