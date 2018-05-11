@@ -3,6 +3,7 @@ package id.ac.umn.mobile.babel
 import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Handler
 import android.support.v7.widget.CardView
@@ -18,6 +19,7 @@ import kotlin.collections.ArrayList
 
 class InOutFragment : Fragment() {
     var inOutItems = ArrayList<Int>()
+    var listener : SharedPreferences.OnSharedPreferenceChangeListener? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_in_out, container, false)
     }
@@ -25,6 +27,7 @@ class InOutFragment : Fragment() {
         super.onStart()
         val inOutSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_in_out)
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
+        listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged() }
         val data = object : Data(){override fun onComplete() {
             if(isAdded){
                 val r = Random()
@@ -34,8 +37,6 @@ class InOutFragment : Fragment() {
             }
         }}
         itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
-        val ref = activity.findViewById<Button>(R.id.fragment_in_out_btn_refresh)
-        ref.setOnClickListener { itemsRV.adapter.notifyDataSetChanged() }
     }
     inner class InOutFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<InOutFragmentRVAdapter.ViewHolder>(){
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -59,13 +60,6 @@ class InOutFragment : Fragment() {
             val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
             pref.registerOnSharedPreferenceChangeListener { _, _ -> recyclerView.adapter.notifyDataSetChanged() }
         }
-
-        override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-            super.onDetachedFromRecyclerView(recyclerView)
-//            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
-//            pref.unregisterOnSharedPreferenceChangeListener { _, _ ->  }
-        }
-
         override fun onBindViewHolder(holder : InOutFragmentRVAdapter.ViewHolder, position : Int) {
             val inOutSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_in_out)
             val item: Item = data.items.single { it._id == inOutItems[position] }
@@ -74,35 +68,26 @@ class InOutFragment : Fragment() {
             var unitTo: Unit = unitFrom
             val sign = if(activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION", "incoming") == "incoming") 1 else -1
             holder.removeBtn.setOnClickListener {
-                val inOutItemsTemp = ArrayList<Int>()
-                val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
                 inOutItems.removeAt(position)
-                inOutItemsTemp.addAll(inOutItems)
-                inOutItems = inOutItemsTemp
-                itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
-//                notifyItemRemoved(position)
-//                notifyItemRangeRemoved(position)
+                notifyDataSetChanged()
             }
             holder.nameTV.text = item.itemName
             holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                    DecimalFormat("0.#").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
-                    DecimalFormat("0.#").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
+                    DecimalFormat("0.##").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
+                    DecimalFormat("0.##").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
                     unitFrom.unit_name
             )
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
             holder.signTV.text = if (sign == 1) "+" else "-"
-//            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
-//            pref.registerOnSharedPreferenceChangeListener { sharedPreferences, s ->
-//                Toast.makeText(activity, "CIHUY", Toast.LENGTH_SHORT).show()
-//                notifyDataSetChanged()
-//            }
+            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+            pref.registerOnSharedPreferenceChangeListener(listener)
             holder.amountNP.minValue = 0
             holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[inOutSpn.selectedItemPosition] / unitTo.value).toInt()
-            holder.amountNP.setFormatter { DecimalFormat("0.#").format(it.toDouble() * unitFrom.increment) }
+            holder.amountNP.setFormatter { DecimalFormat("0.##").format(it.toDouble() * unitFrom.increment) }
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                        DecimalFormat("0.#").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
-                        DecimalFormat("0.#").format(((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
+                        DecimalFormat("0.##").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
+                        DecimalFormat("0.##").format(((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
                         unitFrom.unit_name
                 )
             }
@@ -113,15 +98,14 @@ class InOutFragment : Fragment() {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     unitTo = unitAvail[p2]
                     holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                            DecimalFormat("0.#").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
-                            DecimalFormat("0.#").format(((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value))),
+                            DecimalFormat("0.##").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
+                            DecimalFormat("0.##").format(((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value))),
                             unitFrom.unit_name
                     )
+                    holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[inOutSpn.selectedItemPosition] / unitTo.value).toInt()
                 }
             }
         }
-        override fun getItemCount() : Int{
-            return inOutItems.size
-        }
+        override fun getItemCount() : Int = inOutItems.size
     }
 }

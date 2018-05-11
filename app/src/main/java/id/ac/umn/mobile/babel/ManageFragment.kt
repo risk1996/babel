@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
 import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
-import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -77,7 +74,7 @@ class ManageFragment : Fragment() {
                 locTV.setPadding(40, 0, 10, 5)
                 rowTR.addView(locTV)
                 stkTV.layoutParams = param
-                stkTV.text = String.format("%1\$s %2\$s", DecimalFormat("0.#").format(item.stocks[it._id] / unit.value), unit.unit_name)
+                stkTV.text = String.format("%1\$s %2\$s", DecimalFormat("0.##").format(item.stocks[it._id] / unit.value), unit.unit_name)
                 stkTV.setPadding(40, 0, 10, 5)
                 rowTR.addView(stkTV)
                 oosIV.setImageResource(R.drawable.icons8_error_24)
