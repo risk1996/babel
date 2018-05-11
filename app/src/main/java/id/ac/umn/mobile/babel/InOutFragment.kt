@@ -35,10 +35,15 @@ class InOutFragment : Fragment() {
             if(isAdded){
                 loadTransaction()
                 if(inOutItems.isEmpty()){
-                    val r = Random()
-                    items.forEach { if(r.nextInt(100)>55)inOutItems.add(TransactionItems(it._id, 0, it.unit_id)) }
+//                    val r = Random()
+//                    items.forEach {
+//                        if(r.nextInt(100)>55)
+//                            inOutItems.add(TransactionItems(it._id, 0, it.unit_id))
+//                    }
+                    Toast.makeText(activity, "There's nothing here yet", Toast.LENGTH_SHORT).show()
                 }
-                itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
+//                else
+                    itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
                 locationsSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locations.map { it.code })
                 val act = pref.getString("ACTION","incoming")
                 directionTV.text = if(act == "incoming") "←" else "→"
@@ -53,6 +58,11 @@ class InOutFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         saveTransaction()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadTransaction()
     }
     fun saveTransaction(){
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()

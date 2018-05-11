@@ -19,8 +19,8 @@ class UserFragment : Fragment() {
         val emailTV = activity.findViewById<TextView>(R.id.fragment_user_tv_email)
         val roleTV = activity.findViewById<TextView>(R.id.fragment_user_tv_role)
         val regDateTV = activity.findViewById<TextView>(R.id.fragment_user_tv_reg_date)
-        val otherUsersLV : ListView = activity.findViewById(R.id.fragment_user_lv_other_users)
         val changePassF = activity.findViewById<Button>(R.id.fragment_user_btn_change_password)
+        val otherUsersLV : ListView = activity.findViewById(R.id.fragment_user_lv_other_users)
         val data = object : Data(){
             override fun onComplete() {
                 if(isAdded){

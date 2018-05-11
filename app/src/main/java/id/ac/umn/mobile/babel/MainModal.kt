@@ -1,6 +1,7 @@
 package id.ac.umn.mobile.babel
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
@@ -11,8 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.google.android.gms.common.util.Hex
+import com.google.firebase.database.FirebaseDatabase
+import java.security.MessageDigest
+import java.util.*
 
 class MainModal : BottomSheetDialogFragment() {
+    class CommitDialog : YesNoDialog(){
+        override fun onYesClicked() {}
+        override fun onNoClicked() {}
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v : View? = null
         val tab = activity!!.findViewById<TabLayout>(R.id.activity_main_tl_tabs).selectedTabPosition
@@ -54,8 +63,39 @@ class MainModal : BottomSheetDialogFragment() {
                     Snackbar.make(activity!!.findViewById(android.R.id.content), snack, Snackbar.LENGTH_LONG).show()
                     dismissAllowingStateLoss()
                 }
-                addItemBtn.setOnClickListener { Toast.makeText(activity, "NAH ADD ITEM", Toast.LENGTH_SHORT).show() }
-                commitBtn.setOnClickListener { Toast.makeText(activity, "NAH COMMIT", Toast.LENGTH_SHORT).show() }
+                addItemBtn.setOnClickListener {
+                    val intent = Intent(activity, ItemActivity::class.java).putExtra("OPERATION", "In")
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
+                }
+                commitBtn.setOnClickListener {
+                    // get value dari semua yg ada di sananya trus setvalue ke firebase
+                    // tapi caranya gimana gw mau set nilai dari ItemActivity aja masih bingung caranya
+                    // atau gwnya yg bego harusnya ambil nilai ID tp gw malah manggil namanya
+                    // hmmmm susah bener ini
+                    // ntar paling minta diajarin ya yan hahahahaha
+                    // mungkin karena udh malem aja makanya agak rada2
+
+//                    val data = object : Data(){ override fun onComplete() {
+//                        if(isAdded) {
+//                            InOutFragment().loadTransaction()
+//                            val account = accounts.single { it.email == pref.getString("EMAIL", "") }
+//                            val salt = account.salt
+//                            val newSalt = UUID.randomUUID().toString().substring(25, 30)
+//                            val oldPassword = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))
+//                            if (account.password == oldPassword/* && newPassET.text == confirmNewPassET.text*/) {
+//                                currPassErrorTV.visibility = View.GONE
+//                                Snackbar.make(activity.findViewById(android.R.id.content), "Password successfully changed", Snackbar.LENGTH_LONG).show()
+//                                dismissAllowingStateLoss()
+//                                val db = FirebaseDatabase.getInstance().reference.child("accounts")
+//                                db.child(account._id.toString()).child("salt").setValue(newSalt)
+//                                db.child(account._id.toString()).child("password")
+//                                        .setValue(Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + newSalt).toByteArray())))
+//                            } else { currPassErrorTV.visibility = View.VISIBLE }
+//                        }
+//                    }}
+                    Toast.makeText(activity, "NAH COMMIT", Toast.LENGTH_SHORT).show()
+                }
             }
             2 -> {
                 v = inflater.inflate(R.layout.modal_main_report, container, false)!!
@@ -80,4 +120,5 @@ class MainModal : BottomSheetDialogFragment() {
         }
         return v
     }
+
 }
