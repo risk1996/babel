@@ -18,24 +18,35 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class InOutFragment : Fragment() {
-    var inOutItems = ArrayList<Int>()
+    class TransactionItems(val itemId: Int, var ammount: Int, var unitId: Int)
+    var inOutItems = ArrayList<TransactionItems>()
     var listener : SharedPreferences.OnSharedPreferenceChangeListener? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_in_out, container, false)
     }
     override fun onStart() {
         super.onStart()
-        val inOutSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_in_out)
+        val locationsSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations)
+        val directionTV = activity.findViewById<TextView>(R.id.fragment_in_out_tv_direction)
+        val purposeSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose)
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
-        listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged() }
+        val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
         val data = object : Data(){override fun onComplete() {
             if(isAdded){
-                val r = Random()
-                items.forEach { if(r.nextInt(100)>55)inOutItems.add(it._id) }
+                if(inOutItems.isEmpty()){
+                    val r = Random()
+                    items.forEach { if(r.nextInt(100)>55)inOutItems.add(TransactionItems(it._id, 0, it.unit_id)) }
+                }
                 itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
-                inOutSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locations.map { String.format("%1\$s: %2\$s", it.code, it.position) }.toList())
+                locationsSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locations.map { it.code })
+                val act = pref.getString("ACTION","incoming")
+                directionTV.text = if(act == "incoming") "←" else "→"
+                purposeSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item,
+                        thirdParties.filter { it.tp_status=="active"&&(act=="incoming"&&it.tp_type=="S"||act=="outgoing"&&it.tp_type=="C") }.map { it.tp_name })
             }
         }}
+        listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged(); data.onComplete() }
+        pref.registerOnSharedPreferenceChangeListener(listener)
         itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
     }
     inner class InOutFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<InOutFragmentRVAdapter.ViewHolder>(){
@@ -55,17 +66,12 @@ class InOutFragment : Fragment() {
             card.radius = 5.0F
             return ViewHolder(view)
         }
-        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-            super.onAttachedToRecyclerView(recyclerView)
-            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
-            pref.registerOnSharedPreferenceChangeListener { _, _ -> recyclerView.adapter.notifyDataSetChanged() }
-        }
         override fun onBindViewHolder(holder : InOutFragmentRVAdapter.ViewHolder, position : Int) {
-            val inOutSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_in_out)
-            val item: Item = data.items.single { it._id == inOutItems[position] }
+            val locationsSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations)
+            val item: Item = data.items.single { it._id == inOutItems[position].itemId }
             val unitFrom: Unit = data.units.single { it._id == item.unit_id }
             val unitAvail = data.units.filter { it.measure == unitFrom.measure }
-            var unitTo: Unit = unitFrom
+            var unitTo: Unit = data.units.single { it._id == inOutItems[position].unitId }
             val sign = if(activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION", "incoming") == "incoming") 1 else -1
             holder.removeBtn.setOnClickListener {
                 inOutItems.removeAt(position)
@@ -73,21 +79,21 @@ class InOutFragment : Fragment() {
             }
             holder.nameTV.text = item.itemName
             holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                    DecimalFormat("0.##").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
-                    DecimalFormat("0.##").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
+                    DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
+                    DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
                     unitFrom.unit_name
             )
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
             holder.signTV.text = if (sign == 1) "+" else "-"
-            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
-            pref.registerOnSharedPreferenceChangeListener(listener)
             holder.amountNP.minValue = 0
-            holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[inOutSpn.selectedItemPosition] / unitTo.value).toInt()
+            holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
+            holder.amountNP.value = inOutItems[position].ammount
             holder.amountNP.setFormatter { DecimalFormat("0.##").format(it.toDouble() * unitFrom.increment) }
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
+                inOutItems[position].ammount = numberPicker.value
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                        DecimalFormat("0.##").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
-                        DecimalFormat("0.##").format(((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
+                        DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
+                        DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
                         unitFrom.unit_name
                 )
             }
@@ -97,12 +103,13 @@ class InOutFragment : Fragment() {
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     unitTo = unitAvail[p2]
+                    inOutItems[position].unitId = unitTo._id
                     holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                            DecimalFormat("0.##").format((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value)),
-                            DecimalFormat("0.##").format(((item.stocks[inOutSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value))),
+                            DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
+                            DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value))),
                             unitFrom.unit_name
                     )
-                    holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[inOutSpn.selectedItemPosition] / unitTo.value).toInt()
+                    holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
                 }
             }
         }

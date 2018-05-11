@@ -12,7 +12,7 @@ class Account(val _id: Int, val email: String, val password: String, val salt: S
 class Unit(val _id: Int, val measure: String, val unit_name: String, val value: Double, val increment: Double, val unit_thumbnail: String)
 class Item(val _id: Int, val itemName: String, val stocks: List<Double>, val safetyStock: Double, val unit_id: Int, val thumbnail: String)
 class Location(val _id: Int, val code: String, val position: String)
-class ThirdParty(val _id: Int, val type: String, val tp_name: String)
+class ThirdParty(val _id: Int, val tp_type: String, val tp_name: String, val tp_status: String)
 class FirebaseDb : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -88,8 +88,9 @@ abstract class Data{
                 p0.child("third_parties").children.forEach {
                     thirdParties.add(ThirdParty(
                             it.key.toInt(),
-                            it.child("type").value.toString(),
-                            it.child("tp_name").value.toString()
+                            it.child("tp_type").value.toString(),
+                            it.child("tp_name").value.toString(),
+                            it.child("tp_status").value.toString()
                     ))
                 }
                 onComplete()
