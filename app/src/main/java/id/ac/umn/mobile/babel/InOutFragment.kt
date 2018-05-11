@@ -3,12 +3,11 @@ package id.ac.umn.mobile.babel
 import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
-import android.media.Image
-import android.support.design.widget.FloatingActionButton
+import android.os.AsyncTask
+import android.os.Handler
 import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +17,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class InOutFragment : Fragment() {
-    val inOutItems = ArrayList<Int>()
-    var action = ""
+    var inOutItems = ArrayList<Int>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_in_out, container, false)
     }
@@ -27,7 +25,7 @@ class InOutFragment : Fragment() {
         super.onStart()
         val inOutSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_in_out)
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
-        var data = object : Data(){override fun onComplete() {
+        val data = object : Data(){override fun onComplete() {
             if(isAdded){
                 val r = Random()
                 items.forEach { if(r.nextInt(100)>55)inOutItems.add(it._id) }
@@ -35,8 +33,9 @@ class InOutFragment : Fragment() {
                 inOutSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locations.map { String.format("%1\$s: %2\$s", it.code, it.position) }.toList())
             }
         }}
-        action = "incoming"
         itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
+        val ref = activity.findViewById<Button>(R.id.fragment_in_out_btn_refresh)
+        ref.setOnClickListener { itemsRV.adapter.notifyDataSetChanged() }
     }
     inner class InOutFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<InOutFragmentRVAdapter.ViewHolder>(){
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -55,18 +54,34 @@ class InOutFragment : Fragment() {
             card.radius = 5.0F
             return ViewHolder(view)
         }
+        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+            super.onAttachedToRecyclerView(recyclerView)
+            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+            pref.registerOnSharedPreferenceChangeListener { _, _ -> recyclerView.adapter.notifyDataSetChanged() }
+        }
+
+        override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+            super.onDetachedFromRecyclerView(recyclerView)
+//            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+//            pref.unregisterOnSharedPreferenceChangeListener { _, _ ->  }
+        }
+
         override fun onBindViewHolder(holder : InOutFragmentRVAdapter.ViewHolder, position : Int) {
             val inOutSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_in_out)
             val item: Item = data.items.single { it._id == inOutItems[position] }
             val unitFrom: Unit = data.units.single { it._id == item.unit_id }
             val unitAvail = data.units.filter { it.measure == unitFrom.measure }
             var unitTo: Unit = unitFrom
-            val sign = if(action == "incoming") 1 else -1
+            val sign = if(activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION", "incoming") == "incoming") 1 else -1
             holder.removeBtn.setOnClickListener {
-                holder.itemView.visibility = View.GONE
-                notifyItemRemoved(position)
-                notifyItemRangeChanged(position, inOutSpn.count)
+                val inOutItemsTemp = ArrayList<Int>()
+                val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
                 inOutItems.removeAt(position)
+                inOutItemsTemp.addAll(inOutItems)
+                inOutItems = inOutItemsTemp
+                itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
+//                notifyItemRemoved(position)
+//                notifyItemRangeRemoved(position)
             }
             holder.nameTV.text = item.itemName
             holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
@@ -76,8 +91,13 @@ class InOutFragment : Fragment() {
             )
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
             holder.signTV.text = if (sign == 1) "+" else "-"
+//            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+//            pref.registerOnSharedPreferenceChangeListener { sharedPreferences, s ->
+//                Toast.makeText(activity, "CIHUY", Toast.LENGTH_SHORT).show()
+//                notifyDataSetChanged()
+//            }
             holder.amountNP.minValue = 0
-            holder.amountNP.maxValue = 9999
+            holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[inOutSpn.selectedItemPosition] / unitTo.value).toInt()
             holder.amountNP.setFormatter { DecimalFormat("0.#").format(it.toDouble() * unitFrom.increment) }
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",

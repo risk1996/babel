@@ -73,15 +73,6 @@ class ChangePasswordDialog : DialogFragment(){
                                 db.child(account._id.toString()).child("salt").setValue(newSalt)
                                 db.child(account._id.toString()).child("password")
                                         .setValue(Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + newSalt).toByteArray())))
-//                                db.runTransaction(object : Transaction.Handler {
-//                                    override fun onComplete(p0: DatabaseError?, p1: Boolean, p2: DataSnapshot?) {}
-//                                    override fun doTransaction(p0: MutableData?): Transaction.Result {
-//                                        p0!!.child(account._id.toString()).child("salt").value = newSalt
-//                                        p0.child(account._id.toString()).child("password").value =
-//                                                Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + newSalt).toByteArray()))
-//                                        return Transaction.success(p0)
-//                                    }
-//                                })
                             } else { currPassErrorTV.visibility = View.VISIBLE }
                         }
                     }}}

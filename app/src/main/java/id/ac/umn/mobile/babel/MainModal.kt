@@ -1,7 +1,9 @@
 package id.ac.umn.mobile.babel
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
+import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.view.LayoutInflater
 import android.view.View
@@ -35,8 +37,22 @@ class MainModal : BottomSheetDialogFragment() {
                 val outgoingBtn = v.findViewById<Button>(R.id.modal_main_in_out_btn_outgoing)
                 val addItemBtn = v.findViewById<Button>(R.id.modal_main_in_out_btn_add_item)
                 val commitBtn = v.findViewById<Button>(R.id.modal_main_in_out_btn_commit)
-                incomingBtn.setOnClickListener { Toast.makeText(activity, "NAH INCOMING", Toast.LENGTH_SHORT).show() }
-                outgoingBtn.setOnClickListener { Toast.makeText(activity, "NAH OUTGOING", Toast.LENGTH_SHORT).show() }
+                incomingBtn.setOnClickListener {
+                    val act = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
+                    var snack = "Activity changed to incoming item(s)"
+                    if(act == "incoming") snack = "Activity did not change"
+                    else activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("ACTION", "incoming").apply()
+                    Snackbar.make(activity!!.findViewById(android.R.id.content), snack, Snackbar.LENGTH_LONG).show()
+                    dismissAllowingStateLoss()
+                }
+                outgoingBtn.setOnClickListener {
+                    val act = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
+                    var snack = "Activity changed to outgoing item(s)"
+                    if(act == "outgoing") snack = "Activity did not change"
+                    else activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("ACTION", "outgoing").apply()
+                    Snackbar.make(activity!!.findViewById(android.R.id.content), snack, Snackbar.LENGTH_LONG).show()
+                    dismissAllowingStateLoss()
+                }
                 addItemBtn.setOnClickListener { Toast.makeText(activity, "NAH ADD ITEM", Toast.LENGTH_SHORT).show() }
                 commitBtn.setOnClickListener { Toast.makeText(activity, "NAH COMMIT", Toast.LENGTH_SHORT).show() }
             }
