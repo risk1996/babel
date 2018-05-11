@@ -33,6 +33,7 @@ class InOutFragment : Fragment() {
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
         val data = object : Data(){override fun onComplete() {
             if(isAdded){
+                loadTransaction()
                 if(inOutItems.isEmpty()){
                     val r = Random()
                     items.forEach { if(r.nextInt(100)>55)inOutItems.add(TransactionItems(it._id, 0, it.unit_id)) }
@@ -48,6 +49,24 @@ class InOutFragment : Fragment() {
         listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged(); data.onComplete() }
         pref.registerOnSharedPreferenceChangeListener(listener)
         itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
+    }
+    override fun onStop() {
+        super.onStop()
+        saveTransaction()
+    }
+    fun saveTransaction(){
+        val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
+        pref.putString("ITEMS", inOutItems.joinToString(";") { String.format("%d,%d,%d", it.itemId, it.ammount, it.unitId) })
+        pref.apply()
+    }
+    fun loadTransaction(){
+        val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+        val itemRaw = pref.getString("ITEMS", "").split(";")
+        inOutItems.clear()
+        if(!itemRaw.contains("")) itemRaw.forEach {
+            val itemSpec = it.split(",").map { it.toInt() }
+            inOutItems.add(TransactionItems(itemSpec[0], itemSpec[1], itemSpec[2]))
+        }
     }
     inner class InOutFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<InOutFragmentRVAdapter.ViewHolder>(){
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -13,7 +13,6 @@
                 android:id="@+id/fragment_in_out_spn_locations"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_margin="5dp"
                 android:layout_height="wrap_content"/>
             <TextView
                 android:id="@+id/fragment_in_out_tv_direction"
@@ -26,7 +25,6 @@
                 android:id="@+id/fragment_in_out_spn_purpose"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_margin="5dp"
                 android:layout_height="wrap_content"/>
         </TableRow>
         <TableRow>
