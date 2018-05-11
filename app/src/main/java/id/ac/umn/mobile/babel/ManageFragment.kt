@@ -104,6 +104,7 @@ class ManageFragment : Fragment() {
                 }
             }
         }
+//        fungsi itemcount
         override fun getItemCount() : Int{
             return filterItems.size
         }
