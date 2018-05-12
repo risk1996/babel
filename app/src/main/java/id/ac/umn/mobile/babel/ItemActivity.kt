@@ -21,13 +21,13 @@ import kotlin.collections.HashSet
 import kotlin.collections.LinkedHashSet
 
 class ItemActivity : AppCompatActivity() {
-    val filterItems = ArrayList<Int>()
+    var unitNameBool = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
 
         val titleTV = findViewById<TextView>(R.id.activity_item_tv_title)
-        val itemNameACTV = findViewById<AutoCompleteTextView>(R.id.activity_item_et_item_name)
+        val itemNameET = findViewById<EditText>(R.id.activity_item_et_item_name)
         val itemThumbnailIB = findViewById<ImageButton>(R.id.activity_item_ib_item_thumbnail)
         val unitMeasureS = findViewById<Spinner>(R.id.activity_item_spn_unit_measure)
         val unitNameS = findViewById<Spinner>(R.id.activity_item_spn_unit_name)
@@ -43,10 +43,10 @@ class ItemActivity : AppCompatActivity() {
 
         val data = object : Data(){
             override fun onComplete() {
-                val item = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
-                items.filter { it.itemName.toLowerCase().contains(itemNameACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach {item.add( it.itemName )}
-                itemNameACTV.setAdapter(item)
-                itemNameACTV.threshold = 1
+//                val item = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
+//                items.filter { it.itemName.toLowerCase().contains(itemNameACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach {item.add( it.itemName )}
+//                itemNameACTV.setAdapter(item)
+//                itemNameACTV.threshold = 1
 
                 val unitMeasure = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
                 units.filter{ (it._id%100).toString() == "1" }.forEach { unitMeasure.add(it.measure)}
@@ -57,12 +57,13 @@ class ItemActivity : AppCompatActivity() {
 
         if (act == "VIEW"){
             titleTV.text = "VIEW ITEM"
-            itemNameACTV.isEnabled = false
+            itemNameET.isEnabled = false
             safetyStockET.isEnabled = false
         }
         else titleTV.text = "EDIT ITEM"
-        itemNameACTV.setText(name)
-//        unitMeasureS.post({ unitMeasureS.setSelection((unit/100)-1) })
+        itemNameET.setText(name)
+        unitMeasureS.post({ unitMeasureS.setSelection((unit/100)-1) })
+        unitNameS.post({ unitNameS.setSelection((unit%100)-1) })
         safetyStockET.setText(safetyStock)
 
         unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -72,20 +73,22 @@ class ItemActivity : AppCompatActivity() {
                 data.units.filter{ it.measure == parent!!.getItemAtPosition(position) }.forEach{unitName.add(it.unit_name)}
                 if (act == "VIEW") unitNameS.isEnabled = false
                 unitNameS.adapter = unitName
-//                unitNameS.post({ unitNameS.setSelection((unit%100)-1) })
+                if (unitNameBool){
+                    unitNameBool = false
+                    unitNameS.post({ unitNameS.setSelection((unit%100)-1, false) })
+                }
             }
         }
 
         cancelB.setOnClickListener{
             finish()
-            Toast.makeText(this, unit, Toast.LENGTH_SHORT).show()
         }
         okB.setOnClickListener{
             finish()
             if (act == "EDIT"){
                 val item = data.items.single { it.itemName == name }
                 val db = FirebaseDatabase.getInstance().reference.child("items")
-                db.child(item._id.toString()).child("item_name").setValue(itemNameACTV.text.toString())
+                db.child(item._id.toString()).child("item_name").setValue(itemNameET.text.toString())
                 db.child(item._id.toString()).child("safety_stock").setValue(safetyStockET.text.toString())
                 db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
                 // udah keganti tp langsung crash gara2 index array out of bounds tp blom nemu kenapa bisa gitu
