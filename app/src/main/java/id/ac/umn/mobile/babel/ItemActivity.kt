@@ -41,9 +41,6 @@ class ItemActivity : AppCompatActivity() {
         val unit = intent.getIntExtra("UNIT", 0)
         val safetyStock = intent.getStringExtra("SAFETY_STOCK")
 
-        var unitMeasurePos : Int
-        var unitNamePos : Int
-
         val data = object : Data(){
             override fun onComplete() {
                 val item = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
@@ -58,6 +55,16 @@ class ItemActivity : AppCompatActivity() {
             }
         }
 
+        if (act == "VIEW"){
+            titleTV.text = "VIEW ITEM"
+            itemNameACTV.isEnabled = false
+            safetyStockET.isEnabled = false
+        }
+        else titleTV.text = "EDIT ITEM"
+        itemNameACTV.setText(name)
+//        unitMeasureS.post({ unitMeasureS.setSelection((unit/100)-1) })
+        safetyStockET.setText(safetyStock)
+
         unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -65,23 +72,13 @@ class ItemActivity : AppCompatActivity() {
                 data.units.filter{ it.measure == parent!!.getItemAtPosition(position) }.forEach{unitName.add(it.unit_name)}
                 if (act == "VIEW") unitNameS.isEnabled = false
                 unitNameS.adapter = unitName
-                unitNameS.post({ unitNameS.setSelection((unit%100)-1) })
+//                unitNameS.post({ unitNameS.setSelection((unit%100)-1) })
             }
-        }
-        if (act == "VIEW" || act == "EDIT"){
-            if (act == "VIEW"){
-                titleTV.text = "VIEW ITEM"
-                itemNameACTV.isEnabled = false
-                safetyStockET.isEnabled = false
-            }
-            else titleTV.text = "EDIT ITEM"
-            itemNameACTV.setText(name)
-            unitMeasureS.post({ unitMeasureS.setSelection((unit/100)-1) })
-            safetyStockET.setText(safetyStock)
         }
 
         cancelB.setOnClickListener{
             finish()
+            Toast.makeText(this, unit, Toast.LENGTH_SHORT).show()
         }
         okB.setOnClickListener{
             finish()
@@ -92,6 +89,7 @@ class ItemActivity : AppCompatActivity() {
                 db.child(item._id.toString()).child("safety_stock").setValue(safetyStockET.text.toString())
                 db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
                 // udah keganti tp langsung crash gara2 index array out of bounds tp blom nemu kenapa bisa gitu
+                // masalahnya mungkin di spinner atau array adapter, yg pasti related sama kalo gw mau set nilai spinnernya pas mau edit
 //                TODO("UPDATE item_thumbnail, fix bug")
             }
         }

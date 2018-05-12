@@ -15,10 +15,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.google.firebase.database.FirebaseDatabase
 import java.text.DecimalFormat
 
 class ManageFragment : Fragment() {
     val filterItems = ArrayList<Int>()
+    val delete = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_manage, container, false)
     }
@@ -26,7 +28,7 @@ class ManageFragment : Fragment() {
         super.onStart()
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_manage_items_rv_items)
         val searchET = activity.findViewById<EditText>(R.id.fragment_manage_items_et_search)
-        var data = object : Data(){
+        val data = object : Data(){
             override fun onComplete() {
                 filterItems.clear()
                 items.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
@@ -43,6 +45,10 @@ class ManageFragment : Fragment() {
                 itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         })
+    }
+    class DeleteDialog : YesNoDialog(){
+        override fun onYesClicked() {}
+        override fun onNoClicked() {}
     }
     inner class ManageFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<ManageFragmentRVAdapter.ViewHolder>(){
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -111,7 +117,21 @@ class ManageFragment : Fragment() {
                         true
                     }
                     R.id.menu_item_act_delete -> {
-                        Toast.makeText(context, "CIE DELETE", Toast.LENGTH_SHORT).show()
+//                        val dialog = DeleteDialog()
+//                        dialog.isCancelable = false
+//                        dialog.heading = "Delete Item"
+//                        dialog.message = "Are you sure you want to delete this item?"
+//                        dialog.highlight = dialog.HIGHLIGHT_NO
+//                        dialog.show(fragmentManager, "Dialog Yes No")
+
+//                        val data = object : Data(){
+//                            override fun onComplete() {
+                                val itemToDelete = data.items.single { it.itemName == holder.nameTV.text.toString() }
+                                val db = FirebaseDatabase.getInstance().reference.child("items")
+                                db.child(itemToDelete._id.toString()).removeValue()
+//                            }
+//                        }
+
                         true
                     }
                     else -> {true }
