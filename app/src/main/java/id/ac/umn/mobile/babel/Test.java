@@ -10,17 +10,17 @@ public class Test {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+//di detect oleh tetxwatcher (char sequence)
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+//sedang dibaca oleh tetxwatcher (char sequence)
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+// setelah berhasil dibaca
             }
         });
     }
