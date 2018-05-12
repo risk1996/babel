@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.*
 import org.w3c.dom.Text
@@ -39,13 +40,17 @@ class ItemActivity : AppCompatActivity() {
                 itemNameACTV.setAdapter(item)
                 itemNameACTV.threshold = 1
 
-                //blom bisa buat dupe entry
                 val unitMeasure = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
-                units.forEach{unitMeasure.add(it.measure)}
+                units.filter{ (it._id%100).toString() == "1" }.forEach { unitMeasure.add(it.measure)}
                 unitMeasureS.adapter = unitMeasure
+            }
+        }
 
+        unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val unitName = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
-                units.forEach{unitName.add(it.unit_name)}
+                data.units.filter{ it.measure == parent!!.getItemAtPosition(position) }.forEach{unitName.add(it.unit_name)}
                 unitNameS.adapter = unitName
             }
         }
