@@ -3,6 +3,7 @@ package id.ac.umn.mobile.babel
 import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
@@ -60,14 +61,14 @@ class ManageFragment : Fragment() {
         override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){
             val item : Item = data.items.single { it._id==filterItems[position] }
             val unit : Unit = data.units.find { it._id==item.unit_id }!!
+            val rowTR = TableRow(activity)
+            val locTV = TextView(activity)
+            val stkTV = TextView(activity)
+            val oosIV = ImageView(activity)
+            val param = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
             holder.nameTV.text = item.itemName
             holder.itemLocationsTL.removeViews(1, holder.itemLocationsTL.childCount-1)
             data.locations.forEach {
-                val rowTR = TableRow(activity)
-                val locTV = TextView(activity)
-                val stkTV = TextView(activity)
-                val oosIV = ImageView(activity)
-                val param = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                 locTV.layoutParams = param
                 locTV.text = String.format("%1\$s    : ", it.code)
                 locTV.setPadding(40, 0, 10, 5)
@@ -89,11 +90,24 @@ class ManageFragment : Fragment() {
             holder.itemContextTb.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.menu_item_act_view -> {
-                        Toast.makeText(context, "CIE VIEW", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "CIE VIEW", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(activity, ItemActivity::class.java)
+                        intent.putExtra("OPERATION", "VIEW")
+                        intent.putExtra("ITEM_NAME", holder.nameTV.text.toString())
+                        intent.putExtra("THUMBNAIL", item.thumbnail)
+                        intent.putExtra("UNIT", item.unit_id)
+                        intent.putExtra("SAFETY_STOCK", item.safetyStock.toString())
+                        startActivity(intent)
                         true
                     }
                     R.id.menu_item_act_edit -> {
-                        Toast.makeText(context, "CIE EDIT", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(activity, ItemActivity::class.java)
+                        intent.putExtra("OPERATION", "EDIT")
+                        intent.putExtra("ITEM_NAME", holder.nameTV.text.toString())
+                        intent.putExtra("THUMBNAIL", item.thumbnail)
+                        intent.putExtra("UNIT", item.unit_id)
+                        intent.putExtra("SAFETY_STOCK", item.safetyStock.toString())
+                        startActivity(intent)
                         true
                     }
                     R.id.menu_item_act_delete -> {

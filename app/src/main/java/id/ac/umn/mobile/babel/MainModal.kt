@@ -69,31 +69,6 @@ class MainModal : BottomSheetDialogFragment() {
                     dismissAllowingStateLoss()
                 }
                 commitBtn.setOnClickListener {
-                    // get value dari semua yg ada di sananya trus setvalue ke firebase
-                    // tapi caranya gimana gw mau set nilai dari ItemActivity aja masih bingung caranya
-                    // atau gwnya yg bego harusnya ambil nilai ID tp gw malah manggil namanya
-                    // hmmmm susah bener ini
-                    // ntar paling minta diajarin ya yan hahahahaha
-                    // mungkin karena udh malem aja makanya agak rada2
-
-//                    val data = object : Data(){ override fun onComplete() {
-//                        if(isAdded) {
-//                            InOutFragment().loadTransaction()
-//                            val account = accounts.single { it.email == pref.getString("EMAIL", "") }
-//                            val salt = account.salt
-//                            val newSalt = UUID.randomUUID().toString().substring(25, 30)
-//                            val oldPassword = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))
-//                            if (account.password == oldPassword/* && newPassET.text == confirmNewPassET.text*/) {
-//                                currPassErrorTV.visibility = View.GONE
-//                                Snackbar.make(activity.findViewById(android.R.id.content), "Password successfully changed", Snackbar.LENGTH_LONG).show()
-//                                dismissAllowingStateLoss()
-//                                val db = FirebaseDatabase.getInstance().reference.child("accounts")
-//                                db.child(account._id.toString()).child("salt").setValue(newSalt)
-//                                db.child(account._id.toString()).child("password")
-//                                        .setValue(Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + newSalt).toByteArray())))
-//                            } else { currPassErrorTV.visibility = View.VISIBLE }
-//                        }
-//                    }}
                     Toast.makeText(activity, "NAH COMMIT", Toast.LENGTH_SHORT).show()
                 }
             }
