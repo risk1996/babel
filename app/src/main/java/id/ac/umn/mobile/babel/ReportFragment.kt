@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.*
 
 class ReportFragment : Fragment() {
+//    initiate (inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_report, container, false)
     }
     override fun onStart() {
+//        activty mulai
         super.onStart()
 
         val compIconIV = activity.findViewById<ImageView>(R.id.fragment_report_iv_comp_icon)

@@ -19,16 +19,19 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.security.MessageDigest
-
+//class fungsi login
 class LoginActivity : AppCompatActivity() {
+//    function oncreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//    layout dari activity_login
         setContentView(R.layout.activity_login)
 
         title = getString(R.string.activity_login_label)
-        val emailET = findViewById<EditText>(R.id.activity_login_et_email)
+
+        val emailET = findViewById<EditText>(R.id.activity_login_et_email) //edit text activity_login_et_email
         val emailErrorTV = findViewById<TextView>(R.id.activity_login_tv_email_errors)
-        val passwordET = findViewById<EditText>(R.id.activity_login_et_password)
+        val passwordET = findViewById<EditText>(R.id.activity_login_et_password) // edit text activity_login_et_password
         val passwordErrorTV = findViewById<TextView>(R.id.activity_login_tv_password_errors)
         val rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me)
         val credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors)

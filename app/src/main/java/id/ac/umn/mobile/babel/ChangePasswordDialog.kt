@@ -21,6 +21,7 @@ import java.util.*
 
 class ChangePasswordDialog : DialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+//    layout tampilan untuk fragment
         val view = inflater.inflate(R.layout.dialog_change_password, container, false)
         val currPassET = view.findViewById<EditText>(R.id.current_password_edit)
         val currPassErrorTV = view.findViewById<TextView>(R.id.current_password_edit_error)
@@ -39,6 +40,7 @@ class ChangePasswordDialog : DialogFragment(){
                 currPassErrorTV.visibility = View.GONE
             }
         })
+
         newPassET.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
