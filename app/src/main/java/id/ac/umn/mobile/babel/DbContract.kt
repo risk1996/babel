@@ -13,6 +13,7 @@ class Unit(val _id: Int, val measure: String, val unit_name: String, val value: 
 class Item(val _id: Int, val itemName: String, val stocks: List<Double>, val safetyStock: Double, val unit_id: Int, val thumbnail: String)
 class Location(val _id: Int, val code: String, val position: String)
 class ThirdParty(val _id: Int, val tp_type: String, val tp_name: String, val tp_status: String)
+//database menggunakan FirebaseDb
 class FirebaseDb : Application() {
     override fun onCreate() {
         super.onCreate()
