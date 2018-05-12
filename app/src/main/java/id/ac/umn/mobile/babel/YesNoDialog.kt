@@ -20,6 +20,7 @@ abstract class YesNoDialog : DialogFragment() {
     var heading : String = ""
     var message : String = ""
     var highlight : Int = HIGHLIGHT_YES
+    var value : String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.dialog_yes_no, container, false)

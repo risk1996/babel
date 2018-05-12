@@ -74,8 +74,8 @@ class ItemActivity : AppCompatActivity() {
                 if (act == "VIEW") unitNameS.isEnabled = false
                 unitNameS.adapter = unitName
                 if (unitNameBool){
-                    unitNameBool = false
                     unitNameS.post({ unitNameS.setSelection((unit%100)-1, false) })
+                    unitNameBool = false
                 }
             }
         }
