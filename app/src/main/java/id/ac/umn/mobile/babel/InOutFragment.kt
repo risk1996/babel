@@ -25,6 +25,7 @@ class InOutFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_in_out, container, false)
     }
     override fun onStart() {
+//        function pada saat onStart
         super.onStart()
         val locationsSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations)
         val directionTV = activity.findViewById<TextView>(R.id.fragment_in_out_tv_direction)
