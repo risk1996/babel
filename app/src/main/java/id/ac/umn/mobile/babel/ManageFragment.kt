@@ -30,12 +30,8 @@ class ManageFragment : Fragment() {
         super.onStart()
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_manage_items_rv_items)
         val searchET = activity.findViewById<EditText>(R.id.fragment_manage_items_et_search)
-<<<<<<< HEAD
+
         var data = object : Data(){
-//            setelah selesai activity
-=======
-        val data = object : Data(){
->>>>>>> origin/master
             override fun onComplete() {
                 filterItems.clear()
                 items.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
