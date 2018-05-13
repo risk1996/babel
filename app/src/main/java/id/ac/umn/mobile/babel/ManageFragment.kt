@@ -3,7 +3,9 @@ package id.ac.umn.mobile.babel
 import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.google.firebase.database.FirebaseDatabase
 import java.text.DecimalFormat
 
 class ManageFragment : Fragment() {
@@ -27,8 +30,12 @@ class ManageFragment : Fragment() {
         super.onStart()
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_manage_items_rv_items)
         val searchET = activity.findViewById<EditText>(R.id.fragment_manage_items_et_search)
+<<<<<<< HEAD
         var data = object : Data(){
 //            setelah selesai activity
+=======
+        val data = object : Data(){
+>>>>>>> origin/master
             override fun onComplete() {
                 filterItems.clear()
                 items.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
@@ -45,6 +52,21 @@ class ManageFragment : Fragment() {
                 itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         })
+    }
+    class DeleteDialog : YesNoDialog(){
+        override fun onYesClicked() {
+            val data = object : Data() {
+                override fun onComplete() {
+                    val itemToDelete = items.single { it.itemName == value }
+                    val db = FirebaseDatabase.getInstance().reference.child("items")
+                    db.child(itemToDelete._id.toString()).removeValue()
+                }
+            }
+            Snackbar.make(activity.findViewById(android.R.id.content), "Item successfully deleted", Snackbar.LENGTH_LONG).show()
+        }
+        override fun onNoClicked() {
+            Snackbar.make(activity.findViewById(android.R.id.content), "Nothing is changed", Snackbar.LENGTH_LONG).show()
+        }
     }
     inner class ManageFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<ManageFragmentRVAdapter.ViewHolder>(){
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -63,14 +85,14 @@ class ManageFragment : Fragment() {
         override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){
             val item : Item = data.items.single { it._id==filterItems[position] }
             val unit : Unit = data.units.find { it._id==item.unit_id }!!
+            val rowTR = TableRow(activity)
+            val locTV = TextView(activity)
+            val stkTV = TextView(activity)
+            val oosIV = ImageView(activity)
+            val param = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
             holder.nameTV.text = item.itemName
             holder.itemLocationsTL.removeViews(1, holder.itemLocationsTL.childCount-1)
             data.locations.forEach {
-                val rowTR = TableRow(activity)
-                val locTV = TextView(activity)
-                val stkTV = TextView(activity)
-                val oosIV = ImageView(activity)
-                val param = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                 locTV.layoutParams = param
                 locTV.text = String.format("%1\$s    : ", it.code)
                 locTV.setPadding(40, 0, 10, 5)
@@ -92,15 +114,34 @@ class ManageFragment : Fragment() {
             holder.itemContextTb.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.menu_item_act_view -> {
-                        Toast.makeText(context, "CIE VIEW", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "CIE VIEW", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(activity, ItemActivity::class.java)
+                        intent.putExtra("OPERATION", "VIEW")
+                        intent.putExtra("ITEM_NAME", holder.nameTV.text.toString())
+                        intent.putExtra("THUMBNAIL", item.thumbnail)
+                        intent.putExtra("UNIT", item.unit_id)
+                        intent.putExtra("SAFETY_STOCK", item.safetyStock.toString())
+                        startActivity(intent)
                         true
                     }
                     R.id.menu_item_act_edit -> {
-                        Toast.makeText(context, "CIE EDIT", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(activity, ItemActivity::class.java)
+                        intent.putExtra("OPERATION", "EDIT")
+                        intent.putExtra("ITEM_NAME", holder.nameTV.text.toString())
+                        intent.putExtra("THUMBNAIL", item.thumbnail)
+                        intent.putExtra("UNIT", item.unit_id)
+                        intent.putExtra("SAFETY_STOCK", item.safetyStock.toString())
+                        startActivity(intent)
                         true
                     }
                     R.id.menu_item_act_delete -> {
-                        Toast.makeText(context, "CIE DELETE", Toast.LENGTH_SHORT).show()
+                        val dialog = DeleteDialog()
+                        dialog.isCancelable = false
+                        dialog.heading = "Delete Item"
+                        dialog.message = "Are you sure you want to delete this item?"
+                        dialog.value = holder.nameTV.text.toString()
+                        dialog.highlight = dialog.HIGHLIGHT_NO
+                        dialog.show(fragmentManager, "Dialog Yes No")
                         true
                     }
                     else -> {true }

@@ -1,6 +1,7 @@
 package id.ac.umn.mobile.babel
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
@@ -11,8 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.google.android.gms.common.util.Hex
+import com.google.firebase.database.FirebaseDatabase
+import java.security.MessageDigest
+import java.util.*
 
 class MainModal : BottomSheetDialogFragment() {
+    class CommitDialog : YesNoDialog(){
+        override fun onYesClicked() {}
+        override fun onNoClicked() {}
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v : View? = null
         val tab = activity!!.findViewById<TabLayout>(R.id.activity_main_tl_tabs).selectedTabPosition
@@ -54,8 +63,14 @@ class MainModal : BottomSheetDialogFragment() {
                     Snackbar.make(activity!!.findViewById(android.R.id.content), snack, Snackbar.LENGTH_LONG).show()
                     dismissAllowingStateLoss()
                 }
-                addItemBtn.setOnClickListener { Toast.makeText(activity, "NAH ADD ITEM", Toast.LENGTH_SHORT).show() }
-                commitBtn.setOnClickListener { Toast.makeText(activity, "NAH COMMIT", Toast.LENGTH_SHORT).show() }
+                addItemBtn.setOnClickListener {
+//                    val intent = Intent(activity, ItemActivity::class.java).putExtra("OPERATION", "In")
+//                    startActivity(intent)
+                    dismissAllowingStateLoss()
+                }
+                commitBtn.setOnClickListener {
+                    Toast.makeText(activity, "NAH COMMIT", Toast.LENGTH_SHORT).show()
+                }
             }
             2 -> {
                 v = inflater.inflate(R.layout.modal_main_report, container, false)!!
@@ -80,4 +95,5 @@ class MainModal : BottomSheetDialogFragment() {
         }
         return v
     }
+
 }

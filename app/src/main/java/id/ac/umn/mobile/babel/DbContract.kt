@@ -94,7 +94,10 @@ abstract class Data{
                             it.child("tp_status").value.toString()
                     ))
                 }
-                onComplete()
+                try{
+                    onComplete()
+                }
+                catch (e : NoSuchElementException){}
             }
         })
     }

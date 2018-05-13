@@ -23,15 +23,15 @@ class ChangePasswordDialog : DialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 //    layout tampilan untuk fragment
         val view = inflater.inflate(R.layout.dialog_change_password, container, false)
-        val currPassET = view.findViewById<EditText>(R.id.current_password_edit)
-        val currPassErrorTV = view.findViewById<TextView>(R.id.current_password_edit_error)
-        val newPassET = view.findViewById<EditText>(R.id.new_password_edit)
-        val newPassErrorTV = view.findViewById<TextView>(R.id.new_password_edit_error)
-        val confirmNewPassET = view.findViewById<EditText>(R.id.confirm_new_password_edit)
-        val confirmNewPassErrorTV = view.findViewById<TextView>(R.id.confirm_new_password_edit_error)
-        val changePassB = view.findViewById<Button>(R.id.change_password_button)
-        val cancelChangePassB = view.findViewById<Button>(R.id.cancel_change_password_button)
-        val requiredFieldErrorTV = view.findViewById<TextView>(R.id.required_field_error_text_view)
+        val currPassET = view.findViewById<EditText>(R.id.dialog_change_password_et_current_password)
+        val currPassErrorTV = view.findViewById<TextView>(R.id.dialog_change_password_tv_current_password_error)
+        val newPassET = view.findViewById<EditText>(R.id.dialog_change_password_et_new_password)
+        val newPassErrorTV = view.findViewById<TextView>(R.id.dialog_change_password_tv_new_password_error)
+        val confirmNewPassET = view.findViewById<EditText>(R.id.dialog_change_password_et_confirm_new_password)
+        val confirmNewPassErrorTV = view.findViewById<TextView>(R.id.dialog_change_password_tv_confirm_new_password_error)
+        val changePassB = view.findViewById<Button>(R.id.dialog_change_password_btn_change_password)
+        val cancelChangePassB = view.findViewById<Button>(R.id.dialog_change_password_btn_cancel_change_password)
+        val requiredFieldErrorTV = view.findViewById<TextView>(R.id.dialog_change_password_tv_required_field_error)
         currPassET.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
