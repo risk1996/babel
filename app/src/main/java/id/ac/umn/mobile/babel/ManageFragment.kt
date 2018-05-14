@@ -113,20 +113,14 @@ class ManageFragment : Fragment() {
 //                        Toast.makeText(context, "CIE VIEW", Toast.LENGTH_SHORT).show()
                         val intent = Intent(activity, ItemActivity::class.java)
                         intent.putExtra("OPERATION", "VIEW")
-                        intent.putExtra("ITEM_NAME", holder.nameTV.text.toString())
-                        intent.putExtra("THUMBNAIL", item.thumbnail)
-                        intent.putExtra("UNIT", item.unit_id)
-                        intent.putExtra("SAFETY_STOCK", item.safetyStock.toString())
+                        intent.putExtra("ITEM_ID", item._id)
                         startActivity(intent)
                         true
                     }
                     R.id.menu_item_act_edit -> {
                         val intent = Intent(activity, ItemActivity::class.java)
                         intent.putExtra("OPERATION", "EDIT")
-                        intent.putExtra("ITEM_NAME", holder.nameTV.text.toString())
-                        intent.putExtra("THUMBNAIL", item.thumbnail)
-                        intent.putExtra("UNIT", item.unit_id)
-                        intent.putExtra("SAFETY_STOCK", item.safetyStock.toString())
+                        intent.putExtra("ITEM_ID", item._id)
                         startActivity(intent)
                         true
                     }

@@ -98,6 +98,7 @@ abstract class Data{
                     onComplete()
                 }
                 catch (e : NoSuchElementException){}
+                catch (e : NullPointerException){}
             }
         })
     }

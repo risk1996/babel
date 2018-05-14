@@ -23,7 +23,7 @@ class UserFragment : Fragment() {
         val otherUsersLV : ListView = activity.findViewById(R.id.fragment_user_lv_other_users)
         val data = object : Data(){
             override fun onComplete() {
-                if(isAdded){
+//                if(isAdded){
                     val user = accounts.single { it.email==activity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("EMAIL", "") }
                     nameTV.text = user.name
                     emailTV.text = user.email
@@ -32,7 +32,7 @@ class UserFragment : Fragment() {
                     val acc = ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1)
                     accounts.filter { it._id != user._id }.forEach {  acc.add(String.format("%s (%s)", it.name, it.role )) }
                     otherUsersLV.adapter = acc
-                }
+//                }
             }
         }
         changePassF.setOnClickListener{

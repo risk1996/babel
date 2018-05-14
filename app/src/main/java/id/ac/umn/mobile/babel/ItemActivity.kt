@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import com.google.android.gms.common.util.Hex
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import org.w3c.dom.Text
 import java.security.MessageDigest
@@ -19,6 +20,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 import kotlin.collections.LinkedHashSet
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class ItemActivity : AppCompatActivity() {
 //    HEAD
@@ -39,10 +42,7 @@ class ItemActivity : AppCompatActivity() {
         val okB = findViewById<Button>(R.id.activity_item_btn_ok)
 
         val act = intent.getStringExtra("OPERATION")
-        val name = intent.getStringExtra("ITEM_NAME")
-        val thumbnail = intent.getStringExtra("THUMBNAIL")
-        val unit = intent.getIntExtra("UNIT", 0)
-        val safetyStock = intent.getStringExtra("SAFETY_STOCK")
+        val itemID = intent.getIntExtra("ITEM_ID", 0)
 
         val data = object : Data(){
             override fun onComplete() {
@@ -51,52 +51,71 @@ class ItemActivity : AppCompatActivity() {
 //                itemNameACTV.setAdapter(item)
 //                itemNameACTV.threshold = 1
 
-                val unitMeasure = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
-                units.filter{ (it._id%100).toString() == "1" }.forEach { unitMeasure.add(it.measure)}
-                if (act == "VIEW") unitMeasureS.isEnabled = false
-                unitMeasureS.adapter = unitMeasure
-            }
-        }
+                val availMeasure = units.map { it.measure }.distinct()
+                unitMeasureS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availMeasure)
 
-        if (act == "VIEW"){
-            titleTV.text = "VIEW ITEM"
-            itemNameET.isEnabled = false
-            safetyStockET.isEnabled = false
-        }
-        else titleTV.text = "EDIT ITEM"
-        itemNameET.setText(name)
-        unitMeasureS.post({ unitMeasureS.setSelection((unit/100)-1) })
-        unitNameS.post({ unitNameS.setSelection((unit%100)-1) })
-        safetyStockET.setText(safetyStock)
+                val item  = items.single { it._id == itemID }
+                val unit = units.single { it._id == item.unit_id }
 
-        unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val unitName = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
-                data.units.filter{ it.measure == parent!!.getItemAtPosition(position) }.forEach{unitName.add(it.unit_name)}
-                if (act == "VIEW") unitNameS.isEnabled = false
-                unitNameS.adapter = unitName
-                if (unitNameBool){
-                    unitNameS.post({ unitNameS.setSelection((unit%100)-1, false) })
-                    unitNameBool = false
+                if (act == "EDIT" || act == "VIEW") {
+                    if (act == "VIEW") {
+                        titleTV.text = "VIEW ITEM"
+                        unitMeasureS.isEnabled = false
+                        unitNameS.isEnabled = false
+                        itemNameET.isEnabled = false
+                        safetyStockET.isEnabled = false
+                    }
+                    titleTV.text = "EDIT ITEM"
+                    itemNameET.setText(item.itemName)
+//                    unitMeasureS.post({ unitMeasureS.setSelection((item.unit_id / 100) - 1) })
+                    unitMeasureS.setSelection(availMeasure.indexOf(unit.measure))
+                    safetyStockET.setText(item.safetyStock.toString())
                 }
-            }
-        }
+                else if (act == "NEW"){
+                    titleTV.text = "NEW ITEM"
+                }
 
-        cancelB.setOnClickListener{
-            finish()
-        }
-        okB.setOnClickListener{
-            finish()
-            if (act == "EDIT"){
-                val item = data.items.single { it.itemName == name }
-                val db = FirebaseDatabase.getInstance().reference.child("items")
-                db.child(item._id.toString()).child("item_name").setValue(itemNameET.text.toString())
-                db.child(item._id.toString()).child("safety_stock").setValue(safetyStockET.text.toString())
-                db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
-                // udah keganti tp langsung crash gara2 index array out of bounds tp blom nemu kenapa bisa gitu
-                // masalahnya mungkin di spinner atau array adapter, yg pasti related sama kalo gw mau set nilai spinnernya pas mau edit
-//                TODO("UPDATE item_thumbnail, fix bug")
+                unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        val availUnits = units.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
+                        unitNameS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availUnits.map { it.unit_name })
+//                        if (unitNameBool && (act == "VIEW" || act == "EDIT")){
+//                            unitNameS.post({ unitNameS.setSelection((item.unit_id%100)-1, false) })
+//                            unitNameBool = false
+//                        }
+                        if(unit.measure == availMeasure[unitMeasureS.selectedItemPosition]){
+                            unitNameS.setSelection(availUnits.indexOf(unit))
+                        }else{
+                            unitNameS.setSelection(0)
+                        }
+
+                    }
+                }
+
+                cancelB.setOnClickListener{
+                    finish()
+                }
+                okB.setOnClickListener{
+                    finish()
+                    if (act == "EDIT"){
+                        val db = FirebaseDatabase.getInstance().reference.child("items")
+                        db.child(item._id.toString()).child("item_name").setValue(itemNameET.text.toString())
+                        db.child(item._id.toString()).child("safety_stock").setValue(safetyStockET.text.toString())
+                        db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
+//                TODO("UPDATE item_thumbnail")
+                    }
+                    else if (act == "NEW"){
+                        val db = FirebaseDatabase.getInstance().reference.child("items")
+                        val items = mutableMapOf<String, Any>()
+                        items["item_name"] = itemNameET.text.toString()
+                        items["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
+                        items["safety_stock"] = safetyStockET.text.toString()
+                        items["stocks"] = mutableListOf(999.toString()).toList()
+                        items["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
+                        db.child((items.size).toString()).setValue(item)
+                    }
+                }
             }
         }
     }

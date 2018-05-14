@@ -62,21 +62,19 @@ class ChangePasswordDialog : DialogFragment(){
                 else -> {
                     val pref = activity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
                     val data = object : Data(){ override fun onComplete() {
-                        if(isAdded) {
-                            val account = accounts.single { it.email == pref.getString("EMAIL", "") }
-                            val salt = account.salt
-                            val newSalt = UUID.randomUUID().toString().substring(25, 30)
-                            val oldPassword = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))
-                            if (account.password == oldPassword/* && newPassET.text == confirmNewPassET.text*/) {
-                                currPassErrorTV.visibility = View.GONE
-                                Snackbar.make(activity.findViewById(android.R.id.content), "Password successfully changed", Snackbar.LENGTH_LONG).show()
-                                dismissAllowingStateLoss()
-                                val db = FirebaseDatabase.getInstance().reference.child("accounts")
-                                db.child(account._id.toString()).child("salt").setValue(newSalt)
-                                db.child(account._id.toString()).child("password")
-                                        .setValue(Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + newSalt).toByteArray())))
-                            } else { currPassErrorTV.visibility = View.VISIBLE }
-                        }
+                        val account = accounts.single { it.email == pref.getString("EMAIL", "") }
+                        val salt = account.salt
+                        val newSalt = UUID.randomUUID().toString().substring(25, 30)
+                        val oldPassword = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))
+                        if (account.password == oldPassword/* && newPassET.text == confirmNewPassET.text*/) {
+                            currPassErrorTV.visibility = View.GONE
+                            Snackbar.make(activity.findViewById(android.R.id.content), "Password successfully changed", Snackbar.LENGTH_LONG).show()
+                            dismissAllowingStateLoss()
+                            val db = FirebaseDatabase.getInstance().reference.child("accounts")
+                            db.child(account._id.toString()).child("salt").setValue(newSalt)
+                            db.child(account._id.toString()).child("password")
+                                    .setValue(Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((newPassET.text.toString() + newSalt).toByteArray())))
+                        } else { currPassErrorTV.visibility = View.VISIBLE }
                     }}}
             }
         }

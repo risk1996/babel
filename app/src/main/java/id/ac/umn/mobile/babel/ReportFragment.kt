@@ -31,7 +31,7 @@ class ReportFragment : Fragment() {
         val itemStorageTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_item_storage)
         val data = object : Data(){
             override fun onComplete() {
-                if(isAdded){
+//                if(isAdded){
                     compIconIV.setImageResource(R.drawable::class.java.getField(company.logo).getInt(null))
                     compNameTV.text = String.format("%s %s", company.statusShort, company.name)
                     compStatusTV.text = company.status
@@ -90,7 +90,7 @@ class ReportFragment : Fragment() {
 //                        row.addView(valueTV)
 //                        itemStorageTL.addView(row)
 //                    }
-                }
+//                }
             }
         }
     }
