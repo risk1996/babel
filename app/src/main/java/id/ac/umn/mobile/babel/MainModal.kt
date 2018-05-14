@@ -35,8 +35,8 @@ class MainModal : BottomSheetDialogFragment() {
                 val editUnitsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_edit_units)
                 val deleteUnitsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_delete_units)
                 newItemBtn.setOnClickListener {
-                    Toast.makeText(activity, "NAH NEW ITEM", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(activity, ItemActivity::class.java).putExtra("OPERATION", "NEW")
+                    val intent = Intent(activity, ItemActivity::class.java)
+                    intent.putExtra("OPERATION", "NEW")
                     startActivity(intent)
                 }
                 ediItemsBtn.setOnClickListener { Toast.makeText(activity, "NAH EDIT ITEM", Toast.LENGTH_SHORT).show() }

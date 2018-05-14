@@ -24,9 +24,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
 class ItemActivity : AppCompatActivity() {
-//    HEAD
+    //    HEAD
 // override function item activity
-    var unitNameBool = true
 ///origin/master
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,25 +70,19 @@ class ItemActivity : AppCompatActivity() {
                     unitMeasureS.setSelection(availMeasure.indexOf(unit.measure))
                     safetyStockET.setText(item.safetyStock.toString())
                 }
-                else if (act == "NEW"){
-                    titleTV.text = "NEW ITEM"
-                }
 
                 unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         val availUnits = units.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
                         unitNameS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availUnits.map { it.unit_name })
-//                        if (unitNameBool && (act == "VIEW" || act == "EDIT")){
-//                            unitNameS.post({ unitNameS.setSelection((item.unit_id%100)-1, false) })
-//                            unitNameBool = false
-//                        }
-                        if(unit.measure == availMeasure[unitMeasureS.selectedItemPosition]){
-                            unitNameS.setSelection(availUnits.indexOf(unit))
-                        }else{
-                            unitNameS.setSelection(0)
+                        if (act == "VIEW" || act == "EDIT") {
+                            if (unit.measure == availMeasure[unitMeasureS.selectedItemPosition]) {
+                                unitNameS.setSelection(availUnits.indexOf(unit))
+                            } else {
+                                unitNameS.setSelection(0)
+                            }
                         }
-
                     }
                 }
 
@@ -103,19 +96,37 @@ class ItemActivity : AppCompatActivity() {
                         db.child(item._id.toString()).child("item_name").setValue(itemNameET.text.toString())
                         db.child(item._id.toString()).child("safety_stock").setValue(safetyStockET.text.toString())
                         db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
-//                TODO("UPDATE item_thumbnail")
-                    }
-                    else if (act == "NEW"){
-                        val db = FirebaseDatabase.getInstance().reference.child("items")
-                        val items = mutableMapOf<String, Any>()
-                        items["item_name"] = itemNameET.text.toString()
-                        items["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
-                        items["safety_stock"] = safetyStockET.text.toString()
-                        items["stocks"] = mutableListOf(999.toString()).toList()
-                        items["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
-                        db.child((items.size).toString()).setValue(item)
+//                        TODO("UPDATE item_thumbnail")
                     }
                 }
+            }
+        }
+
+        if (act == "NEW"){
+            titleTV.text = "NEW ITEM"
+
+            unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val unitName = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
+                    data.units.filter{ it.measure == parent!!.getItemAtPosition(position) }.forEach{unitName.add(it.unit_name)}
+                    unitNameS.adapter = unitName
+                }
+            }
+
+            cancelB.setOnClickListener{
+                finish()
+            }
+            okB.setOnClickListener{
+                finish()
+                val db = FirebaseDatabase.getInstance().reference.child("items")
+                val items = mutableMapOf<String, Any>()
+                items["item_name"] = itemNameET.text.toString()
+                items["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
+                items["safety_stock"] = safetyStockET.text.toString()
+                items["stocks"] = mutableListOf(999.toString()).toList()
+                items["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
+                db.child((data.items.size + 1).toString()).setValue(items)
             }
         }
     }
