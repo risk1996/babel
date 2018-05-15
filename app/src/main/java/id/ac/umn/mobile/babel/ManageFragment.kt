@@ -53,9 +53,11 @@ class ManageFragment : Fragment() {
         override fun onYesClicked() {
             val data = object : Data() {
                 override fun onComplete() {
-                    val itemToDelete = items.single { it.itemName == value }
-                    val db = FirebaseDatabase.getInstance().reference.child("items")
-                    db.child(itemToDelete._id.toString()).removeValue()
+                    if (isAdded){
+                        val itemToDelete = items.single { it.itemName == value }
+                        val db = FirebaseDatabase.getInstance().reference.child("items")
+                        db.child(itemToDelete._id.toString()).removeValue()
+                    }
                 }
             }
             Snackbar.make(activity.findViewById(android.R.id.content), "Item successfully deleted", Snackbar.LENGTH_LONG).show()

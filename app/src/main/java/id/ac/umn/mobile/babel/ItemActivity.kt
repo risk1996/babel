@@ -138,7 +138,7 @@ class ItemActivity : AppCompatActivity() {
                             newItem["safety_stock"] = safetyStockET.text.toString()
                             newItem["stocks"] = mutableListOf(999.toString()).toList()
                             newItem["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
-                            db.child((items.size + 1).toString()).setValue(newItem)
+                            db.child((items.last()._id + 1).toString()).setValue(newItem)
                         }
                     }
                     finish()
