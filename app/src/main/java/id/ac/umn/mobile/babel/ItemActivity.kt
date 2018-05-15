@@ -1,6 +1,7 @@
 package id.ac.umn.mobile.babel
 
 import android.content.Context
+import android.content.Intent
 import android.media.Image
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -43,91 +44,100 @@ class ItemActivity : AppCompatActivity() {
         val act = intent.getStringExtra("OPERATION")
         val itemID = intent.getIntExtra("ITEM_ID", 0)
 
+        when (act) {
+            "VIEW" -> {
+                titleTV.text = "VIEW ITEM"
+                itemNameET.isEnabled = false
+                itemThumbnailIB.isEnabled = false
+                unitMeasureS.isEnabled = false
+                unitNameS.isEnabled = false
+                safetyStockET.isEnabled = false
+                okB.text = "Edit"
+            }
+            "EDIT" -> {
+                titleTV.text = "EDIT ITEM"
+                okB.text = "Confirm Edit"
+            }
+            "NEW" -> {
+                titleTV.text = "NEW ITEM"
+//                unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+//                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                        val unitName = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
+//                        data.units.filter{ it.measure == parent!!.getItemAtPosition(position) }.forEach{unitName.add(it.unit_name)}
+//                        unitNameS.adapter = unitName
+//                    }
+//                }
+//                okB.setOnClickListener{
+//                    finish()
+//                    val db = FirebaseDatabase.getInstance().reference.child("items")
+//                    val items = mutableMapOf<String, Any>()
+//                    items["item_name"] = itemNameET.text.toString()
+//                    items["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
+//                    items["safety_stock"] = safetyStockET.text.toString()
+//                    items["stocks"] = mutableListOf(999.toString()).toList()
+//                    items["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
+//                    db.child((data.items.size + 1).toString()).setValue(items)
+//                }
+            }
+            else -> { finish() }
+        }
+
         val data = object : Data(){
             override fun onComplete() {
-//                val item = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
-//                items.filter { it.itemName.toLowerCase().contains(itemNameACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach {item.add( it.itemName )}
-//                itemNameACTV.setAdapter(item)
-//                itemNameACTV.threshold = 1
-
-                val availMeasure = units.map { it.measure }.distinct()
+                val availMeasure = units.distinctBy { it.measure }.map { it.measure }
                 unitMeasureS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availMeasure)
-
-                val item  = items.single { it._id == itemID }
-                val unit = units.single { it._id == item.unit_id }
-
+                val item  = items.singleOrNull { it._id == itemID }
+                val unit = units.singleOrNull { it._id == item?.unit_id }
                 if (act == "EDIT" || act == "VIEW") {
-                    if (act == "VIEW") {
-                        titleTV.text = "VIEW ITEM"
-                        unitMeasureS.isEnabled = false
-                        unitNameS.isEnabled = false
-                        itemNameET.isEnabled = false
-                        safetyStockET.isEnabled = false
-                    }
-                    titleTV.text = "EDIT ITEM"
+                    item!!; unit!!
+                    itemThumbnailIB.setImageResource(R.drawable::class.java.getField(item.thumbnail.replace("_48","_96")).getInt(null))
                     itemNameET.setText(item.itemName)
-//                    unitMeasureS.post({ unitMeasureS.setSelection((item.unit_id / 100) - 1) })
                     unitMeasureS.setSelection(availMeasure.indexOf(unit.measure))
                     safetyStockET.setText(item.safetyStock.toString())
                 }
-
                 unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         val availUnits = units.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
                         unitNameS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availUnits.map { it.unit_name })
-                        if (act == "VIEW" || act == "EDIT") {
-                            if (unit.measure == availMeasure[unitMeasureS.selectedItemPosition]) {
-                                unitNameS.setSelection(availUnits.indexOf(unit))
-                            } else {
-                                unitNameS.setSelection(0)
-                            }
-                        }
+                        if ((act == "VIEW" || act == "EDIT") && unit!!.measure == availMeasure[unitMeasureS.selectedItemPosition]) unitNameS.setSelection(availUnits.indexOf(unit))
+                        else unitNameS.setSelection(0)
                     }
-                }
-
-                cancelB.setOnClickListener{
-                    finish()
                 }
                 okB.setOnClickListener{
-                    finish()
-                    if (act == "EDIT"){
-                        val db = FirebaseDatabase.getInstance().reference.child("items")
-                        db.child(item._id.toString()).child("item_name").setValue(itemNameET.text.toString())
-                        db.child(item._id.toString()).child("safety_stock").setValue(safetyStockET.text.toString())
-                        db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
+                    Toast.makeText(this@ItemActivity, "HAI HAI", Toast.LENGTH_SHORT).show()
+                    when (act) {
+                        "VIEW" -> {
+                            item!!
+                            val intent = Intent(this@ItemActivity, ItemActivity::class.java)
+                            intent.putExtra("OPERATION", "EDIT")
+                            intent.putExtra("ITEM_ID", item._id)
+                            startActivity(intent)
+                        }
+                        "EDIT" -> {
+                            item!!
+                            val db = FirebaseDatabase.getInstance().reference.child("items")
+                            db.child(item._id.toString()).child("item_name").setValue(itemNameET.text.toString())
+                            db.child(item._id.toString()).child("safety_stock").setValue(safetyStockET.text.toString())
+                            db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
 //                        TODO("UPDATE item_thumbnail")
+                        }
+                        "NEW" -> {
+                            val db = FirebaseDatabase.getInstance().reference.child("items")
+                            val items = mutableMapOf<String, Any>()
+                            items["item_name"] = itemNameET.text.toString()
+                            items["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
+                            items["safety_stock"] = safetyStockET.text.toString()
+                            items["stocks"] = mutableListOf(999.toString()).toList()
+                            items["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
+                            db.child((items.size + 1).toString()).setValue(items)
+                        }
                     }
+                    finish()
                 }
             }
         }
-
-        if (act == "NEW"){
-            titleTV.text = "NEW ITEM"
-
-            unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val unitName = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1)
-                    data.units.filter{ it.measure == parent!!.getItemAtPosition(position) }.forEach{unitName.add(it.unit_name)}
-                    unitNameS.adapter = unitName
-                }
-            }
-
-            cancelB.setOnClickListener{
-                finish()
-            }
-            okB.setOnClickListener{
-                finish()
-                val db = FirebaseDatabase.getInstance().reference.child("items")
-                val items = mutableMapOf<String, Any>()
-                items["item_name"] = itemNameET.text.toString()
-                items["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
-                items["safety_stock"] = safetyStockET.text.toString()
-                items["stocks"] = mutableListOf(999.toString()).toList()
-                items["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
-                db.child((data.items.size + 1).toString()).setValue(items)
-            }
-        }
+        cancelB.setOnClickListener{ finish() }
     }
 }

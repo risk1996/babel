@@ -118,6 +118,7 @@ class InOutFragment : Fragment() {
             holder.amountNP.minValue = 0
             holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
             holder.amountNP.value = inOutItems[position].ammount
+            inOutItems[position].ammount = holder.amountNP.value
             holder.amountNP.setFormatter { DecimalFormat("0.##").format(it.toDouble() * unitFrom.increment) }
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
                 inOutItems[position].ammount = numberPicker.value
