@@ -36,11 +36,11 @@ class InOutFragment : Fragment() {
             if(isAdded){
                 loadTransaction()
                 if(inOutItems.isEmpty()){
-                    val r = Random()
-                    items.forEach {
-                        if(r.nextInt(100)>55)
-                            inOutItems.add(TransactionItems(it._id, 0, it.unit_id))
-                    }
+//                    val r = Random()
+//                    items.forEach {
+//                        if(r.nextInt(100)>55)
+//                            inOutItems.add(TransactionItems(it._id, 0, it.unit_id))
+//                    }
                     Toast.makeText(activity, "There's nothing here yet", Toast.LENGTH_SHORT).show()
                 }
 //                else

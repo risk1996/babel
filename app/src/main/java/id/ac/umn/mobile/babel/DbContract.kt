@@ -94,11 +94,10 @@ abstract class Data{
                             it.child("tp_status").value.toString()
                     ))
                 }
-                try{
+//                try{
                     onComplete()
-                }
-                catch (e : NoSuchElementException){}
-                catch (e : NullPointerException){}
+//                }
+//                catch (e : NoSuchElementException){ e.printStackTrace() }
             }
         })
     }

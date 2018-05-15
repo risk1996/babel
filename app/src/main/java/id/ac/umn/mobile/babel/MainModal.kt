@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.gms.common.util.Hex
@@ -68,8 +70,8 @@ class MainModal : BottomSheetDialogFragment() {
                     dismissAllowingStateLoss()
                 }
                 addItemBtn.setOnClickListener {
-//                    val dialog = AddInOutDialog()
-//                    dialog.show(support, dialog.tag)
+                    val dialog = AddInOutDialog()
+                    dialog.show(activity!!.fragmentManager, dialog.tag)
                     dismissAllowingStateLoss()
                 }
                 commitBtn.setOnClickListener {
