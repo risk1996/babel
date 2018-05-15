@@ -68,8 +68,8 @@ class MainModal : BottomSheetDialogFragment() {
                     dismissAllowingStateLoss()
                 }
                 addItemBtn.setOnClickListener {
-//                    val intent = Intent(activity, ItemActivity::class.java).putExtra("OPERATION", "In")
-//                    startActivity(intent)
+//                    val dialog = AddInOutDialog()
+//                    dialog.show(support, dialog.tag)
                     dismissAllowingStateLoss()
                 }
                 commitBtn.setOnClickListener {

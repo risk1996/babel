@@ -125,13 +125,13 @@ class ItemActivity : AppCompatActivity() {
                         }
                         "NEW" -> {
                             val db = FirebaseDatabase.getInstance().reference.child("items")
-                            val items = mutableMapOf<String, Any>()
-                            items["item_name"] = itemNameET.text.toString()
-                            items["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
-                            items["safety_stock"] = safetyStockET.text.toString()
-                            items["stocks"] = mutableListOf(999.toString()).toList()
-                            items["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
-                            db.child((items.size + 1).toString()).setValue(items)
+                            val newItem = mutableMapOf<String, Any>()
+                            newItem["item_name"] = itemNameET.text.toString()
+                            newItem["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
+                            newItem["safety_stock"] = safetyStockET.text.toString()
+                            newItem["stocks"] = mutableListOf(999.toString()).toList()
+                            newItem["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
+                            db.child((items.size + 1).toString()).setValue(newItem)
                         }
                     }
                     finish()
