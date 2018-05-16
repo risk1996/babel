@@ -35,7 +35,7 @@ class InOutFragment : Fragment() {
         val purposeSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose)
 //      value itemsRV pada activity spinner dengan R.id.fragment_in_out_items_rv_items
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
-//
+
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
 
         val data = object : Data(){override fun onComplete() {
@@ -62,23 +62,30 @@ class InOutFragment : Fragment() {
         pref.registerOnSharedPreferenceChangeListener(listener)
         itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
     }
+//  mengoverride function pada saat activity tidak ditampilkan
     override fun onStop() {
         super.onStop()
         saveTransaction()
     }
-
+//  mengoverride function pada saat dibuka kembali
     override fun onResume() {
         super.onResume()
         loadTransaction()
     }
+//
     fun saveTransaction(){
+//    nilai pref > getSharedPreference
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
+//      
         pref.putString("ITEMS", inOutItems.joinToString(";") { String.format("%d,%d,%d", it.itemId, it.ammount, it.unitId) })
         pref.apply()
     }
+//
     fun loadTransaction(){
+//
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
         val itemRaw = pref.getString("ITEMS", "").split(";")
+//
         inOutItems.clear()
         if(!itemRaw.contains("")) itemRaw.forEach {
             val itemSpec = it.split(",").map { it.toInt() }
