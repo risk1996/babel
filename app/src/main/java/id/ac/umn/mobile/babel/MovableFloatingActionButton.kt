@@ -19,6 +19,7 @@ class MovableFloatingActionButton : FloatingActionButton, View.OnTouchListener {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { init() }
     private fun init() { setOnTouchListener(this) }
 
+//  mengoverride function pada saat
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
 
         val action = motionEvent.action

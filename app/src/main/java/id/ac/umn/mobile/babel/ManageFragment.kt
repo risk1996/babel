@@ -21,23 +21,29 @@ import java.text.DecimalFormat
 
 class ManageFragment : Fragment() {
     val filterItems = ArrayList<Int>()
-//    menampilkan layout dari class manage fragments
+//  menampilkan layout dari class manage fragments
+//  mengoverride function ketika activityt dibuat dengan dapat menunjukan alamat xml yang digunakan
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//      alamat xml yang digunakan fragment_manage
         return inflater.inflate(R.layout.fragment_manage, container, false)
     }
     override fun onStart() {
-//        start activity
+//      mengoverride fungsion pada saar start activity
         super.onStart()
+//      value item yang digunakan pada activity yang digunakan pada xml fragment_manage_items
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_manage_items_rv_items)
         val searchET = activity.findViewById<EditText>(R.id.fragment_manage_items_et_search)
 
         val data = object : Data(){
+//          mengoverride fungsi pada saat data selesai dikirim
             override fun onComplete() {
+//              mengclear data di filter.items
                 filterItems.clear()
                 items.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
                 itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         }
+
         itemsRV.adapter = ManageFragmentRVAdapter(activity, data)
         searchET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}

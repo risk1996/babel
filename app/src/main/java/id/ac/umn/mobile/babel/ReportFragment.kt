@@ -15,9 +15,9 @@ class ReportFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_report, container, false)
     }
     override fun onStart() {
-//        activty mulai
+//      mengoverride function ketika activity dimulai
         super.onStart()
-
+//      nilai value yang ditunjukan activity melalui fincVievById dari fragment_report
         val compIconIV = activity.findViewById<ImageView>(R.id.fragment_report_iv_comp_icon)
         val compNameTV = activity.findViewById<TextView>(R.id.fragment_report_tv_comp_name)
         val compStatusTV = activity.findViewById<TextView>(R.id.fragment_report_tv_comp_status)
@@ -30,6 +30,7 @@ class ReportFragment : Fragment() {
         val itemShortageTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_item_shortage_loc)
         val itemStorageTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_item_storage)
         val data = object : Data(){
+//          mengoverride function ketika data selesai dikirim
             override fun onComplete() {
                 if(isAdded){
                     compIconIV.setImageResource(R.drawable::class.java.getField(company.logo).getInt(null))
