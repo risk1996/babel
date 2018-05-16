@@ -76,7 +76,7 @@ class InOutFragment : Fragment() {
     fun saveTransaction(){
 //    nilai pref > getSharedPreference
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
-//      
+//
         pref.putString("ITEMS", inOutItems.joinToString(";") { String.format("%d,%d,%d", it.itemId, it.ammount, it.unitId) })
         pref.apply()
     }
@@ -92,21 +92,34 @@ class InOutFragment : Fragment() {
             inOutItems.add(TransactionItems(itemSpec[0], itemSpec[1], itemSpec[2]))
         }
     }
+//  inner class inOutFragmentRVAdapter > inner class ViewHolder
     inner class InOutFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<InOutFragmentRVAdapter.ViewHolder>(){
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+//          var removeBtn dari button dengan R.id.fragment_in_out_btn_remove
             var removeBtn : Button      = itemView.findViewById(R.id.fragment_in_out_btn_remove)
+//          var thumbnailIV dari ImageView dengan R.id.fragment_in_out_recycler_view_iv_thumbnail
             var thumbnailIV : ImageView = itemView.findViewById(R.id.fragment_in_out_recycler_view_iv_thumbnail)
+//          var nameTV dari TextView dengan R.id.fragment_in_out_recycler_view_tv_name
             var nameTV: TextView        = itemView.findViewById(R.id.fragment_in_out_recycler_view_tv_name)
+//          var stockTV dari TextViewdengan R.id.fragment_in_out_recycler_view_tv_stock
             var stockTV: TextView       = itemView.findViewById(R.id.fragment_in_out_recycler_view_tv_stock)
+//          var signTV dari TextView dengan R.id.fragment_in_out_tv_sign
             var signTV : TextView       = itemView.findViewById(R.id.fragment_in_out_tv_sign)
+//          var amountNP dari NumberPicker dengan R.id.fragment_in_out_np_amount
             var amountNP : NumberPicker = itemView.findViewById(R.id.fragment_in_out_np_amount)
+//          var unitSpn dari Spinner dengan R.id.fragment_in_out_spn_unit
             var unitSpn : Spinner       = itemView.findViewById(R.id.fragment_in_out_spn_unit)
         }
+//      mengoverride function ketika membuat supaya menampilkan fungsi dari parent viewGroup dengan tipe data integer
+//
         override fun onCreateViewHolder(parent : ViewGroup, type : Int) : InOutFragmentRVAdapter.ViewHolder{
+//          layout tujuan fragment_in_out_recycler_view_item
             val view : View = LayoutInflater.from(parent.context).inflate(R.layout.fragment_in_out_recycler_view_item, parent, false)
+//          value dari card berasal dari findViewById dari R.id.fragment_in_out_recycler_view_cv_item sebagai CardView
             val card = view.findViewById(R.id.fragment_in_out_recycler_view_cv_item) as CardView
             card.maxCardElevation = 2.0F
             card.radius = 5.0F
+//          kembali ke ViewHolder
             return ViewHolder(view)
         }
         override fun onBindViewHolder(holder : InOutFragmentRVAdapter.ViewHolder, position : Int) {
