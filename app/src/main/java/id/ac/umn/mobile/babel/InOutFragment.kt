@@ -122,6 +122,14 @@ class InOutFragment : Fragment() {
 //          kembali ke ViewHolder
             return ViewHolder(view)
         }
+//      mengoverride function ketika mengisi data (InOutFragmentRVAdapter) pada posisi terntentu (position : Int)
+//      semua data pada lokasi tertentu
+//        val locationsSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations)
+//        val item: Item = data.items.single { it._id == inOutItems[position].itemId }
+//        val unitFrom: Unit = data.units.single { it._id == item.unit_id }
+//        val unitAvail = data.units.filter { it.measure == unitFrom.measure }
+//        var unitTo: Unit = data.units.single { it._id == inOutItems[position].unitId }
+//       nilai posisi pada onBindViewHolder
         override fun onBindViewHolder(holder : InOutFragmentRVAdapter.ViewHolder, position : Int) {
             val locationsSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations)
             val item: Item = data.items.single { it._id == inOutItems[position].itemId }

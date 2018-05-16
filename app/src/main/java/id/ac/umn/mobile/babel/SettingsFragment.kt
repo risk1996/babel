@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 class SettingsFragment : PreferenceFragment() {
+//  mengoverride fungsi ketika activity baru dibuat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//      untuk memasukan file xml prefenrence
         addPreferencesFromResource(R.xml.preferences)
     }
 }

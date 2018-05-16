@@ -16,12 +16,14 @@ import java.text.DecimalFormat
 
 class ItemActivity : AppCompatActivity() {
     //    HEAD
-// override function item activity
-///origin/master
+    // override function item activity
+    ///origin/master
+//    mengoverride fungsi pada saat activity dibuat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//      xml yang digunakan activity_item
         setContentView(R.layout.activity_item)
-
+//      content R.id yg digunakan di activity_item
         val titleTV = findViewById<TextView>(R.id.activity_item_tv_title)
         val itemNameET = findViewById<EditText>(R.id.activity_item_et_item_name)
         val itemThumbnailIB = findViewById<ImageButton>(R.id.activity_item_ib_item_thumbnail)
@@ -31,10 +33,10 @@ class ItemActivity : AppCompatActivity() {
         val stockPerLocationTL = findViewById<TableLayout>(R.id.activity_item_tl_stock_per_location)
         val cancelB = findViewById<Button>(R.id.activity_item_btn_cancel)
         val okB = findViewById<Button>(R.id.activity_item_btn_ok)
-
+//
         val act = intent.getStringExtra("OPERATION")
         val itemID = intent.getIntExtra("ITEM_ID", 0)
-
+//
         when (act) {
             "VIEW" -> {
                 titleTV.text = "VIEW ITEM"
@@ -57,6 +59,7 @@ class ItemActivity : AppCompatActivity() {
         }
 
         val data = object : Data(){
+//          mengoverride function ketika data sudah selesai dikirim
             override fun onComplete() {
                 val availMeasure = units.distinctBy { it.measure }.map { it.measure }
                 unitMeasureS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availMeasure)

@@ -26,7 +26,7 @@ class AddInOutDialog : DialogFragment() {
 //    inflater: buat java object view dari layout tujuan
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dialog_add_in_out, container, false)
-//    layout inflater ditunjukan dialog_add_in_out
+//      layout inflater ditunjukan dialog_add_in_out
         val headingTV = view.findViewById<TextView>(R.id.dialog_add_in_out_tv_heading)
 //      object id dialog_add_in_out_tv_heading
         val searchACTV = view.findViewById<AutoCompleteTextView>(R.id.dialog_in_out_items_actv_search)
