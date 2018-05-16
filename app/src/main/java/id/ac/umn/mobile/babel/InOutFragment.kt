@@ -25,13 +25,19 @@ class InOutFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_in_out, container, false)
     }
     override fun onStart() {
-//        function pada saat onStart
+//      mengoveride function pada saat onStart
         super.onStart()
+//      value locationsSpn pada activity spinner dengan R.id.fragment_in_out_spn_locations
         val locationsSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations)
+//      value directionTV pada activity spinner dengan R.id.fragment_in_out_tv_direction
         val directionTV = activity.findViewById<TextView>(R.id.fragment_in_out_tv_direction)
+//      value purposeSpn pada activity spinner dengan R.id.fragment_in_out_spn_purpose
         val purposeSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose)
+//      value itemsRV pada activity spinner dengan R.id.fragment_in_out_items_rv_items
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
+//
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+
         val data = object : Data(){override fun onComplete() {
             if(isAdded){
                 loadTransaction()

@@ -6,8 +6,10 @@ import android.os.Bundle
 
 class AboutActivity : AppCompatActivity() {
 // AboutActivity extend AppCompatActivity
+//    overrida pada saat oncreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//      xml nya activity_about
         setContentView(R.layout.activity_about)
     }
 // override function onCreate -> setContentView activity_about
