@@ -61,9 +61,13 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
     class LogOutDialog : YesNoDialog(){
+//      mengoverride fungsi pada saat onYesClicked pada saat activity.finish
+//      startActivity pada activity LoginActivity pada class java
         override fun onYesClicked() { activity.finish(); startActivity(Intent(activity, LoginActivity::class.java)) }
+//      override function pada saat onNoClicked
         override fun onNoClicked() {}
     }
+//
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId){
             R.id.menu_main_act_sign_out -> {

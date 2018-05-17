@@ -45,6 +45,8 @@ class LoginActivity : AppCompatActivity() {
             passwordET.setText(pref.getString("PASSWORD", ""))
             rememberMeChk.isChecked = pref.getBoolean("REMEMBER_ME", false)
         }
+//      emailET addTextChangedListener dengan metode textwatcher
+//      text watcher untuk mendeteksi text
         emailET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -52,6 +54,7 @@ class LoginActivity : AppCompatActivity() {
                 emailErrorTV.visibility = if(!android.util.Patterns.EMAIL_ADDRESS.matcher(emailET.text).matches()) View.VISIBLE else View.GONE
             }
         })
+//      passwordET addTextChangedListener dengan metode TextWatcher
         passwordET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
