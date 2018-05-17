@@ -26,10 +26,10 @@ class MainModal : BottomSheetDialogFragment() {
         var incrementStock = 0
 //      val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // NullPointerException
         override fun onYesClicked() {
-            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // function onComplete jadi infinite loop
+//            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // function onComplete jadi infinite loop
             val data = object : Data(){
                 override fun onComplete() {
-//                    val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // KotlinNullPointerException, bisa dicurangin pake try catch tp kadang dia increment dua kali
+                    val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // KotlinNullPointerException, bisa dicurangin pake try catch tp kadang dia increment dua kali
                     val itemRaw = pref.getString("ITEMS", "").split(";")
                     val db = FirebaseDatabase.getInstance().reference.child("items")
                     if(!itemRaw.contains("")) itemRaw.forEach {

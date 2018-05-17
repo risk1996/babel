@@ -67,6 +67,7 @@ class InOutFragment : Fragment() {
         super.onStop()
         saveTransaction()
     }
+
 //  mengoverride function pada saat dibuka kembali
     override fun onResume() {
         super.onResume()
@@ -161,7 +162,6 @@ class InOutFragment : Fragment() {
                         DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
                         unitFrom.unit_name
                 )
-                saveTransaction()
             }
             holder.unitSpn.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, unitAvail.map { it.unit_name })
             holder.unitSpn.setSelection(unitAvail.indexOf(unitTo))
