@@ -24,10 +24,12 @@ import java.util.*
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
+//      val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // NullPointerException
         override fun onYesClicked() {
+            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // function onComplete jadi infinite loop
             val data = object : Data(){
                 override fun onComplete() {
-                    val pref = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+//                    val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // KotlinNullPointerException, bisa dicurangin pake try catch tp kadang dia increment dua kali
                     val itemRaw = pref.getString("ITEMS", "").split(";")
                     val db = FirebaseDatabase.getInstance().reference.child("items")
                     if(!itemRaw.contains("")) itemRaw.forEach {
@@ -45,8 +47,9 @@ class MainModal : BottomSheetDialogFragment() {
                         if(value == "outgoing") incrementStock = itemSpec[1]*(-1)
                         else if(value == "incoming") incrementStock = itemSpec[1]
                         db.child(itemSpec[0].toString()).child("stocks").child("0")
-                                .setValue( (((item.stocks[0] / unitFrom.value ) + (incrementStock.toDouble() / unitTo.value * unitFrom.value)) * unitFrom.value).toString() )
+                                .setValue( (((item.stocks[0] / unitFrom.value ) + (incrementStock.toDouble() / unitTo.value * unitFrom.value)) * unitFrom.value).toDouble().toString() )
                     }
+                    Log.d("", "itemSpec[0]   lalalalalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 }
             }
             Snackbar.make( activity.findViewById(android.R.id.content), "Changes have been committed", Snackbar.LENGTH_LONG).show()
