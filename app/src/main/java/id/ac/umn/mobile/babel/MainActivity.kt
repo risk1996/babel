@@ -36,7 +36,9 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+//  mengoverride ketika activity dibuka kembali
     override fun onResume() {
+//      value tabsTL mengambil findViewById dari activity_main_tl_tabs
         val tabsTL = findViewById<TabLayout>(R.id.activity_main_tl_tabs)
         when(tabsTL!!.selectedTabPosition){
             0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ManageFragment()).commit()
@@ -46,11 +48,15 @@ class MainActivity : AppCompatActivity() {
         }
         super.onResume()
     }
+//  mengoverride ketika fungsi berhenti sesaat
     override fun onPause() {
         super.onPause()
+//      menggunakan R.id.activity_main_fl_frame
         fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, Fragment()).commit()
     }
+//  mengoverride function pada saat activity optionmenu dibuat
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//      dengan layout menu activity_main_menu_appbar
         menuInflater.inflate(R.menu.activity_main_menu_appbar, menu)
         return super.onCreateOptionsMenu(menu)
     }
