@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import java.security.MessageDigest
 import java.util.*
 
+// update nilai stock dari tiap barang dari inoutfragment
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
