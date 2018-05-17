@@ -23,26 +23,25 @@ import java.util.*
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
         override fun onYesClicked() {
-
             val data = object : Data(){
                 override fun onComplete() {
                     val pref = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
                     val itemRaw = pref.getString("ITEMS", "").split(";")
-//                    itemSpec[0] = item id
-//                    itemSpec[1] = item stock nuumber
-//                    itemSpec[2] = selected unit name
                     val db = FirebaseDatabase.getInstance().reference.child("items")
                     if(!itemRaw.contains("")) itemRaw.forEach {
                         val itemSpec = it.split(",").map { it.toInt() }
                         val item = items.single { it._id==itemSpec[0] }
-                        val unit = units.single { it._id==itemSpec[2] }
-                        Log.d("", "makanan1 : " + itemSpec[0])
-                        Log.d("", "makanan2 : " + itemSpec[1])
-                        Log.d("", "makanan3 : " + itemSpec[2])
-                        Log.d("", "makanan4 : " + item.stocks[0])
-                        Log.d("", "makanan5 : " + item.unit_id)
-                        Log.d("", "makanan6 : " + unit.value)
-//                        db.child(itemSpec[0].toString()).child("stocks").child("0").setValue( (item.stocks[0].toInt() + (itemSpec[1] * item.unit_id / unit.value.toInt())).toString() )
+                        val unitFrom = units.single { it._id==item.unit_id }
+                        val unitTo = units.single { it._id==itemSpec[2] }
+                        Log.d("", "itemSpec[0]    : " + itemSpec[0])
+                        Log.d("", "itemSpec[1]    : " + itemSpec[1])
+                        Log.d("", "itemSpec[2]    : " + itemSpec[2])
+                        Log.d("", "item.stocks[0] : " + item.stocks[0])
+                        Log.d("", "item.unit_id   : " + item.unit_id)
+                        Log.d("", "unitFrom.value : " + unitFrom.value)
+                        Log.d("", "unitTo.value   : " + unitTo.value)
+                        db.child(itemSpec[0].toString()).child("stocks").child("0")
+                                .setValue( (((item.stocks[0] / unitFrom.value ) + (itemSpec[1] / unitTo.value * unitFrom.value)) * unitFrom.value).toString() )
                     }
                     db.onDisconnect()
                 }
@@ -50,7 +49,6 @@ class MainModal : BottomSheetDialogFragment() {
             Snackbar.make( activity.findViewById(android.R.id.content), "Changes have been committed", Snackbar.LENGTH_LONG).show()
         }
         override fun onNoClicked() {
-
             Snackbar.make( activity.findViewById(android.R.id.content), "No changes have been made", Snackbar.LENGTH_LONG).show()
         }
     }

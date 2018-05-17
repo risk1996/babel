@@ -49,7 +49,7 @@ class InOutFragment : Fragment() {
 //                    }
                     Toast.makeText(activity, "There's nothing here yet", Toast.LENGTH_SHORT).show()
                 }
-//                else
+                else
                     itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
                 locationsSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locations.map { it.code })
                 val act = pref.getString("ACTION","incoming")
@@ -161,6 +161,7 @@ class InOutFragment : Fragment() {
                         DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
                         unitFrom.unit_name
                 )
+                saveTransaction()
             }
             holder.unitSpn.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, unitAvail.map { it.unit_name })
             holder.unitSpn.setSelection(unitAvail.indexOf(unitTo))
