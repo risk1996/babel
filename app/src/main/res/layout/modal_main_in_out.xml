@@ -13,7 +13,7 @@
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Incoming"
+            android:text="@string/bottom_dialog_in_out_incoming"
             android:drawableTop="@drawable/icons8_down_3_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
@@ -24,7 +24,7 @@
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Outgoing"
+            android:text="@string/bottom_dialog_in_out_outgoing"
             android:drawableTop="@drawable/icons8_up_2_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
@@ -35,7 +35,7 @@
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Add"
+            android:text="@string/bottom_dialog_in_out_add_item"
             android:drawableTop="@drawable/icons8_add_list_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
@@ -46,7 +46,7 @@
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Commit"
+            android:text="@string/bottom_dialog_in_out_commit"
             android:drawableTop="@drawable/icons8_inspection_24"
             android:drawableTint="@color/colorAccent"/>
     </TableRow>

@@ -13,30 +13,30 @@
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Edit"
+            android:text="@string/bottom_dialog_report_edit_company"
             android:drawableTop="@drawable/icons8_office_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
-            android:id="@+id/modal_main_report_btn_print_report"
+            android:id="@+id/modal_main_report_btn_track_incoming"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Print"
-            android:drawableTop="@drawable/icons8_print_24"
+            android:text="@string/bottom_dialog_report_track_incoming"
+            android:drawableTop="@drawable/icons8_down_button_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
-            android:id="@+id/modal_main_report_btn_export_report"
+            android:id="@+id/modal_main_report_btn_track_outgoing"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Export"
-            android:drawableTop="@drawable/icons8_save_24"
+            android:text="@string/bottom_dialog_report_track_outgoing"
+            android:drawableTop="@drawable/icons8_slide_up_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
             android:id="@+id/modal_main_report_btn_out_of_stock"
@@ -46,7 +46,7 @@
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="OOS"
+            android:text="@string/bottom_dialog_report_out_of_stock"
             android:drawableTop="@drawable/icons8_error_24"
             android:drawableTint="@color/colorAccent"/>
     </TableRow>

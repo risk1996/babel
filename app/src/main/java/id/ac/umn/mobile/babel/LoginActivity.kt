@@ -19,24 +19,19 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.security.MessageDigest
-//class fungsi login
+
 class LoginActivity : AppCompatActivity() {
-//    function oncreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//    layout dari activity_login
         setContentView(R.layout.activity_login)
-
         title = getString(R.string.activity_login_label)
-
-        val emailET = findViewById<EditText>(R.id.activity_login_et_email) //edit text activity_login_et_email
-        val emailErrorTV = findViewById<TextView>(R.id.activity_login_tv_email_errors) // TextView activity_login_tv_email_errors
-        val passwordET = findViewById<EditText>(R.id.activity_login_et_password) // edit text activity_login_et_password
-        val passwordErrorTV = findViewById<TextView>(R.id.activity_login_tv_password_errors) // TextView activity_login_tv_password_errors
-        val rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me) // CheckBox activity_login_chk_remember_me
-        val credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors) // TextView activity_login_tv_credentials_errors
-        val signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in) // Button activity_login_btn_sign_in
-//      value pref > getSharedPreferences
+        val emailET = findViewById<EditText>(R.id.activity_login_et_email)
+        val emailErrorTV = findViewById<TextView>(R.id.activity_login_tv_email_errors)
+        val passwordET = findViewById<EditText>(R.id.activity_login_et_password)
+        val passwordErrorTV = findViewById<TextView>(R.id.activity_login_tv_password_errors)
+        val rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me)
+        val credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors)
+        val signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in)
         val pref = getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
 
 
@@ -45,8 +40,6 @@ class LoginActivity : AppCompatActivity() {
             passwordET.setText(pref.getString("PASSWORD", ""))
             rememberMeChk.isChecked = pref.getBoolean("REMEMBER_ME", false)
         }
-//      emailET addTextChangedListener dengan metode textwatcher
-//      text watcher untuk mendeteksi text
         emailET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -54,7 +47,6 @@ class LoginActivity : AppCompatActivity() {
                 emailErrorTV.visibility = if(!android.util.Patterns.EMAIL_ADDRESS.matcher(emailET.text).matches()) View.VISIBLE else View.GONE
             }
         })
-//      passwordET addTextChangedListener dengan metode TextWatcher
         passwordET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}

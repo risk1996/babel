@@ -20,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase
 import java.security.MessageDigest
 import java.util.*
 
-// update nilai stock dari tiap barang dari inoutfragment
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
@@ -60,21 +59,14 @@ class MainModal : BottomSheetDialogFragment() {
             0 -> {
                 v = inflater.inflate(R.layout.modal_main_manage, container, false)!!
                 val newItemBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_new_item)
-                val ediItemsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_edit_items)
-                val deleteItemsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_delete_items)
-                val newUnitBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_new_unit)
-                val editUnitsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_edit_units)
-                val deleteUnitsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_delete_units)
+                val manageUnitsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_units)
+                val manageLocationsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_locations)
+                val managethirdPartiesBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_third_parties)
                 newItemBtn.setOnClickListener {
                     val intent = Intent(activity, ItemActivity::class.java)
                     intent.putExtra("OPERATION", "NEW")
                     startActivity(intent)
                 }
-                ediItemsBtn.setOnClickListener { Toast.makeText(activity, "NAH EDIT ITEM", Toast.LENGTH_SHORT).show() }
-                deleteItemsBtn.setOnClickListener { Toast.makeText(activity, "NAH DELETE ITEM", Toast.LENGTH_SHORT).show() }
-                newUnitBtn.setOnClickListener { Toast.makeText(activity, "NAH NEW UNIT", Toast.LENGTH_SHORT).show() }
-                editUnitsBtn.setOnClickListener { Toast.makeText(activity, "NAH EDIT UNIT", Toast.LENGTH_SHORT).show() }
-                deleteUnitsBtn.setOnClickListener { Toast.makeText(activity, "NAH DELETE UNIT", Toast.LENGTH_SHORT).show() }
             }
             1 -> {
                 v = inflater.inflate(R.layout.modal_main_in_out, container, false)!!
@@ -117,22 +109,16 @@ class MainModal : BottomSheetDialogFragment() {
             2 -> {
                 v = inflater.inflate(R.layout.modal_main_report, container, false)!!
                 val editCompanyBtn = v.findViewById<Button>(R.id.modal_main_report_btn_edit_company)
-                val printReportBtn = v.findViewById<Button>(R.id.modal_main_report_btn_print_report)
-                val exportReportBtn = v.findViewById<Button>(R.id.modal_main_report_btn_export_report)
+                val trackIncomingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_incoming)
+                val trackOutgoingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_outgoing)
                 val outOfStockBtn = v.findViewById<Button>(R.id.modal_main_report_btn_out_of_stock)
-                editCompanyBtn.setOnClickListener { Toast.makeText(activity, "NAH EDIT COMPANY", Toast.LENGTH_SHORT).show() }
-                printReportBtn.setOnClickListener { Toast.makeText(activity, "NAH PRINT REPORT", Toast.LENGTH_SHORT).show() }
-                exportReportBtn.setOnClickListener { Toast.makeText(activity, "NAH EXPORT REPORT", Toast.LENGTH_SHORT).show() }
-                outOfStockBtn.setOnClickListener { Toast.makeText(activity, "NAH OUT OF STOCK", Toast.LENGTH_SHORT).show() }
             }
             3 -> {
                 v = inflater.inflate(R.layout.modal_main_user, container, false)!!
                 val newUserBtn = v.findViewById<Button>(R.id.modal_main_user_btn_new_user)
-                val editUsersBtn = v.findViewById<Button>(R.id.modal_main_user_btn_edit_users)
-                val deleteUsersBtn = v.findViewById<Button>(R.id.modal_main_user_btn_delete_users)
-                newUserBtn.setOnClickListener { Toast.makeText(activity, "NAH NEW USER", Toast.LENGTH_SHORT).show() }
-                editUsersBtn.setOnClickListener { Toast.makeText(activity, "NAH EDIT USERS", Toast.LENGTH_SHORT).show() }
-                deleteUsersBtn.setOnClickListener { Toast.makeText(activity, "NAH DELETE USERS", Toast.LENGTH_SHORT).show() }
+                val settingsBtn = v.findViewById<Button>(R.id.modal_main_user_btn_settings)
+                val logoutBtn = v.findViewById<Button>(R.id.modal_main_user_btn_logout)
+                val quitBtn = v.findViewById<Button>(R.id.modal_main_user_btn_quit)
             }
         }
         return v

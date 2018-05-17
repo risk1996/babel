@@ -5,16 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TableRow>
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:textColor="@color/colorAccent"
-            android:text="Item(s):"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
         <Button
             android:id="@+id/modal_main_manage_btn_new_item"
             android:layout_weight="1"
@@ -23,75 +13,41 @@
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="New"
-            android:drawableTop="@drawable/icons8_add_tag_24"
+            android:text="@string/bottom_dialog_new_item"
+            android:drawableTop="@drawable/icons8_new_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
-            android:id="@+id/modal_main_manage_btn_edit_items"
+            android:id="@+id/modal_main_manage_btn_manage_units"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Edit"
-            android:drawableTop="@drawable/icons8_tags_24"
+            android:text="@string/bottom_dialog_manage_units"
+            android:drawableTop="@drawable/icons8_length_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
-            android:id="@+id/modal_main_manage_btn_delete_items"
+            android:id="@+id/modal_main_manage_btn_manage_locations"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Delete"
-            android:drawableTop="@drawable/icons8_remove_tag_24"
+            android:text="@string/bottom_dialog_manage_locations"
+            android:drawableTop="@drawable/icons8_place_marker_24"
             android:drawableTint="@color/colorAccent"/>
-    </TableRow>
-    <TableRow>
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:textColor="@color/colorAccent"
-            android:text="Units(s):"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
         <Button
-            android:id="@+id/modal_main_manage_btn_new_unit"
+            android:id="@+id/modal_main_manage_btn_manage_third_parties"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="New"
-            android:drawableTop="@drawable/icons8_new_ticket_24"
-            android:drawableTint="@color/colorAccent"/>
-        <Button
-            android:id="@+id/modal_main_manage_btn_edit_units"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@android:color/transparent"
-            android:textColor="@color/colorAccent"
-            android:text="Edit"
-            android:drawableTop="@drawable/icons8_two_tickets_24"
-            android:drawableTint="@color/colorAccent"/>
-        <Button
-            android:id="@+id/modal_main_manage_btn_delete_units"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@android:color/transparent"
-            android:textColor="@color/colorAccent"
-            android:text="Delete"
-            android:drawableTop="@drawable/icons8_delete_ticket_24"
+            android:text="@string/bottom_dialog_manage_third_parties"
+            android:drawableTop="@drawable/icons8_handshake_24"
             android:drawableTint="@color/colorAccent"/>
     </TableRow>
 </TableLayout>

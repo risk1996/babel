@@ -5,16 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TableRow>
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:textColor="@color/colorAccent"
-            android:text="User(s):"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
         <Button
             android:id="@+id/modal_main_user_btn_new_user"
             android:layout_weight="1"
@@ -23,30 +13,41 @@
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="New"
+            android:text="@string/bottom_dialog_user_new_user"
             android:drawableTop="@drawable/icons8_add_user_male_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
-            android:id="@+id/modal_main_user_btn_edit_users"
+            android:id="@+id/modal_main_user_btn_settings"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Edit"
-            android:drawableTop="@drawable/icons8_user_account_24"
+            android:text="@string/bottom_dialog_user_settings"
+            android:drawableTop="@drawable/icons8_settings_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
-            android:id="@+id/modal_main_user_btn_delete_users"
+            android:id="@+id/modal_main_user_btn_logout"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
-            android:text="Delete"
-            android:drawableTop="@drawable/icons8_delete_user_male_24"
+            android:text="@string/bottom_dialog_user_logout"
+            android:drawableTop="@drawable/icons8_export_24"
+            android:drawableTint="@color/colorAccent"/>
+        <Button
+            android:id="@+id/modal_main_user_btn_quit"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/colorAccent"
+            android:text="@string/bottom_dialog_user_quit"
+            android:drawableTop="@drawable/icons8_close_window_24"
             android:drawableTint="@color/colorAccent"/>
     </TableRow>
 </TableLayout>

@@ -15,15 +15,9 @@ import com.google.firebase.database.FirebaseDatabase
 import java.text.DecimalFormat
 
 class ItemActivity : AppCompatActivity() {
-    //    HEAD
-    // override function item activity
-    ///origin/master
-//    mengoverride fungsi pada saat activity dibuat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//      xml yang digunakan activity_item
         setContentView(R.layout.activity_item)
-//      content R.id yg digunakan di activity_item
         val titleTV = findViewById<TextView>(R.id.activity_item_tv_title)
         val itemNameET = findViewById<EditText>(R.id.activity_item_et_item_name)
         val itemThumbnailIB = findViewById<ImageButton>(R.id.activity_item_ib_item_thumbnail)
@@ -33,11 +27,9 @@ class ItemActivity : AppCompatActivity() {
         val stockPerLocationTL = findViewById<TableLayout>(R.id.activity_item_tl_stock_per_location)
         val cancelB = findViewById<Button>(R.id.activity_item_btn_cancel)
         val okB = findViewById<Button>(R.id.activity_item_btn_ok)
-//      val act mengambil string dari activity sebelumnya yang manggil activity sekarang
         val act = intent.getStringExtra("OPERATION")
-//      val itemID mengambil int dari activity sebelumnya yang manggil activity sekarang
         val itemID = intent.getIntExtra("ITEM_ID", 0)
-//
+
         when (act) {
             "VIEW" -> {
                 titleTV.text = "VIEW ITEM"
@@ -60,16 +52,13 @@ class ItemActivity : AppCompatActivity() {
         }
 
         val data = object : Data(){
-//          mengoverride function ketika data sudah selesai dikirim
             override fun onComplete() {
                 val availMeasure = units.distinctBy { it.measure }.map { it.measure }
                 unitMeasureS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availMeasure)
                 var availUnits = units.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
                 val item  = items.singleOrNull { it._id == itemID }
                 val unit = units.singleOrNull { it._id == item?.unit_id }
-//              val dari rawstock dari ArrayList<Double>
                 val rawStock = ArrayList<Double>()
-//              val dari stockETs dari ArrayList<TextView>
                 val stockETs = ArrayList<TextView>()
                 if (act == "EDIT" || act == "VIEW") {
                     item!!; unit!!
@@ -96,7 +85,6 @@ class ItemActivity : AppCompatActivity() {
                     stockPerLocationTL.addView(rowTR)
                 }
                 stockETs.forEach {
-//                  looping dari stockETs
                     it.addTextChangedListener(object : TextWatcher{
                         override fun afterTextChanged(p0: Editable?) {}
                         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -109,7 +97,6 @@ class ItemActivity : AppCompatActivity() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         availUnits = units.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
-//                      unitNameS.adapter mengambil array dalam bentuk string pada ItemActivity pada layout simple_list_item_1
                         unitNameS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availUnits.map { it.unit_name })
                         if ((act == "VIEW" || act == "EDIT") && unit!!.measure == availMeasure[unitMeasureS.selectedItemPosition]) unitNameS.setSelection(availUnits.indexOf(unit))
                         else unitNameS.setSelection(0)

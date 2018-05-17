@@ -36,9 +36,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-//  mengoverride ketika activity dibuka kembali
     override fun onResume() {
-//      value tabsTL mengambil findViewById dari activity_main_tl_tabs
         val tabsTL = findViewById<TabLayout>(R.id.activity_main_tl_tabs)
         when(tabsTL!!.selectedTabPosition){
             0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ManageFragment()).commit()
@@ -48,26 +46,18 @@ class MainActivity : AppCompatActivity() {
         }
         super.onResume()
     }
-//  mengoverride ketika fungsi berhenti sesaat
     override fun onPause() {
         super.onPause()
-//      menggunakan R.id.activity_main_fl_frame
         fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, Fragment()).commit()
     }
-//  mengoverride function pada saat activity optionmenu dibuat
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//      dengan layout menu activity_main_menu_appbar
         menuInflater.inflate(R.menu.activity_main_menu_appbar, menu)
         return super.onCreateOptionsMenu(menu)
     }
     class LogOutDialog : YesNoDialog(){
-//      mengoverride fungsi pada saat onYesClicked pada saat activity.finish
-//      startActivity pada activity LoginActivity pada class java
         override fun onYesClicked() { activity.finish(); startActivity(Intent(activity, LoginActivity::class.java)) }
-//      override function pada saat onNoClicked
         override fun onNoClicked() {}
     }
-//
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId){
             R.id.menu_main_act_sign_out -> {
@@ -78,9 +68,7 @@ class MainActivity : AppCompatActivity() {
                 dialog.highlight = dialog.HIGHLIGHT_NO
                 dialog.show(fragmentManager, "Dialog Yes No")
             }
-            R.id.menu_main_act_about -> {
-                startActivity(Intent(this, AboutActivity::class.java))
-            }
+            R.id.menu_main_act_about -> { startActivity(Intent(this, AboutActivity::class.java)) }
         }
         return super.onOptionsItemSelected(item)
     }

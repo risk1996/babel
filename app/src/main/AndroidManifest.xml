@@ -25,7 +25,6 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".ItemActivity" />
-        <activity android:name=".AddInOutDialog" />
     </application>
 
 </manifest>

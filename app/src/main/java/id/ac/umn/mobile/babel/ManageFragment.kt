@@ -21,29 +21,21 @@ import java.text.DecimalFormat
 
 class ManageFragment : Fragment() {
     val filterItems = ArrayList<Int>()
-//  menampilkan layout dari class manage fragments
-//  mengoverride function ketika activityt dibuat dengan dapat menunjukan alamat xml yang digunakan
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//      alamat xml yang digunakan fragment_manage
         return inflater.inflate(R.layout.fragment_manage, container, false)
     }
     override fun onStart() {
-//      mengoverride fungsion pada saar start activity
         super.onStart()
-//      value item yang digunakan pada activity yang digunakan pada xml fragment_manage_items
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_manage_items_rv_items)
         val searchET = activity.findViewById<EditText>(R.id.fragment_manage_items_et_search)
 
         val data = object : Data(){
-//          mengoverride fungsi pada saat data selesai dikirim
             override fun onComplete() {
-//              mengclear data di filter.items
                 filterItems.clear()
                 items.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
                 itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         }
-
         itemsRV.adapter = ManageFragmentRVAdapter(activity, data)
         searchET.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
@@ -56,10 +48,8 @@ class ManageFragment : Fragment() {
         })
     }
     class AreYouSureAboutThatDialog : YesNoDialog(){
-//      mengoverride function pada saat onYesClicked
         override fun onYesClicked() {
             val data = object : Data() {
-//              override function pada saat data selesai
                 override fun onComplete() {
                     if (isAdded){
                         val itemToDelete = items.single { it.itemName == value }
@@ -102,7 +92,6 @@ class ManageFragment : Fragment() {
             card.radius = 5.0F
             return ViewHolder(view)
         }
-//      mengoverride function pada saat binding viewHolder
         override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){
             val item : Item = data.items.single { it._id==filterItems[position] }
             val unit : Unit = data.units.find { it._id==item.unit_id }!!
@@ -122,7 +111,6 @@ class ManageFragment : Fragment() {
                 stkTV.text = String.format("%1\$s %2\$s", DecimalFormat("0.##").format(item.stocks[it._id] / unit.value), unit.unit_name)
                 stkTV.setPadding(40, 0, 10, 5)
                 rowTR.addView(stkTV)
-//              set imageResource dari drawable dengan icons8_error_24
                 oosIV.setImageResource(R.drawable.icons8_error_24)
                 oosIV.setColorFilter(Color.rgb(255, 0, 0))
                 if(item.stocks[it._id] >= item.safetyStock) oosIV.visibility = View.INVISIBLE
@@ -136,7 +124,6 @@ class ManageFragment : Fragment() {
             holder.itemContextTb.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.menu_item_act_view -> {
-//                        Toast.makeText(context, "CIE VIEW", Toast.LENGTH_SHORT).show()
                         val intent = Intent(activity, ItemActivity::class.java)
                         intent.putExtra("OPERATION", "VIEW")
                         intent.putExtra("ITEM_ID", item._id)
@@ -164,7 +151,6 @@ class ManageFragment : Fragment() {
                 }
             }
         }
-//      mengoverride fungsi getItemCount
         override fun getItemCount() : Int{
             return filterItems.size
         }
