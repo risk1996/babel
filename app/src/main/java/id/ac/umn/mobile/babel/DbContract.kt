@@ -96,6 +96,7 @@ abstract class Data{
                 try{
                     onComplete()
                 }
+                catch (e : KotlinNullPointerException){ e.printStackTrace() }
                 catch (e : NoSuchElementException){ e.printStackTrace() }
                 catch (e : NullPointerException){ e.printStackTrace() }
             }
