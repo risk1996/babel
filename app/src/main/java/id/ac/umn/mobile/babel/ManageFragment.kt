@@ -56,8 +56,10 @@ class ManageFragment : Fragment() {
         })
     }
     class AreYouSureAboutThatDialog : YesNoDialog(){
+//      mengoverride function pada saat onYesClicked
         override fun onYesClicked() {
             val data = object : Data() {
+//              override function pada saat data selesai
                 override fun onComplete() {
                     if (isAdded){
                         val itemToDelete = items.single { it.itemName == value }
