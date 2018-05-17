@@ -6,7 +6,9 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.app.DialogFragment
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.GridLayoutManager
@@ -22,52 +24,89 @@ import android.widget.*
 import org.w3c.dom.Text
 
 class AddInOutDialog : DialogFragment() {
-//    function onCreateView > menaruh objek inflater: LayoutInflater, container: ViewGroup, SavedInstanceState
+    class TransactionItems(val itemId: Int, var amount: Int, var unitId: Int)
+    var inOutItems = ArrayList<TransactionItems>()
+    var isPressed = false
+    //    function onCreateView > menaruh objek inflater: LayoutInflater, container: ViewGroup, SavedInstanceState
 //    inflater: buat java object view dari layout tujuan
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dialog_add_in_out, container, false)
-//      layout inflater ditunjukan dialog_add_in_out
+//    layout inflater ditunjukan dialog_add_in_out
         val headingTV = view.findViewById<TextView>(R.id.dialog_add_in_out_tv_heading)
 //      object id dialog_add_in_out_tv_heading
         val searchACTV = view.findViewById<AutoCompleteTextView>(R.id.dialog_in_out_items_actv_search)
 //      object id dialog_in_out_items_actv_search
         val itemsLV = view.findViewById<ListView>(R.id.dialog_in_out_lv_filtered_search)
 //      object id dialog_in_out_lv_filtered_search
+        val searchTR = view.findViewById<TableRow>(R.id.dialog_add_in_out_tr1)
+        val itemsTR = view.findViewById<TableRow>(R.id.dialog_add_in_out_tr2)
+        val itemDetailsTR = view.findViewById<TableRow>(R.id.dialog_add_in_out_tr3)
+
+        var stringOfID = ""
 
         headingTV.text = "ADD ITEM"
+//        ambil semua data yang udah ada di InOutFragment buat ditambahin di dialog ini
+        val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+        val itemRaw = pref.getString("ITEMS", "").split(";")
+        inOutItems.clear()
+        if(!itemRaw.contains("")) itemRaw.forEach {
+            val itemSpec = it.split(",").map { it.toInt() }
+            inOutItems.add(TransactionItems(itemSpec[0], itemSpec[1], itemSpec[2]))
+            stringOfID = stringOfID + itemSpec[0].toString() + " "
+        }
+
 //    value data
         val data = object : Data(){
-//            fungsi onComplete dipanggil pada saat data selesai
+            //            fungsi onComplete dipanggil pada saat data selesai
 //            override ketika fungsi aliran data selesai
             override fun onComplete() {
                 val filteredData = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item)
-                items.filter { it.itemName.toLowerCase().contains(searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filteredData.add(it.itemName) }
+                items.filter {
+                    it.itemName.toLowerCase().contains(searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) &&
+                            !stringOfID.contains(it._id.toString())
+                }.forEach { filteredData.add(it.itemName) }
                 itemsLV.adapter = filteredData
             }
         }
-//        try {
-//          searchACTV var buat ngambil nilai dari viewfindbyid nilai dr xml
-//          xml = simple_spinner_dropdown_item
-            searchACTV.addTextChangedListener(object : TextWatcher {
-//              override pada saat function afterTextChanged/beforeTextChanged/onTextChanged
-                override fun afterTextChanged(p0: Editable?) {}
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//      searchACTV var buat ngambil nilai dari viewfindbyid nilai dr xml
+//      xml = simple_spinner_dropdown_item
+        searchACTV.addTextChangedListener(object : TextWatcher {
+            //            override pada saat function afterTextChanged/beforeTextChanged/onTextChanged
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 //          filter data dari array adapter dengan isi berupa string dari activity xml simple_spinner_dropdown_item
-                    val filteredData = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item)
-                    data.items.filter { it.itemName.toLowerCase().contains(searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filteredData.add(it.itemName) }
-                    itemsLV.adapter = filteredData
-//                  filter
-//                  toLowerCase mengubah itemName menjadi lowercase
-//                  contains
-//                  replace
-//                  toRegex mengubah string menjadi regular expression
-//                  Foreach looping data add pada itemName
-                }
-            })
-//        }
-//        catch (e: KotlinNullPointerException){ e.printStackTrace() }
-//        catch (e: NullPointerException){ e.printStackTrace() }
+                val filteredData = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item)
+                data.items.filter {
+                    it.itemName.toLowerCase().contains(searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) &&
+                            !stringOfID.contains(it._id.toString())
+                }.forEach { filteredData.add(it.itemName) }
+                itemsLV.adapter = filteredData
+//              filter
+//              toLowerCase mengubah itemName menjadi lowercase
+//              contains
+//              replace
+//              toRegex mengubah string menjadi regular expression
+//              Foreach looping data add pada itemName
+            }
+        })
+
+        itemsLV.setOnItemClickListener { parent, view, position, id ->
+            val selectedItem = data.items.single { it.itemName == itemsLV.getItemAtPosition(position).toString() }
+            inOutItems.add(TransactionItems(selectedItem._id, 0, selectedItem.unit_id))
+            isPressed = true
+            dismiss()
+        }
+
         return view
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+//        update InOutFragment data ListView
+        val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
+        pref.putString("ITEMS", inOutItems.joinToString(";") { String.format("%d,%d,%d", it.itemId, it.amount, it.unitId) })
+        pref.apply()
+        if(isPressed) Snackbar.make( activity.findViewById(android.R.id.content), "Item has been added", Snackbar.LENGTH_LONG).show()
     }
 }

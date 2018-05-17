@@ -24,7 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"/>
-        <TableRow>
+        <TableRow
+            android:id="@+id/dialog_add_in_out_tr1"
+            android:visibility="visible">
             <android.support.design.widget.TextInputLayout
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -37,12 +39,24 @@
                     android:hint="@string/manage_prompt_search_items"/>
             </android.support.design.widget.TextInputLayout>
         </TableRow>
-        <TableRow>
+        <TableRow
+            android:id="@+id/dialog_add_in_out_tr2"
+            android:visibility="visible">
             <ListView
                 android:id="@+id/dialog_in_out_lv_filtered_search"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
+        </TableRow>
+        <TableRow
+            android:id="@+id/dialog_add_in_out_tr3"
+            android:visibility="gone">
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icons8_water_bottle_96"
+                />
         </TableRow>
     </TableLayout>
 </RelativeLayout>

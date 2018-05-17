@@ -8,6 +8,7 @@ import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,13 +22,38 @@ import java.util.*
 
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
-//      mengoveride function pada saat onYesClicked() &  onNoClicked()
-        override fun onYesClicked() {}
-        override fun onNoClicked() {}
+        var incrementStock = 0
+        override fun onYesClicked() {
+            val data = object : Data(){
+                override fun onComplete() {
+                    val pref = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
+                    val itemRaw = pref.getString("ITEMS", "").split(";")
+                    val db = FirebaseDatabase.getInstance().reference.child("items")
+                    if(!itemRaw.contains("")) itemRaw.forEach {
+                        val itemSpec = it.split(",").map { it.toInt() }
+                        val item = items.single { it._id==itemSpec[0] }
+                        val unitFrom = units.single { it._id==item.unit_id }
+                        val unitTo = units.single { it._id==itemSpec[2] }
+                        Log.d("", "itemSpec[0]    : " + itemSpec[0])
+                        Log.d("", "itemSpec[1]    : " + itemSpec[1])
+                        Log.d("", "itemSpec[2]    : " + itemSpec[2])
+                        Log.d("", "item.stocks[0] : " + item.stocks[0])
+                        Log.d("", "item.unit_id   : " + item.unit_id)
+                        Log.d("", "unitFrom.value : " + unitFrom.value)
+                        Log.d("", "unitTo.value   : " + unitTo.value)
+                        if(value == "outgoing") incrementStock = itemSpec[1]*(-1)
+                        else if(value == "incoming") incrementStock = itemSpec[1]
+                        db.child(itemSpec[0].toString()).child("stocks").child("0")
+                                .setValue( (((item.stocks[0] / unitFrom.value ) + (incrementStock.toDouble() / unitTo.value * unitFrom.value)) * unitFrom.value).toString() )
+                    }
+                }
+            }
+            Snackbar.make( activity.findViewById(android.R.id.content), "Changes have been committed", Snackbar.LENGTH_LONG).show()
+        }
+        override fun onNoClicked() { Snackbar.make( activity.findViewById(android.R.id.content), "No changes have been made", Snackbar.LENGTH_LONG).show() }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v : View? = null
-//      R.id.activity_main_tl_tabs
         val tab = activity!!.findViewById<TabLayout>(R.id.activity_main_tl_tabs).selectedTabPosition
         when(tab){
             0 -> {
@@ -77,7 +103,14 @@ class MainModal : BottomSheetDialogFragment() {
                     dismissAllowingStateLoss()
                 }
                 commitBtn.setOnClickListener {
-                    Toast.makeText(activity, "NAH COMMIT", Toast.LENGTH_SHORT).show()
+                    val dialog = CommitDialog()
+                    dialog.isCancelable = false
+                    dialog.heading = "Commit Changes"
+                    dialog.message = "Are you sure you want to commit?"
+                    dialog.value = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
+                    dialog.highlight = dialog.HIGHLIGHT_NO
+                    dialog.show(activity!!.fragmentManager, "Dialog Yes No")
+                    dismissAllowingStateLoss()
                 }
             }
             2 -> {

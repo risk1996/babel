@@ -122,7 +122,6 @@ class ItemActivity : AppCompatActivity() {
                     }
                 }
                 okB.setOnClickListener{
-                    Toast.makeText(this@ItemActivity, "HAI HAI", Toast.LENGTH_SHORT).show()
                     when (act) {
                         "VIEW" -> {
                             val intent = Intent(this@ItemActivity, ItemActivity::class.java)
