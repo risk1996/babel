@@ -102,6 +102,7 @@ class ManageFragment : Fragment() {
             card.radius = 5.0F
             return ViewHolder(view)
         }
+//      mengoverride function pada saat binding viewHolder
         override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){
             val item : Item = data.items.single { it._id==filterItems[position] }
             val unit : Unit = data.units.find { it._id==item.unit_id }!!
