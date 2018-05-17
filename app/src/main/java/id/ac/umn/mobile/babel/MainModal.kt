@@ -22,6 +22,7 @@ import java.util.*
 
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
+        var incrementStock = 0
         override fun onYesClicked() {
             val data = object : Data(){
                 override fun onComplete() {
@@ -40,17 +41,16 @@ class MainModal : BottomSheetDialogFragment() {
                         Log.d("", "item.unit_id   : " + item.unit_id)
                         Log.d("", "unitFrom.value : " + unitFrom.value)
                         Log.d("", "unitTo.value   : " + unitTo.value)
+                        if(value == "outgoing") incrementStock = itemSpec[1]*(-1)
+                        else if(value == "incoming") incrementStock = itemSpec[1]
                         db.child(itemSpec[0].toString()).child("stocks").child("0")
-                                .setValue( (((item.stocks[0] / unitFrom.value ) + (itemSpec[1] / unitTo.value * unitFrom.value)) * unitFrom.value).toString() )
+                                .setValue( (((item.stocks[0] / unitFrom.value ) + (incrementStock.toDouble() / unitTo.value * unitFrom.value)) * unitFrom.value).toString() )
                     }
-                    db.onDisconnect()
                 }
             }
             Snackbar.make( activity.findViewById(android.R.id.content), "Changes have been committed", Snackbar.LENGTH_LONG).show()
         }
-        override fun onNoClicked() {
-            Snackbar.make( activity.findViewById(android.R.id.content), "No changes have been made", Snackbar.LENGTH_LONG).show()
-        }
+        override fun onNoClicked() { Snackbar.make( activity.findViewById(android.R.id.content), "No changes have been made", Snackbar.LENGTH_LONG).show() }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v : View? = null
@@ -107,6 +107,7 @@ class MainModal : BottomSheetDialogFragment() {
                     dialog.isCancelable = false
                     dialog.heading = "Commit Changes"
                     dialog.message = "Are you sure you want to commit?"
+                    dialog.value = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
                     dialog.highlight = dialog.HIGHLIGHT_NO
                     dialog.show(activity!!.fragmentManager, "Dialog Yes No")
                     dismissAllowingStateLoss()
