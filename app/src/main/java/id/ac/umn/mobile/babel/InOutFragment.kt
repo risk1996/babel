@@ -18,7 +18,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class InOutFragment : Fragment() {
-    class TransactionItems(val itemId: Int, var ammount: Int, var unitId: Int)
+    class TransactionItems(val itemId: Int, var amount: Int, var unitId: Int)
     var inOutItems = ArrayList<TransactionItems>()
     var listener : SharedPreferences.OnSharedPreferenceChangeListener? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -77,7 +77,7 @@ class InOutFragment : Fragment() {
 //    nilai pref > getSharedPreference
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
 //
-        pref.putString("ITEMS", inOutItems.joinToString(";") { String.format("%d,%d,%d", it.itemId, it.ammount, it.unitId) })
+        pref.putString("ITEMS", inOutItems.joinToString(";") { String.format("%d,%d,%d", it.itemId, it.amount, it.unitId) })
         pref.apply()
     }
 //
@@ -151,11 +151,11 @@ class InOutFragment : Fragment() {
             holder.signTV.text = if (sign == 1) "+" else "-"
             holder.amountNP.minValue = 0
             holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
-            holder.amountNP.value = inOutItems[position].ammount
-            inOutItems[position].ammount = holder.amountNP.value
+            holder.amountNP.value = inOutItems[position].amount
+            inOutItems[position].amount = holder.amountNP.value
             holder.amountNP.setFormatter { DecimalFormat("0.##").format(it.toDouble() * unitFrom.increment) }
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
-                inOutItems[position].ammount = numberPicker.value
+                inOutItems[position].amount = numberPicker.value
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                         DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
                         DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
