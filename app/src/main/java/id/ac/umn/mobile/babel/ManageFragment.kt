@@ -121,6 +121,7 @@ class ManageFragment : Fragment() {
                 stkTV.text = String.format("%1\$s %2\$s", DecimalFormat("0.##").format(item.stocks[it._id] / unit.value), unit.unit_name)
                 stkTV.setPadding(40, 0, 10, 5)
                 rowTR.addView(stkTV)
+//              set imageResource dari drawable dengan icons8_error_24
                 oosIV.setImageResource(R.drawable.icons8_error_24)
                 oosIV.setColorFilter(Color.rgb(255, 0, 0))
                 if(item.stocks[it._id] >= item.safetyStock) oosIV.visibility = View.INVISIBLE
@@ -162,7 +163,7 @@ class ManageFragment : Fragment() {
                 }
             }
         }
-//        fungsi itemcount
+//      mengoverride fungsi getItemCount
         override fun getItemCount() : Int{
             return filterItems.size
         }
