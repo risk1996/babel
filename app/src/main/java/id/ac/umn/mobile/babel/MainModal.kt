@@ -21,11 +21,13 @@ import java.util.*
 
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
+//      mengoveride function pada saat onYesClicked() &  onNoClicked()
         override fun onYesClicked() {}
         override fun onNoClicked() {}
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v : View? = null
+//      R.id.activity_main_tl_tabs
         val tab = activity!!.findViewById<TabLayout>(R.id.activity_main_tl_tabs).selectedTabPosition
         when(tab){
             0 -> {

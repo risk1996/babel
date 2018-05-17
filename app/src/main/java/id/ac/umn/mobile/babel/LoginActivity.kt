@@ -30,13 +30,15 @@ class LoginActivity : AppCompatActivity() {
         title = getString(R.string.activity_login_label)
 
         val emailET = findViewById<EditText>(R.id.activity_login_et_email) //edit text activity_login_et_email
-        val emailErrorTV = findViewById<TextView>(R.id.activity_login_tv_email_errors)
+        val emailErrorTV = findViewById<TextView>(R.id.activity_login_tv_email_errors) // TextView activity_login_tv_email_errors
         val passwordET = findViewById<EditText>(R.id.activity_login_et_password) // edit text activity_login_et_password
-        val passwordErrorTV = findViewById<TextView>(R.id.activity_login_tv_password_errors)
-        val rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me)
-        val credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors)
-        val signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in)
+        val passwordErrorTV = findViewById<TextView>(R.id.activity_login_tv_password_errors) // TextView activity_login_tv_password_errors
+        val rememberMeChk = findViewById<CheckBox>(R.id.activity_login_chk_remember_me) // CheckBox activity_login_chk_remember_me
+        val credentialErrorTV = findViewById<TextView>(R.id.activity_login_tv_credentials_errors) // TextView activity_login_tv_credentials_errors
+        val signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in) // Button activity_login_btn_sign_in
+//      value pref > getSharedPreferences
         val pref = getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
+
 
         if(pref.getBoolean("REMEMBER_ME", false)){
             emailET.setText(pref.getString("EMAIL",""))
