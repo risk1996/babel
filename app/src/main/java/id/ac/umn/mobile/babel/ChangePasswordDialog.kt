@@ -60,7 +60,7 @@ class ChangePasswordDialog : DialogFragment(){
                 else -> {
                     val pref = activity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
                     val data = object : Data(){ override fun onComplete() {
-                        val account = accounts.single { it.email == pref.getString("EMAIL", "") }
+                        val account = accountsActive.single { it.email == pref.getString("EMAIL", "") }
                         val salt = account.salt
                         val newSalt = UUID.randomUUID().toString().substring(25, 30)
                         val oldPassword = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((currPassET.text.toString() + salt).toByteArray()))

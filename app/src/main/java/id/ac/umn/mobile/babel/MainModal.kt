@@ -33,9 +33,9 @@ class MainModal : BottomSheetDialogFragment() {
                     val db = FirebaseDatabase.getInstance().reference.child("items")
                     if(!itemRaw.contains("")) itemRaw.forEach {
                         val itemSpec = it.split(",").map { it.toInt() }
-                        val item = items.single { it._id==itemSpec[0] }
-                        val unitFrom = units.single { it._id==item.unit_id }
-                        val unitTo = units.single { it._id==itemSpec[2] }
+                        val item = itemsActive.single { it._id==itemSpec[0] }
+                        val unitFrom = unitsActive.single { it._id==item.unit_id }
+                        val unitTo = unitsActive.single { it._id==itemSpec[2] }
                         Log.d("", "itemSpec[0]    : " + itemSpec[0])
                         Log.d("", "itemSpec[1]    : " + itemSpec[1])
                         Log.d("", "itemSpec[2]    : " + itemSpec[2])

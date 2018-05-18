@@ -30,14 +30,14 @@ class ReportFragment : Fragment() {
             override fun onComplete() {
                 if(isAdded){
                     compIconIV.setImageResource(R.drawable::class.java.getField(company.logo).getInt(null))
-                    compNameTV.text = String.format("%s %s", company.statusShort, company.name)
-                    compStatusTV.text = company.status
+                    compNameTV.text = String.format("%s %s", company.typeShort, company.name)
+                    compStatusTV.text = company.type
                     compSiteTV.text = company.site
                     compOfficeMainTV.text = company.officeMain
                     compOfficeSecondaryTV.text = company.officeSecondary
 
-                    itemNumTV.text = items.filter { it.stocks.none { it == .0 } }.count().toString()
-                    locations.forEach {
+                    itemNumTV.text = itemsActive.filter { it.stocks.none { it == .0 } }.count().toString()
+                    locationsActive.forEach {
                         val row = TableRow(activity)
                         val labelTV = TextView(activity)
                         val valueTV = TextView(activity)
@@ -46,14 +46,14 @@ class ReportFragment : Fragment() {
                         labelTV.text = String.format("- %s", value.code)
                         row.addView(labelTV)
                         valueTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
-                        valueTV.text = items.filter { it.stocks[locations.indexOf(value)] > 0 }.count().toString()
+                        valueTV.text = itemsActive.filter { it.stocks[locationsActive.indexOf(value)] > 0 }.count().toString()
                         valueTV.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
                         valueTV.setTextColor(ContextCompat.getColor(activity, android.R.color.black))
                         row.addView(valueTV)
                         itemNumLocTL.addView(row)
                     }
-                    itemShortageTV.text = items.filter { item -> item.stocks.count { it < item.safetyStock } > 0 }.size.toString()
-                    locations.forEach {
+                    itemShortageTV.text = itemsActive.filter { item -> item.stocks.count { it < item.safetyStock } > 0 }.size.toString()
+                    locationsActive.forEach {
                         val row = TableRow(activity)
                         val labelTV = TextView(activity)
                         val valueTV = TextView(activity)
@@ -62,7 +62,7 @@ class ReportFragment : Fragment() {
                         labelTV.text = String.format("- %s", value.code)
                         row.addView(labelTV)
                         valueTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
-                        valueTV.text = items.filter { it.stocks[locations.indexOf(value)] < it.safetyStock }.count().toString()
+                        valueTV.text = itemsActive.filter { it.stocks[locationsActive.indexOf(value)] < it.safetyStock }.count().toString()
                         valueTV.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
                         valueTV.setTextColor(ContextCompat.getColor(activity, android.R.color.black))
                         row.addView(valueTV)

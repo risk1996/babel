@@ -42,11 +42,7 @@ class MovableFloatingActionButton : FloatingActionButton, View.OnTouchListener {
                 var newY = motionEvent.rawY + dY
                 newY = Math.max(0f, newY) // Don't allow the FAB past the top of the parent
                 newY = Math.min((parentHeight - viewHeight).toFloat(), newY) // Don't allow the FAB past the bottom of the parent
-                view.animate()
-                        .x(newX)
-                        .y(newY)
-                        .setDuration(0)
-                        .start()
+                view.animate().x(newX).y(newY).setDuration(0).start()
                 return true // Consumed
             }
             MotionEvent.ACTION_UP -> {

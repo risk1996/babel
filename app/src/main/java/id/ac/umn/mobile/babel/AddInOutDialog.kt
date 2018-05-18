@@ -49,7 +49,7 @@ class AddInOutDialog : DialogFragment() {
         val data = object : Data(){
             override fun onComplete() {
                 val filteredData = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item)
-                items.filter {
+                itemsActive.filter {
                     it.itemName.toLowerCase().contains(searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) &&
                             !stringOfID.contains(it._id.toString())
                 }.forEach { filteredData.add(it.itemName) }
@@ -61,7 +61,7 @@ class AddInOutDialog : DialogFragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val filteredData = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item)
-                data.items.filter {
+                data.itemsActive.filter {
                     it.itemName.toLowerCase().contains(searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) &&
                             !stringOfID.contains(it._id.toString())
                 }.forEach { filteredData.add(it.itemName) }
@@ -69,7 +69,7 @@ class AddInOutDialog : DialogFragment() {
             }
         })
         itemsLV.setOnItemClickListener { parent, view, position, id ->
-            val selectedItem = data.items.single { it.itemName == itemsLV.getItemAtPosition(position).toString() }
+            val selectedItem = data.itemsActive.single { it.itemName == itemsLV.getItemAtPosition(position).toString() }
             inOutItems.add(TransactionItems(selectedItem._id, 0, selectedItem.unit_id))
             isPressed = true
             dismiss()

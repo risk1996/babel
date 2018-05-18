@@ -32,7 +32,7 @@ class ManageFragment : Fragment() {
         val data = object : Data(){
             override fun onComplete() {
                 filterItems.clear()
-                items.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
+                itemsActive.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
                 itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         }
@@ -42,7 +42,7 @@ class ManageFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 filterItems.clear()
-                data.items.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
+                data.itemsActive.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
                 itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         })
@@ -52,7 +52,7 @@ class ManageFragment : Fragment() {
             val data = object : Data() {
                 override fun onComplete() {
                     if (isAdded){
-                        val itemToDelete = items.single { it.itemName == value }
+                        val itemToDelete = itemsActive.single { it.itemName == value }
                         val db = FirebaseDatabase.getInstance().reference.child("items")
                         db.child(itemToDelete._id.toString()).removeValue()
                     }
@@ -93,8 +93,8 @@ class ManageFragment : Fragment() {
             return ViewHolder(view)
         }
         override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){
-            val item : Item = data.items.single { it._id==filterItems[position] }
-            val unit : Unit = data.units.find { it._id==item.unit_id }!!
+            val item : Item = data.itemsActive.single { it._id==filterItems[position] }
+            val unit : Unit = data.unitsActive.find { it._id==item.unit_id }!!
             val rowTR = TableRow(activity)
             val locTV = TextView(activity)
             val stkTV = TextView(activity)
@@ -102,7 +102,7 @@ class ManageFragment : Fragment() {
             val param = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
             holder.nameTV.text = item.itemName
             holder.itemLocationsTL.removeViews(1, holder.itemLocationsTL.childCount-1)
-            data.locations.forEach {
+            data.locationsActive.forEach {
                 locTV.layoutParams = param
                 locTV.text = String.format("%1\$s    : ", it.code)
                 locTV.setPadding(40, 0, 10, 5)

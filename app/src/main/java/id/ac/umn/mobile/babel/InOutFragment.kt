@@ -38,11 +38,11 @@ class InOutFragment : Fragment() {
                 loadTransaction()
                 if(inOutItems.isEmpty())Toast.makeText(activity, "There's nothing here yet", Toast.LENGTH_SHORT).show()
                 else itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
-                locationsSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locations.map { it.code })
+                locationsSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locationsActive.map { it.code })
                 val act = pref.getString("ACTION","incoming")
                 directionTV.text = if(act == "incoming") "←" else "→"
                 purposeSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item,
-                        thirdParties.filter { it.tp_status=="active"&&(act=="incoming"&&it.tp_type=="S"||act=="outgoing"&&it.tp_type=="C") }.map { it.tp_name })
+                        thirdPartiesActive.filter { act=="incoming" && it.role=="S" || act=="outgoing" && it.role=="C" }.map { it.tp_name })
             }
         }}
         listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged(); data.onComplete() }
@@ -90,10 +90,10 @@ class InOutFragment : Fragment() {
         }
         override fun onBindViewHolder(holder : InOutFragmentRVAdapter.ViewHolder, position : Int) {
             val locationsSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations)
-            val item: Item = data.items.single { it._id == inOutItems[position].itemId }
-            val unitFrom: Unit = data.units.single { it._id == item.unit_id }
-            val unitAvail = data.units.filter { it.measure == unitFrom.measure }
-            var unitTo: Unit = data.units.single { it._id == inOutItems[position].unitId }
+            val item: Item = data.itemsActive.single { it._id == inOutItems[position].itemId }
+            val unitFrom: Unit = data.unitsActive.single { it._id == item.unit_id }
+            val unitAvail = data.unitsActive.filter { it.measure == unitFrom.measure }
+            var unitTo: Unit = data.unitsActive.single { it._id == inOutItems[position].unitId }
             val sign = if(activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION", "incoming") == "incoming") 1 else -1
             holder.removeBtn.setOnClickListener {
                 inOutItems.removeAt(position)

@@ -53,11 +53,11 @@ class ItemActivity : AppCompatActivity() {
 
         val data = object : Data(){
             override fun onComplete() {
-                val availMeasure = units.distinctBy { it.measure }.map { it.measure }
+                val availMeasure = unitsActive.distinctBy { it.measure }.map { it.measure }
                 unitMeasureS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availMeasure)
-                var availUnits = units.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
-                val item  = items.singleOrNull { it._id == itemID }
-                val unit = units.singleOrNull { it._id == item?.unit_id }
+                var availUnits = unitsActive.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
+                val item  = itemsActive.singleOrNull { it._id == itemID }
+                val unit = unitsActive.singleOrNull { it._id == item?.unit_id }
                 val rawStock = ArrayList<Double>()
                 val stockETs = ArrayList<TextView>()
                 if (act == "EDIT" || act == "VIEW") {
@@ -69,13 +69,13 @@ class ItemActivity : AppCompatActivity() {
                     rawStock.add(item.safetyStock)
                     stockETs.add(safetyStockET)
                 }
-                locations.forEach {
+                locationsActive.forEach {
                     val rowTR = TableRow(this@ItemActivity)
                     val locationTV = TextView(this@ItemActivity)
                     val stockOnLocationET = EditText(this@ItemActivity)
                     locationTV.text = it.code
                     rowTR.addView(locationTV, TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f))
-                    if (act == "EDIT" || act == "VIEW") stockOnLocationET.setText(item!!.stocks[locations.indexOf(it)].toString())
+                    if (act == "EDIT" || act == "VIEW") stockOnLocationET.setText(item!!.stocks[locationsActive.indexOf(it)].toString())
                     else stockOnLocationET.setText(0f.toString())
                     rawStock.add(stockOnLocationET.text.toString().toDouble())
                     stockETs.add(stockOnLocationET)
@@ -96,7 +96,7 @@ class ItemActivity : AppCompatActivity() {
                 unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        availUnits = units.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
+                        availUnits = unitsActive.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
                         unitNameS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availUnits.map { it.unit_name })
                         if ((act == "VIEW" || act == "EDIT") && unit!!.measure == availMeasure[unitMeasureS.selectedItemPosition]) unitNameS.setSelection(availUnits.indexOf(unit))
                         else unitNameS.setSelection(0)
@@ -132,7 +132,7 @@ class ItemActivity : AppCompatActivity() {
                             newItem["safety_stock"] = safetyStockET.text.toString()
                             newItem["stocks"] = mutableListOf(999.toString()).toList()
                             newItem["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
-                            db.child((items.last()._id + 1).toString()).setValue(newItem)
+                            db.child((itemsAll.last()._id + 1).toString()).setValue(newItem)
                         }
                     }
                     finish()
