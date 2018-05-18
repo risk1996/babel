@@ -49,8 +49,8 @@ class InOutFragment : Fragment() {
         pref.registerOnSharedPreferenceChangeListener(listener)
         itemsRV.adapter = InOutFragmentRVAdapter(activity, data)
     }
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         saveTransaction()
     }
     override fun onResume() {

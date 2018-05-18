@@ -2,23 +2,16 @@ package id.ac.umn.mobile.babel
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Button
-import android.widget.Toast
-import com.google.android.gms.common.util.Hex
 import com.google.firebase.database.FirebaseDatabase
-import java.security.MessageDigest
-import java.util.*
 
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
@@ -46,7 +39,7 @@ class MainModal : BottomSheetDialogFragment() {
                         if(value == "outgoing") incrementStock = itemSpec[1]*(-1)
                         else if(value == "incoming") incrementStock = itemSpec[1]
                         db.child(itemSpec[0].toString()).child("stocks").child("0")
-                                .setValue( (((item.stocks[0] / unitFrom.value ) + (incrementStock.toDouble() / unitTo.value * unitFrom.value)) * unitFrom.value).toDouble().toString() )
+                                .setValue( (((item.stocks[0] / unitFrom.value ) + (incrementStock.toDouble() / unitTo.value * unitFrom.value)) * unitFrom.value).toString() )
                     }
                     Log.d("", "itemSpec[0]   lalalalalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 }
@@ -94,7 +87,9 @@ class MainModal : BottomSheetDialogFragment() {
                     dismissAllowingStateLoss()
                 }
                 addItemBtn.setOnClickListener {
-                    val dialog = AddInOutDialog()
+                    (activity as MainActivity).inOutFragment.saveTransaction()
+                    val dialog = ListDialog()
+                    dialog.content = "IN OUT ITEM"
                     dialog.show(activity!!.fragmentManager, dialog.tag)
                     dismissAllowingStateLoss()
                 }

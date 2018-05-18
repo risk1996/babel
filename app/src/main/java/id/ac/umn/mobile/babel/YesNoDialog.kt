@@ -12,10 +12,10 @@ import android.widget.TextView
 import org.w3c.dom.Text
 
 abstract class YesNoDialog : DialogFragment() {
-    val HIGHLIGHT_NONE = 0
-    val HIGHLIGHT_NO = 1
-    val HIGHLIGHT_YES = 2
-    val HIGHLIGHT_BOTH = 3
+    val HIGHLIGHT_NONE  = 0
+    val HIGHLIGHT_NO    = 1
+    val HIGHLIGHT_YES   = 2
+    val HIGHLIGHT_BOTH  = 3
 
     var heading : String = ""
     var message : String = ""

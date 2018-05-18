@@ -10,6 +10,10 @@ import android.view.Menu
 import android.view.MenuItem
 
 class MainActivity : AppCompatActivity() {
+    val manageFragment = ManageFragment()
+    val inOutFragment = InOutFragment()
+    val reportFragment = ReportFragment()
+    val userFragment = UserFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,10 +32,10 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(tab!!.position){
-                    0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ManageFragment()).commit()
-                    1 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, InOutFragment()).commit()
-                    2 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ReportFragment()).commit()
-                    3 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, UserFragment()).commit()
+                    0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, manageFragment).commit()
+                    1 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, inOutFragment).commit()
+                    2 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, reportFragment).commit()
+                    3 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, userFragment).commit()
                 }
             }
         })
@@ -39,10 +43,10 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         val tabsTL = findViewById<TabLayout>(R.id.activity_main_tl_tabs)
         when(tabsTL!!.selectedTabPosition){
-            0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ManageFragment()).commit()
-            1 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, InOutFragment()).commit()
-            2 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, ReportFragment()).commit()
-            3 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, UserFragment()).commit()
+            0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, manageFragment).commit()
+            1 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, inOutFragment).commit()
+            2 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, reportFragment).commit()
+            3 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, userFragment).commit()
         }
         super.onResume()
     }
