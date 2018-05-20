@@ -100,6 +100,7 @@
     <!--Dialog-->
     <string name="action_yes">Yes</string>
     <string name="action_no">No</string>
+    <string name="action_new">New</string>
 
     <!--Placeholders-->
     <string name="item_name">&lt;ITEM NAME&gt;</string>

@@ -95,7 +95,7 @@ class ManageFragment : Fragment() {
         }
         override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){
             val item : Item = data.itemsActive.single { it._id==filterItems[position] }
-            val unit : Unit = data.unitsActive.find { it._id==item.unit_id }!!
+            val unit : Unit = data.unitsActive.find { it._id==item.unitId }!!
             val rowTR = TableRow(activity)
             val locTV = TextView(activity)
             val stkTV = TextView(activity)
@@ -109,7 +109,7 @@ class ManageFragment : Fragment() {
                 locTV.setPadding(40, 0, 10, 5)
                 rowTR.addView(locTV)
                 stkTV.layoutParams = param
-                stkTV.text = String.format("%1\$s %2\$s", DecimalFormat("0.##").format(item.stocks[it._id] / unit.value), unit.unit_name)
+                stkTV.text = String.format("%1\$s %2\$s", DecimalFormat("0.##").format(item.stocks[it._id] / unit.value), unit.unitName)
                 stkTV.setPadding(40, 0, 10, 5)
                 rowTR.addView(stkTV)
                 oosIV.setImageResource(R.drawable.icons8_error_24)

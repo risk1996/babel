@@ -27,13 +27,13 @@ class MainModal : BottomSheetDialogFragment() {
                     if(!itemRaw.contains("")) itemRaw.forEach {
                         val itemSpec = it.split(",").map { it.toInt() }
                         val item = itemsActive.single { it._id==itemSpec[0] }
-                        val unitFrom = unitsActive.single { it._id==item.unit_id }
+                        val unitFrom = unitsActive.single { it._id==item.unitId }
                         val unitTo = unitsActive.single { it._id==itemSpec[2] }
                         Log.d("", "itemSpec[0]    : " + itemSpec[0])
                         Log.d("", "itemSpec[1]    : " + itemSpec[1])
                         Log.d("", "itemSpec[2]    : " + itemSpec[2])
                         Log.d("", "item.stocks[0] : " + item.stocks[0])
-                        Log.d("", "item.unit_id   : " + item.unit_id)
+                        Log.d("", "item.unit_id   : " + item.unitId)
                         Log.d("", "unitFrom.value : " + unitFrom.value)
                         Log.d("", "unitTo.value   : " + unitTo.value)
                         if(value == "outgoing") incrementStock = itemSpec[1]*(-1)
@@ -62,6 +62,24 @@ class MainModal : BottomSheetDialogFragment() {
                     val intent = Intent(activity, ItemActivity::class.java)
                     intent.putExtra("OPERATION", "NEW")
                     startActivity(intent)
+                }
+                manageUnitsBtn.setOnClickListener {
+                    val dialog = ListDialog()
+                    dialog.content = "UNITS"
+                    dialog.show(activity!!.fragmentManager, dialog.tag)
+                    dismissAllowingStateLoss()
+                }
+                manageLocationsBtn.setOnClickListener {
+                    val dialog = ListDialog()
+                    dialog.content = "LOCATIONS"
+                    dialog.show(activity!!.fragmentManager, dialog.tag)
+                    dismissAllowingStateLoss()
+                }
+                managethirdPartiesBtn.setOnClickListener {
+                    val dialog = ListDialog()
+                    dialog.content = "THIRD PARTIES"
+                    dialog.show(activity!!.fragmentManager, dialog.tag)
+                    dismissAllowingStateLoss()
                 }
             }
             1 -> {

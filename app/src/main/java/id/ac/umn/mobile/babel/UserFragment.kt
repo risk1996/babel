@@ -28,7 +28,7 @@ class UserFragment : Fragment() {
                     nameTV.text = user.name
                     emailTV.text = user.email
                     roleTV.text = user.role
-                    val regDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(user.reg_date)
+                    val regDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(user.regDate)
                     regDateTV.text = String.format("Registered since: %1\$s", SimpleDateFormat("E, dd MM yyyy", Locale.getDefault()).format(regDate))
                     val acc = ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1)
                     accountsActive.filter { it._id != user._id }.forEach {  acc.add(String.format("%s (%s)", it.name, it.role )) }

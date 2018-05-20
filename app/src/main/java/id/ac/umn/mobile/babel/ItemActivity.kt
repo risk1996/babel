@@ -57,7 +57,7 @@ class ItemActivity : AppCompatActivity() {
                 unitMeasureS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availMeasure)
                 var availUnits = unitsActive.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
                 val item  = itemsActive.singleOrNull { it._id == itemID }
-                val unit = unitsActive.singleOrNull { it._id == item?.unit_id }
+                val unit = unitsActive.singleOrNull { it._id == item?.unitId }
                 val rawStock = ArrayList<Double>()
                 val stockETs = ArrayList<TextView>()
                 if (act == "EDIT" || act == "VIEW") {
@@ -97,7 +97,7 @@ class ItemActivity : AppCompatActivity() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         availUnits = unitsActive.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
-                        unitNameS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availUnits.map { it.unit_name })
+                        unitNameS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availUnits.map { it.unitName })
                         if ((act == "VIEW" || act == "EDIT") && unit!!.measure == availMeasure[unitMeasureS.selectedItemPosition]) unitNameS.setSelection(availUnits.indexOf(unit))
                         else unitNameS.setSelection(0)
                     }

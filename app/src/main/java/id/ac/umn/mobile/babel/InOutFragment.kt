@@ -42,7 +42,7 @@ class InOutFragment : Fragment() {
                 val act = pref.getString("ACTION","incoming")
                 directionTV.text = if(act == "incoming") "←" else "→"
                 purposeSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item,
-                        thirdPartiesActive.filter { act=="incoming" && it.role=="S" || act=="outgoing" && it.role=="C" }.map { it.tp_name })
+                        thirdPartiesActive.filter { act=="incoming" && it.role=="S" || act=="outgoing" && it.role=="C" }.map { it.tpName })
             }
         }}
         listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged(); data.onComplete() }
@@ -91,7 +91,7 @@ class InOutFragment : Fragment() {
         override fun onBindViewHolder(holder : InOutFragmentRVAdapter.ViewHolder, position : Int) {
             val locationsSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations)
             val item: Item = data.itemsActive.single { it._id == inOutItems[position].itemId }
-            val unitFrom: Unit = data.unitsActive.single { it._id == item.unit_id }
+            val unitFrom: Unit = data.unitsActive.single { it._id == item.unitId }
             val unitAvail = data.unitsActive.filter { it.measure == unitFrom.measure }
             var unitTo: Unit = data.unitsActive.single { it._id == inOutItems[position].unitId }
             val sign = if(activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION", "incoming") == "incoming") 1 else -1
@@ -103,7 +103,7 @@ class InOutFragment : Fragment() {
             holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                     DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
                     DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
-                    unitFrom.unit_name
+                    unitFrom.unitName
             )
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
             holder.signTV.text = if (sign == 1) "+" else "-"
@@ -117,10 +117,10 @@ class InOutFragment : Fragment() {
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                         DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
                         DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
-                        unitFrom.unit_name
+                        unitFrom.unitName
                 )
             }
-            holder.unitSpn.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, unitAvail.map { it.unit_name })
+            holder.unitSpn.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, unitAvail.map { it.unitName })
             holder.unitSpn.setSelection(unitAvail.indexOf(unitTo))
             holder.unitSpn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -130,7 +130,7 @@ class InOutFragment : Fragment() {
                     holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                             DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
                             DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value))),
-                            unitFrom.unit_name
+                            unitFrom.unitName
                     )
                     holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
                 }

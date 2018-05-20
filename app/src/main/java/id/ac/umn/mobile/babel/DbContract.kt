@@ -9,11 +9,11 @@ import com.google.firebase.database.ValueEventListener
 import java.lang.Exception
 
 class Company   (val type: String, val typeShort: String, val name: String, val logo: String, val site: String, val officeMain: String, val officeSecondary: String)
-class Account   (val _id: Int, val status: String, val email: String, val password: String, val salt: String, val name: String, val role: String, val dob: String, val reg_date: String)
-class Unit      (val _id: Int, val status: String, val measure: String, val unit_name: String, val value: Double, val increment: Double, val unit_thumbnail: String)
-class Item      (val _id: Int, val status: String, val itemName: String, val stocks: List<Double>, val safetyStock: Double, val unit_id: Int, val thumbnail: String)
+class Account   (val _id: Int, val status: String, val email: String, val password: String, val salt: String, val name: String, val role: String, val dob: String, val regDate: String)
+class Unit      (val _id: Int, val status: String, val measure: String, val unitName: String, val value: Double, val increment: Double, val unitThumbnail: String)
+class Item      (val _id: Int, val status: String, val itemName: String, val stocks: List<Double>, val safetyStock: Double, val unitId: Int, val thumbnail: String)
 class Location  (val _id: Int, val status: String, val code: String, val position: String)
-class ThirdParty(val _id: Int, val status: String, val role: String, val tp_name: String)
+class ThirdParty(val _id: Int, val status: String, val role: String, val tpName: String)
 class FirebaseDb : Application() {
     override fun onCreate() {
         super.onCreate()

@@ -19,10 +19,33 @@
                 android:textColor="@android:color/black"
                 android:text="@string/dialog_heading"/>
         </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+        <TableRow>
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+        </TableRow>
+        <TableRow android:id="@+id/dialog_list_tr_operations">
+            <Switch
+                android:id="@+id/dialog_list_sw_inactive"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Show inactive"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"/>
+            <Button
+                android:id="@+id/dialog_list_btn_new"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:textColor="@color/colorAccent"
+                android:text="@string/action_new"/>
+        </TableRow>
         <TableRow>
             <android.support.design.widget.TextInputLayout
                 android:layout_weight="1"
