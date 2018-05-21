@@ -11,6 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 
+//==================================================================================================
+// List Dialog
+//==================================================================================================
+//
+//
+//
+//
+//--------------------------------------------------------------------------------------------------
+
 class ListDialog : DialogFragment() {
     var content : String? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -99,6 +108,7 @@ class ListDialog : DialogFragment() {
 
                 }
             }
+
             "THIRD PARTIES" -> {
                 headingTV.text = "MANAGE THIRD PARTIES"
                 newBtn.setOnClickListener {  }

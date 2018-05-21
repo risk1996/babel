@@ -14,6 +14,16 @@ import android.widget.*
 import com.google.firebase.database.FirebaseDatabase
 import java.text.DecimalFormat
 
+//==================================================================================================
+// Item Activity
+//==================================================================================================
+//
+// Part of Main Activity (first tab), user can input or output data about item,
+// moreover, about detail item and quantity about item
+//
+//--------------------------------------------------------------------------------------------------
+
+
 class ItemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

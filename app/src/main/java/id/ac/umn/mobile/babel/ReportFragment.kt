@@ -10,7 +10,14 @@ import android.view.ViewGroup
 import android.widget.*
 
 
-
+//==================================================================================================
+// Report Fragment
+//==================================================================================================
+//
+// Part of Main Activity (first tab), contain about information about app ,
+// moreover, admin can also read about item report about item
+//
+//--------------------------------------------------------------------------------------------------
 
 
 class ReportFragment : Fragment() {

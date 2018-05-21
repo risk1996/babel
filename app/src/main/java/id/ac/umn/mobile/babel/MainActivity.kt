@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout
 import android.view.Menu
 import android.view.MenuItem
 
+
 class MainActivity : AppCompatActivity() {
     val manageFragment = ManageFragment()
     val inOutFragment = InOutFragment()
