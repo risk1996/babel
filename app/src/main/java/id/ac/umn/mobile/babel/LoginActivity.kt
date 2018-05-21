@@ -20,6 +20,16 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.security.MessageDigest
 
+//==================================================================================================
+// Login Activity
+//==================================================================================================
+//
+// Part of Main Activity, user can login to the app with the account that already register with
+// software, more over, admin have an access with different feature.
+//
+//--------------------------------------------------------------------------------------------------
+
+
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

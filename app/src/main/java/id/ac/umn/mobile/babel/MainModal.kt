@@ -133,7 +133,8 @@ class MainModal : BottomSheetDialogFragment() {
                 v = inflater.inflate(R.layout.modal_main_report, container, false)!!
                 val editCompanyBtn = v.findViewById<Button>(R.id.modal_main_report_btn_edit_company)
                 val trackIncomingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_incoming)
-                val trackOutgoingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_outgoing)
+                val
+                        trackOutgoingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_outgoing)
                 val outOfStockBtn = v.findViewById<Button>(R.id.modal_main_report_btn_out_of_stock)
             }
             3 -> {

@@ -7,6 +7,16 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 
+//==================================================================================================
+// Movable Floating Action Button
+//==================================================================================================
+//
+// moveable floating button, user can use the button with feature with every different xml
+// also moveable button can move around the screen
+//
+//--------------------------------------------------------------------------------------------------
+
+
 class MovableFloatingActionButton : FloatingActionButton, View.OnTouchListener {
 
     private var downRawX: Float = 0.toFloat()
