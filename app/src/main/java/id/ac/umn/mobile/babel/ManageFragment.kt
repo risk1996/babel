@@ -19,8 +19,15 @@ import android.widget.*
 import com.google.firebase.database.FirebaseDatabase
 import java.text.DecimalFormat
 
+//==================================================================================================
+// Manage Fragment
+//==================================================================================================
+// Part of Main Activity (first tab), user can monitor the stock of each item on active locations,
+// moreover, admin can do CRUD operations on items, units, locations, and third parties.
+//--------------------------------------------------------------------------------------------------
+
 class ManageFragment : Fragment() {
-    val filterItems = ArrayList<Int>()
+    val filterItems = ArrayList<Int>() // contains items' id with names matching regex in search term
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_manage, container, false)
     }
@@ -29,15 +36,15 @@ class ManageFragment : Fragment() {
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_manage_items_rv_items)
         val searchET = activity.findViewById<EditText>(R.id.fragment_manage_items_et_search)
 
-        val data = object : Data(){
+        val data = object : Data(){ // populate RecyclerView after data has been loaded
             override fun onComplete() {
                 filterItems.clear()
                 itemsActive.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
-                itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
+                itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0) filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         }
         itemsRV.adapter = ManageFragmentRVAdapter(activity, data)
-        searchET.addTextChangedListener(object : TextWatcher{
+        searchET.addTextChangedListener(object : TextWatcher{ // searches active item in data
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -48,7 +55,7 @@ class ManageFragment : Fragment() {
             }
         })
     }
-    class AreYouSureAboutThatDialog : YesNoDialog(){
+    class AreYouSureAboutThatDialog : YesNoDialog(){ // second confirmation of item deletion
         override fun onYesClicked() {
             val data = object : Data() {
                 override fun onComplete() {
@@ -66,7 +73,7 @@ class ManageFragment : Fragment() {
             Snackbar.make(activity.findViewById(android.R.id.content), "Item is not deleted", Snackbar.LENGTH_LONG).show()
         }
     }
-    class DeleteDialog : YesNoDialog(){
+    class DeleteDialog : YesNoDialog(){ // first confirmation of item deletion
         override fun onYesClicked() {
             val dialog = AreYouSureAboutThatDialog()
             dialog.isCancelable = false
@@ -81,35 +88,34 @@ class ManageFragment : Fragment() {
         }
     }
     inner class ManageFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<ManageFragmentRVAdapter.ViewHolder>(){
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) { // declares elements inside each CardView
             var thumbnailIV : ImageView         = itemView.findViewById(R.id.fragment_manage_recycler_view_iv_thumbnail)
             var nameTV: TextView                = itemView.findViewById(R.id.fragment_manage_recycler_view_tv_name)
             var itemLocationsTL : TableLayout   = itemView.findViewById(R.id.fragment_manage_recycler_view_tl_items_locations)
             var itemContextTb : Toolbar         = itemView.findViewById(R.id.fragment_manage_recycler_view_tb_item_context)
         }
-        override fun onCreateViewHolder(parent : ViewGroup, type : Int) : ManageFragmentRVAdapter.ViewHolder{
+        override fun onCreateViewHolder(parent : ViewGroup, type : Int) : ManageFragmentRVAdapter.ViewHolder{ // modifies card inside RecyclerView
             val view : View = LayoutInflater.from(parent.context).inflate(R.layout.fragment_manage_recycler_view_item, parent, false)
             val card = view.findViewById(R.id.fragment_manage_recycler_view_cv_item) as CardView
             card.maxCardElevation = 2.0F
             card.radius = 5.0F
             return ViewHolder(view)
         }
-        override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){
-            val item : Item = data.itemsActive.single { it._id==filterItems[position] }
-            val unit : Unit = data.unitsActive.find { it._id==item.unitId }!!
-            val rowTR = TableRow(activity)
-            val locTV = TextView(activity)
-            val stkTV = TextView(activity)
-            val oosIV = ImageView(activity)
-            val param = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-            holder.nameTV.text = item.itemName
+        override fun onBindViewHolder(holder : ManageFragmentRVAdapter.ViewHolder, position : Int){ // fill each CardView's content
+            val item : Item = data.itemsActive.single { it._id==filterItems[position] } // obtain item information
+            val unit : Unit = data.unitsActive.find { it._id==item.unitId }!! // obtain item's default unit information
+            holder.nameTV.text = item.itemName // put item's name
             holder.itemLocationsTL.removeViews(1, holder.itemLocationsTL.childCount-1)
-            data.locationsActive.forEach {
-                locTV.layoutParams = param
+            data.locationsActive.forEach { // for each active location, get the stock and determine whether it's below safety stock
+                val rowTR = TableRow(activity)
+                val locTV = TextView(activity)
+                val stkTV = TextView(activity)
+                val oosIV = ImageView(activity)
+                locTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                 locTV.text = String.format("%1\$s    : ", it.code)
                 locTV.setPadding(40, 0, 10, 5)
                 rowTR.addView(locTV)
-                stkTV.layoutParams = param
+                stkTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                 stkTV.text = String.format("%1\$s %2\$s", DecimalFormat("0.##").format(item.stocks[it._id] / unit.value), unit.unitName)
                 stkTV.setPadding(40, 0, 10, 5)
                 rowTR.addView(stkTV)
@@ -120,10 +126,10 @@ class ManageFragment : Fragment() {
                 rowTR.addView(oosIV)
                 holder.itemLocationsTL.addView(rowTR)
             }
-            holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
+            holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null)) // put item's thumbnail
             holder.itemContextTb.menu.clear()
             holder.itemContextTb.inflateMenu(R.menu.fragment_manage_menu_item)
-            holder.itemContextTb.setOnMenuItemClickListener {
+            holder.itemContextTb.setOnMenuItemClickListener { // put item's operations
                 when(it.itemId){
                     R.id.menu_item_act_view -> {
                         val intent = Intent(activity, ItemActivity::class.java)
@@ -153,8 +159,6 @@ class ManageFragment : Fragment() {
                 }
             }
         }
-        override fun getItemCount() : Int{
-            return filterItems.size
-        }
+        override fun getItemCount() = filterItems.size
     }
 }
