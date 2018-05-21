@@ -11,37 +11,44 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.google.firebase.database.FirebaseDatabase
+import android.widget.Toast
+import com.google.firebase.database.*
+import java.math.BigDecimal
+import java.text.DecimalFormat
 
 class MainModal : BottomSheetDialogFragment() {
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
-//      val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // NullPointerException
+
         override fun onYesClicked() {
-//            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // function onComplete jadi infinite loop
-            val data = object : Data(){
-                override fun onComplete() {
-                    val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // KotlinNullPointerException, bisa dicurangin pake try catch tp kadang dia increment dua kali
-                    val itemRaw = pref.getString("ITEMS", "").split(";")
-                    val db = FirebaseDatabase.getInstance().reference.child("items")
-                    if(!itemRaw.contains("")) itemRaw.forEach {
-                        val itemSpec = it.split(",").map { it.toInt() }
-                        val item = itemsActive.single { it._id==itemSpec[0] }
-                        val unitFrom = unitsActive.single { it._id==item.unitId }
-                        val unitTo = unitsActive.single { it._id==itemSpec[2] }
-                        Log.d("", "itemSpec[0]    : " + itemSpec[0])
-                        Log.d("", "itemSpec[1]    : " + itemSpec[1])
-                        Log.d("", "itemSpec[2]    : " + itemSpec[2])
-                        Log.d("", "item.stocks[0] : " + item.stocks[0])
-                        Log.d("", "item.unit_id   : " + item.unitId)
-                        Log.d("", "unitFrom.value : " + unitFrom.value)
-                        Log.d("", "unitTo.value   : " + unitTo.value)
-                        if(value == "outgoing") incrementStock = itemSpec[1]*(-1)
-                        else if(value == "incoming") incrementStock = itemSpec[1]
-                        db.child(itemSpec[0].toString()).child("stocks").child("0")
-                                .setValue( (((item.stocks[0] / unitFrom.value ) + (incrementStock.toDouble() / unitTo.value * unitFrom.value)) * unitFrom.value).toString() )
+            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // function onComplete jadi infinite loop
+            val itemRaw = pref.getString("ITEMS", "").split(";")
+            if(!itemRaw.contains("")) itemRaw.forEach {
+                var bool = true
+                val itemSpec = it.split(",").map { it.toInt() }
+                val data = object : Data(){
+                    override fun onComplete() {
+                        if (bool){
+                            bool = false
+                            val db = FirebaseDatabase.getInstance().reference.child("items")
+                            db.runTransaction(object : Transaction.Handler{
+                                override fun doTransaction(p0: MutableData?): Transaction.Result {
+                                    val item = itemsActive.single { it._id==itemSpec[0] }
+                                    val unitFrom = unitsActive.single { it._id==item.unitId }
+                                    val unitTo = unitsActive.single { it._id==itemSpec[2] }
+                                    if(value == "outgoing") incrementStock = itemSpec[1]*(-1)
+                                    else if(value == "incoming") incrementStock = itemSpec[1]
+                                    val updateValue = item.stocks[0] + (incrementStock / unitTo.value * unitFrom.value * unitFrom.value)
+                                    p0!!.child(itemSpec[0].toString()).child("stocks").child("0").value = updateValue.toString()
+                                    return Transaction.success(p0)
+                                }
+                                override fun onComplete(p0: DatabaseError?, p1: Boolean, p2: DataSnapshot?) {
+
+                                }
+                            })
+                        }
+                        else Log.d("", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
                     }
-                    Log.d("", "itemSpec[0]   lalalalalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 }
             }
             Snackbar.make( activity.findViewById(android.R.id.content), "Changes have been committed", Snackbar.LENGTH_LONG).show()
@@ -57,7 +64,7 @@ class MainModal : BottomSheetDialogFragment() {
                 val newItemBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_new_item)
                 val manageUnitsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_units)
                 val manageLocationsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_locations)
-                val managethirdPartiesBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_third_parties)
+                val manageThirdPartiesBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_third_parties)
                 newItemBtn.setOnClickListener {
                     val intent = Intent(activity, ItemActivity::class.java)
                     intent.putExtra("OPERATION", "NEW")
@@ -75,7 +82,7 @@ class MainModal : BottomSheetDialogFragment() {
                     dialog.show(activity!!.fragmentManager, dialog.tag)
                     dismissAllowingStateLoss()
                 }
-                managethirdPartiesBtn.setOnClickListener {
+                manageThirdPartiesBtn.setOnClickListener {
                     val dialog = ListDialog()
                     dialog.content = "THIRD PARTIES"
                     dialog.show(activity!!.fragmentManager, dialog.tag)

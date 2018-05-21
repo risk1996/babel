@@ -55,7 +55,8 @@ class ManageFragment : Fragment() {
                     if (isAdded){
                         val itemToDelete = itemsActive.single { it.itemName == value }
                         val db = FirebaseDatabase.getInstance().reference.child("items")
-                        db.child(itemToDelete._id.toString()).removeValue()
+//                        db.child(itemToDelete._id.toString()).removeValue()
+                        db.child(itemToDelete._id.toString()).child("status").setValue("inactive")
                     }
                 }
             }
