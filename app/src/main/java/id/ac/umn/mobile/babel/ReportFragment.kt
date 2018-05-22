@@ -14,7 +14,7 @@ import android.widget.*
 // Report Fragment
 //==================================================================================================
 //
-// Part of Main Activity (first tab), contain about information about app ,
+// Part of Main Activity (first tab), contain about report about item  ,
 // moreover, admin can also read about item report about item
 //
 //--------------------------------------------------------------------------------------------------
