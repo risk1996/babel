@@ -29,6 +29,7 @@ class ItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
         val titleTV = findViewById<TextView>(R.id.activity_item_tv_title)
+        val inactiveSW = findViewById<Switch>(R.id.activity_item_sw_inactive)
         val itemNameET = findViewById<EditText>(R.id.activity_item_et_item_name)
         val itemThumbnailIB = findViewById<ImageButton>(R.id.activity_item_ib_item_thumbnail)
         val unitMeasureS = findViewById<Spinner>(R.id.activity_item_spn_unit_measure)
@@ -66,7 +67,7 @@ class ItemActivity : AppCompatActivity() {
                 val availMeasure = unitsActive.distinctBy { it.measure }.map { it.measure }
                 unitMeasureS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availMeasure)
                 var availUnits = unitsActive.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
-                val item  = itemsActive.singleOrNull { it._id == itemID }
+                val item  = itemsAll.singleOrNull { it._id == itemID }
                 val unit = unitsActive.singleOrNull { it._id == item?.unitId }
                 val rawStock = ArrayList<Double>()
                 val stockETs = ArrayList<TextView>()
@@ -74,8 +75,9 @@ class ItemActivity : AppCompatActivity() {
                     item!!; unit!!
                     itemThumbnailIB.setImageResource(R.drawable::class.java.getField(item.thumbnail.replace("_48","_96")).getInt(null))
                     itemNameET.setText(item.itemName)
+                    inactiveSW.isChecked = item.status == "active"
                     unitMeasureS.setSelection(availMeasure.indexOf(unit.measure))
-                    safetyStockET.setText((item.safetyStock / unit.value).toString())
+                    safetyStockET.setText((item.safetyStock * unit.value).toString())
                     rawStock.add(item.safetyStock)
                     stockETs.add(safetyStockET)
                 }
@@ -130,17 +132,20 @@ class ItemActivity : AppCompatActivity() {
                             item!!
                             val db = FirebaseDatabase.getInstance().reference.child("items")
                             db.child(item._id.toString()).child("item_name").setValue(itemNameET.text.toString())
-                            db.child(item._id.toString()).child("safety_stock").setValue(safetyStockET.text.toString())
+                            db.child(item._id.toString()).child("status").setValue(if(inactiveSW.isChecked) "active" else "inactive")
+                            db.child(item._id.toString()).child("safety_stock").setValue((safetyStockET.text.toString().toInt() * unit!!.value).toString())
                             db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
 //                        TODO("UPDATE item_thumbnail")
                         }
                         "NEW" -> {
                             val db = FirebaseDatabase.getInstance().reference.child("items")
                             val newItem = mutableMapOf<String, Any>()
+                            val unitId = unitsActive.singleOrNull { it._id == (unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition }
                             newItem["item_name"] = itemNameET.text.toString()
                             newItem["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
-                            newItem["safety_stock"] = safetyStockET.text.toString()
-                            newItem["stocks"] = mutableListOf(999.toString()).toList()
+                            newItem["safety_stock"] = (safetyStockET.text.toString().toInt() * unitId!!.value).toString()
+                            newItem["status"] = if(inactiveSW.isChecked) "active" else "inactive"
+                            newItem["stocks"] = rawStock.map { it.toString() }
                             newItem["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
                             db.child((itemsAll.last()._id + 1).toString()).setValue(newItem)
                         }

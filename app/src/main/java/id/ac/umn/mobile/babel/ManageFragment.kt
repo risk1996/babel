@@ -55,33 +55,18 @@ class ManageFragment : Fragment() {
             }
         })
     }
-    class AreYouSureAboutThatDialog : YesNoDialog(){ // second confirmation of item deletion
+    class DeleteDialog : YesNoDialog(){ // confirmation of item deletion
         override fun onYesClicked() {
             val data = object : Data() {
                 override fun onComplete() {
                     if (isAdded){
                         val itemToDelete = itemsActive.single { it.itemName == value }
                         val db = FirebaseDatabase.getInstance().reference.child("items")
-//                        db.child(itemToDelete._id.toString()).removeValue()
                         db.child(itemToDelete._id.toString()).child("status").setValue("inactive")
                     }
                 }
             }
             Snackbar.make(activity.findViewById(android.R.id.content), "Item successfully deleted", Snackbar.LENGTH_LONG).show()
-        }
-        override fun onNoClicked() {
-            Snackbar.make(activity.findViewById(android.R.id.content), "Item is not deleted", Snackbar.LENGTH_LONG).show()
-        }
-    }
-    class DeleteDialog : YesNoDialog(){ // first confirmation of item deletion
-        override fun onYesClicked() {
-            val dialog = AreYouSureAboutThatDialog()
-            dialog.isCancelable = false
-            dialog.heading = "Are you really sure?"
-            dialog.message = "This process is irreversible"
-            dialog.value = value
-            dialog.highlight = dialog.HIGHLIGHT_NO
-            dialog.show(fragmentManager, "Dialog Yes No")
         }
         override fun onNoClicked() {
             Snackbar.make(activity.findViewById(android.R.id.content), "Item is not deleted", Snackbar.LENGTH_LONG).show()

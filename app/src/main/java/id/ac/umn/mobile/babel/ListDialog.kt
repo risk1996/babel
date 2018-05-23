@@ -2,6 +2,7 @@ package id.ac.umn.mobile.babel
 
 import android.app.DialogFragment
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.text.Editable
@@ -60,6 +61,41 @@ class ListDialog : DialogFragment() {
                      dismiss()
                  }
             }
+
+            "ITEM" -> {
+                headingTV.text = "MANAGE ITEMS"
+                newBtn.setOnClickListener {
+                    val intent = Intent(activity, ItemActivity::class.java)
+                    intent.putExtra("OPERATION", "NEW")
+                    startActivity(intent)
+                }
+                var availItem = ArrayList<Item>()
+                val data = object : Data(){
+                    override fun onComplete() {
+                        availItem = ArrayList(if(inactiveSW.isChecked) itemsAll else itemsActive)
+                        val term = searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()
+                        itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availItem.filter { it.itemName.toLowerCase().contains(term) }.map { it.itemName })
+                    }
+                }
+                inactiveSW.setOnCheckedChangeListener { compoundButton, b -> data.onComplete() }
+                searchACTV.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(p0: Editable?) {}
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                        val term = searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()
+                        itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availItem.filter { it.itemName.toLowerCase().contains(term) }.map { it.itemName })
+                    }
+                })
+                itemsLV.setOnItemClickListener { parent, _, position, id ->
+                    val item = data.itemsAll.single { it.itemName == itemsLV.getItemAtPosition(position).toString() }
+                    val intent = Intent(activity, ItemActivity::class.java)
+                    intent.putExtra("OPERATION", "EDIT")
+                    intent.putExtra("ITEM_ID", item._id)
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
+                }
+            }
+
             "UNITS" -> {
                 headingTV.text = "MANAGE UNITS"
                 newBtn.setOnClickListener {  }
@@ -80,7 +116,7 @@ class ListDialog : DialogFragment() {
                         itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availUnits.filter { it.unitName.toLowerCase().contains(term) }.map { it.unitName })
                     }
                 })
-                itemsLV.setOnItemClickListener { adapterView, view, i, l ->
+                itemsLV.setOnItemClickListener { adapterView, _, i, l ->
 
                 }
             }
@@ -104,7 +140,7 @@ class ListDialog : DialogFragment() {
                         itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availLocation.filter { it.position.toLowerCase().contains(term) }.map { it.position })
                     }
                 })
-                itemsLV.setOnItemClickListener { adapterView, view, i, l ->
+                itemsLV.setOnItemClickListener { adapterView, _, i, l ->
 
                 }
             }
@@ -129,7 +165,7 @@ class ListDialog : DialogFragment() {
                         itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availThirdParty.filter { it.tpName.toLowerCase().contains(term) }.map { it.tpName })
                     }
                 })
-                itemsLV.setOnItemClickListener { adapterView, view, i, l ->
+                itemsLV.setOnItemClickListener { adapterView, _, i, l ->
 
                 }
             }

@@ -1,6 +1,7 @@
 package id.ac.umn.mobile.babel
 
 import android.app.Fragment
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 
 class MainActivity : AppCompatActivity() {
+    var privilege : String? = null
     val manageFragment = ManageFragment()
     val inOutFragment = InOutFragment()
     val reportFragment = ReportFragment()
@@ -22,9 +24,16 @@ class MainActivity : AppCompatActivity() {
 //        val inOutTI = findViewById<TabItem>(R.id.activity_main_ti_in_out)
 //        val reportTI = findViewById<TabItem>(R.id.activity_main_ti_report)
 //        val userTI = findViewById<TabItem>(R.id.activity_main_ti_user)
+        val data = object : Data(){
+            override fun onComplete() {
+                val user = accountsActive.single { it.email==this@MainActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("EMAIL", "") }
+                privilege = user.role
+            }
+        }
         val moreFAB = findViewById<MovableFloatingActionButton>(R.id.activity_main_fab_more)
         moreFAB.setOnClickListener {
             val bottomModal = MainModal()
+            bottomModal.privilege = privilege!!
             bottomModal.show(supportFragmentManager, bottomModal.tag)
         }
         tabsTL.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
