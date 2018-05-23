@@ -18,7 +18,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.database.*
 import java.security.MessageDigest
 import java.util.*
-//class ChangePasswordDialog
+
 class ChangePasswordDialog : DialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dialog_change_password, container, false)

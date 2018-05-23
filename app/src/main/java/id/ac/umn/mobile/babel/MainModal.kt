@@ -8,22 +8,19 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.database.*
-import java.math.BigDecimal
-import java.text.DecimalFormat
 
 class MainModal : BottomSheetDialogFragment() {
     var privilege : String = ""
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
         override fun onYesClicked() {
-            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // function onComplete jadi infinite loop
+            val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
             val itemRaw = pref.getString("ITEMS", "").split(";")
             if(!itemRaw.contains("")) itemRaw.forEach {
                 var bool = true
@@ -44,9 +41,7 @@ class MainModal : BottomSheetDialogFragment() {
                                     p0!!.child(itemSpec[0].toString()).child("stocks").child("0").value = updateValue.toString()
                                     return Transaction.success(p0)
                                 }
-                                override fun onComplete(p0: DatabaseError?, p1: Boolean, p2: DataSnapshot?) {
-
-                                }
+                                override fun onComplete(p0: DatabaseError?, p1: Boolean, p2: DataSnapshot?) {  }
                             })
                         }
                     }
@@ -65,6 +60,11 @@ class MainModal : BottomSheetDialogFragment() {
         override fun onYesClicked() { activity.finish(); startActivity(Intent(activity, LoginActivity::class.java)) }
         override fun onNoClicked() {}
     }
+    fun disableButton(btn: Button){
+        btn.isEnabled = false
+        btn.compoundDrawablesRelative.forEach { it?.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP) }
+        btn.setTextColor(Color.GRAY)
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v : View? = null
         val tab = activity!!.findViewById<TabLayout>(R.id.activity_main_tl_tabs).selectedTabPosition
@@ -76,14 +76,10 @@ class MainModal : BottomSheetDialogFragment() {
                 val manageLocationsBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_locations)
                 val manageThirdPartiesBtn = v.findViewById<Button>(R.id.modal_main_manage_btn_manage_third_parties)
                 if (privilege == "User"){
-                    newItemBtn.isEnabled = false
-                    newItemBtn.alpha = .5f
-                    manageUnitsBtn.isEnabled = false
-                    manageUnitsBtn.alpha = .5f
-                    manageLocationsBtn.isEnabled = false
-                    manageLocationsBtn.alpha = .5f
-                    manageThirdPartiesBtn.isEnabled = false
-                    manageThirdPartiesBtn.alpha = .5f
+                    disableButton(newItemBtn)
+                    disableButton(manageUnitsBtn)
+                    disableButton(manageLocationsBtn)
+                    disableButton(manageThirdPartiesBtn)
                 }
                 newItemBtn.setOnClickListener {
                     val dialog = ListDialog()
@@ -161,16 +157,7 @@ class MainModal : BottomSheetDialogFragment() {
                 val trackIncomingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_incoming)
                 val trackOutgoingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_outgoing)
                 val outOfStockBtn = v.findViewById<Button>(R.id.modal_main_report_btn_out_of_stock)
-                if (privilege == "User"){
-                    editCompanyBtn.isEnabled = false
-                    editCompanyBtn.alpha = .5f
-                    trackIncomingBtn.isEnabled = false
-                    trackIncomingBtn.alpha = .5f
-                    trackOutgoingBtn.isEnabled = false
-                    trackOutgoingBtn.alpha = .5f
-                    outOfStockBtn.isEnabled = false
-                    outOfStockBtn.alpha = .5f
-                }
+                if (privilege == "User") disableButton(editCompanyBtn)
             }
             3 -> {
                 v = inflater.inflate(R.layout.modal_main_user, container, false)!!
@@ -178,10 +165,7 @@ class MainModal : BottomSheetDialogFragment() {
                 val settingsBtn = v.findViewById<Button>(R.id.modal_main_user_btn_settings)
                 val logoutBtn = v.findViewById<Button>(R.id.modal_main_user_btn_logout)
                 val quitBtn = v.findViewById<Button>(R.id.modal_main_user_btn_quit)
-                if (privilege == "User"){
-                    newUserBtn.isEnabled = false
-                    newUserBtn.alpha = .5f
-                }
+                if (privilege == "User") disableButton(newUserBtn)
                 logoutBtn.setOnClickListener {
                     val dialog = LogOutDialog()
                     dialog.isCancelable = false

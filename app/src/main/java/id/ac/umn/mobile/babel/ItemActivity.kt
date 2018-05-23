@@ -1,6 +1,8 @@
 package id.ac.umn.mobile.babel
 
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -17,14 +19,13 @@ import java.text.DecimalFormat
 //==================================================================================================
 // Item Activity
 //==================================================================================================
-//
-// Part of Main Activity (first tab), user can input or output data about item,
-// moreover, about detail item and quantity about item
-//
+// Called by Manage Fragment (leftmost FAB button), here, user and administrator can view, but
+// only administrator can edit the data about an item.
 //--------------------------------------------------------------------------------------------------
 
 
 class ItemActivity : AppCompatActivity() {
+    var listener : SharedPreferences.OnSharedPreferenceChangeListener? = null // TODO("IMPLEMENT LISTENER FROM THUMBNAIL DIALOG")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
@@ -46,6 +47,7 @@ class ItemActivity : AppCompatActivity() {
                 titleTV.text = "VIEW ITEM"
                 itemNameET.isEnabled = false
                 itemThumbnailIB.isEnabled = false
+                itemThumbnailIB.drawable.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
                 unitMeasureS.isEnabled = false
                 unitNameS.isEnabled = false
                 safetyStockET.isEnabled = false
@@ -80,6 +82,10 @@ class ItemActivity : AppCompatActivity() {
                     safetyStockET.setText((item.safetyStock * unit.value).toString())
                     rawStock.add(item.safetyStock)
                     stockETs.add(safetyStockET)
+                }
+                itemThumbnailIB.setOnClickListener {
+                    val dialog = ThumbnailDialog()
+                    dialog.show(fragmentManager, dialog.tag)
                 }
                 locationsActive.forEach {
                     val rowTR = TableRow(this@ItemActivity)

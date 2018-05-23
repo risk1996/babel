@@ -93,6 +93,9 @@
     <string name="password_error_password_minimum_length">Password must at least contain 8 characters</string>
     <string name="password_error_password_mismatch">New password did not match</string>
 
+    <!--Thumbnail Dialog-->
+    <string name="thumbnail_title">Select Thumbnail</string>
+
     <!--About Activity-->
     <string name="about_developers">Developers:</string>
     <string name="about_credits">Made Possible by:</string>

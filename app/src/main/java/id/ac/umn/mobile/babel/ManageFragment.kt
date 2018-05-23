@@ -114,6 +114,10 @@ class ManageFragment : Fragment() {
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null)) // put item's thumbnail
             holder.itemContextTb.menu.clear()
             holder.itemContextTb.inflateMenu(R.menu.fragment_manage_menu_item)
+            if ((activity as MainActivity).privilege == "User"){
+                holder.itemContextTb.menu.removeItem(R.id.menu_item_act_edit)
+                holder.itemContextTb.menu.removeItem(R.id.menu_item_act_delete)
+            }
             holder.itemContextTb.setOnMenuItemClickListener { // put item's operations
                 when(it.itemId){
                     R.id.menu_item_act_view -> {

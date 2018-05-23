@@ -14,7 +14,7 @@
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
             android:text="@string/bottom_dialog_new_item"
-            android:drawableTop="@drawable/icons8_new_24"
+            android:drawableTop="@drawable/icons8_product_24"
             android:drawableTint="@color/colorAccent"/>
         <Button
             android:id="@+id/modal_main_manage_btn_manage_units"
