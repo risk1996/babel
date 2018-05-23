@@ -55,6 +55,15 @@
                         android:text="1 Jan 1970"
                         android:textSize="14sp"/>
                 </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/fragment_user_tv_last_login"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="1 Jan 1970"
+                        android:textSize="14sp"/>
+                </TableRow>
             </TableLayout>
         </TableRow>
         <TableRow

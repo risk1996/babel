@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.security.MessageDigest
+import java.text.SimpleDateFormat
+import java.util.*
 
 //==================================================================================================
 // Login Activity
@@ -73,8 +75,17 @@ class LoginActivity : AppCompatActivity() {
                 prefEd.putBoolean("REMEMBER_ME", rememberMeChk.isChecked)
             } else prefEd.clear()
             prefEd.putString("EMAIL", emailET.text.toString())
+            prefEd.putString("LAST_LOGIN", SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
             prefEd.apply()
+
             val db = FirebaseDatabase.getInstance().reference.child("accounts")
+            val data = object : Data(){
+                override fun onComplete() {
+                    val user = accountsActive.single { it.email==this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("EMAIL", "") }
+                    val lastLoginString = this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("LAST_LOGIN", "")
+                    db.child(user._id.toString()).child("last_login").setValue(lastLoginString)
+                }
+            }
             db.orderByChild("email").equalTo(emailET.text.toString()).addValueEventListener(object : ValueEventListener{
                 override fun onCancelled(p0: DatabaseError?) {}
                 override fun onDataChange(p0: DataSnapshot?) {

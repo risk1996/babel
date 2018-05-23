@@ -9,7 +9,7 @@ import com.google.firebase.database.ValueEventListener
 import java.lang.Exception
 
 class Company   (val type: String, val typeShort: String, val name: String, val logo: String, val site: String, val officeMain: String, val officeSecondary: String)
-class Account   (val _id: Int, val status: String, val email: String, val password: String, val salt: String, val name: String, val role: String, val dob: String, val regDate: String)
+class Account   (val _id: Int, val status: String, val email: String, val password: String, val salt: String, val name: String, val role: String, val dob: String, val regDate: String, val lastLogin: String)
 class Unit      (val _id: Int, val status: String, val measure: String, val unitName: String, val value: Double, val increment: Double, val unitThumbnail: String)
 class Item      (val _id: Int, val status: String, val itemName: String, val stocks: List<Double>, val safetyStock: Double, val unitId: Int, val thumbnail: String)
 class Location  (val _id: Int, val status: String, val code: String, val position: String)
@@ -53,7 +53,8 @@ abstract class Data{
                             it.child("name").value.toString(),
                             it.child("role").value.toString(),
                             it.child("dob").value.toString(),
-                            it.child("reg_date").value.toString()
+                            it.child("reg_date").value.toString(),
+                            it.child("last_login").value.toString()
                     ))
                 }
                 accountsActive = ArrayList(accountsAll.filter { it.status == "active" })

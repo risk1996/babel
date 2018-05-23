@@ -25,6 +25,10 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".ItemActivity" />
+        <activity android:name=".UnitActivity" />
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".ThirdPartyActivity" />
+        <activity android:name=".UserActivity"></activity>
     </application>
 
 </manifest>
