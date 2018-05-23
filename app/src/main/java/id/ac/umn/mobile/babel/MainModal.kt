@@ -47,11 +47,11 @@ class MainModal : BottomSheetDialogFragment() {
                                 }
                             })
                         }
-                        else Log.d("", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
                     }
                 }
             }
             Snackbar.make( activity.findViewById(android.R.id.content), "Changes have been committed", Snackbar.LENGTH_LONG).show()
+            activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().clear().apply()
         }
         override fun onNoClicked() { Snackbar.make( activity.findViewById(android.R.id.content), "No changes have been made", Snackbar.LENGTH_LONG).show() }
     }
@@ -112,20 +112,25 @@ class MainModal : BottomSheetDialogFragment() {
                     dismissAllowingStateLoss()
                 }
                 addItemBtn.setOnClickListener {
-                    (activity as MainActivity).inOutFragment.saveTransaction()
                     val dialog = ListDialog()
                     dialog.content = "IN OUT ITEM"
                     dialog.show(activity!!.fragmentManager, dialog.tag)
                     dismissAllowingStateLoss()
                 }
                 commitBtn.setOnClickListener {
-                    val dialog = CommitDialog()
-                    dialog.isCancelable = false
-                    dialog.heading = "Commit Changes"
-                    dialog.message = "Are you sure you want to commit?"
-                    dialog.value = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
-                    dialog.highlight = dialog.HIGHLIGHT_NO
-                    dialog.show(activity!!.fragmentManager, "Dialog Yes No")
+                    (activity as MainActivity).inOutFragment.saveTransaction()
+                    val pref = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE) // function onComplete jadi infinite loop
+                    val itemRaw = pref.getString("ITEMS", "").split(";")
+                    if(!itemRaw.contains("")){
+                        val dialog = CommitDialog()
+                        dialog.isCancelable = false
+                        dialog.heading = "Commit Changes"
+                        dialog.message = "Are you sure you want to commit?"
+                        dialog.value = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
+                        dialog.highlight = dialog.HIGHLIGHT_NO
+                        dialog.show(activity!!.fragmentManager, "Dialog Yes No")
+                    }
+                    else Toast.makeText(activity, "No items to commit", Toast.LENGTH_SHORT).show()
                     dismissAllowingStateLoss()
                 }
             }
@@ -133,8 +138,7 @@ class MainModal : BottomSheetDialogFragment() {
                 v = inflater.inflate(R.layout.modal_main_report, container, false)!!
                 val editCompanyBtn = v.findViewById<Button>(R.id.modal_main_report_btn_edit_company)
                 val trackIncomingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_incoming)
-                val
-                        trackOutgoingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_outgoing)
+                val trackOutgoingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_outgoing)
                 val outOfStockBtn = v.findViewById<Button>(R.id.modal_main_report_btn_out_of_stock)
             }
             3 -> {

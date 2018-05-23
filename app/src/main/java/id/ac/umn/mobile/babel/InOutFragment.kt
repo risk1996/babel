@@ -36,8 +36,7 @@ class InOutFragment : Fragment() {
         val data = object : Data(){override fun onComplete() {
             if(isAdded){
                 loadTransaction()
-                if(inOutItems.isEmpty())Toast.makeText(activity, "There's nothing here yet", Toast.LENGTH_SHORT).show()
-                else itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
+                if(!inOutItems.isEmpty()) itemsRV.layoutManager = GridLayoutManager(activity, inOutItems.size, GridLayoutManager.HORIZONTAL, false)
                 locationsSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locationsActive.map { it.code })
                 val act = pref.getString("ACTION","incoming")
                 directionTV.text = if(act == "incoming") "←" else "→"

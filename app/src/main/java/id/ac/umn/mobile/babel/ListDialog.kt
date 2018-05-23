@@ -35,11 +35,11 @@ class ListDialog : DialogFragment() {
                  headingTV.text = "ADD ITEM"
                  operationsTR.visibility = View.GONE
                  val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
-                 val presentItems = pref.getString("ITEMS", "").split(";").map { it.split(",")[0].toInt() }
+                 val presentItems = if (pref.getString("ITEMS", "") != "") pref.getString("ITEMS", "").split(";").map { it.split(",")[0].toInt() } else null
                  var availItems = ArrayList<Item>()
                  val data = object : Data(){
                      override fun onComplete() {
-                         availItems = ArrayList(itemsActive.filter { presentItems.indexOf(it._id) < 0 })
+                         availItems = ArrayList(itemsActive.filter { if (presentItems != null) presentItems!!.indexOf(it._id) < 0 else true })
                          itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availItems.map { it.itemName })
                      }
                  }
@@ -54,7 +54,7 @@ class ListDialog : DialogFragment() {
                  itemsLV.setOnItemClickListener { parent, view, position, id ->
                      val item = data.itemsActive.single { it.itemName == itemsLV.getItemAtPosition(position).toString() }
                      val prefEd = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
-                     prefEd.putString("ITEMS", pref.getString("ITEMS", "").plus(String.format(";%d,%d,%d", item._id, 0, item.unitId)))
+                     prefEd.putString("ITEMS", pref.getString("ITEMS", "").plus(String.format("%s%d,%d,%d", if(pref.getString("ITEMS", "") == "")"" else ";", item._id, 0, item.unitId)))
                      prefEd.apply()
                      Snackbar.make( activity.findViewById(android.R.id.content), "Item has been added", Snackbar.LENGTH_LONG).show()
                      dismiss()
