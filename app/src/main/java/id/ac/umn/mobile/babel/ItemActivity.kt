@@ -15,6 +15,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import com.google.firebase.database.FirebaseDatabase
+import org.w3c.dom.Text
 import java.text.DecimalFormat
 
 //==================================================================================================
@@ -135,13 +136,8 @@ class ItemActivity : AppCompatActivity() {
                     }
                 }
                 okB.setOnClickListener{
+                    finish()
                     when (act) {
-                        "VIEW" -> {
-                            val intent = Intent(this@ItemActivity, ItemActivity::class.java)
-                            intent.putExtra("OPERATION", "EDIT")
-                            intent.putExtra("ITEM_ID", item!!._id)
-                            startActivity(intent)
-                        }
                         "EDIT", "NEW" -> {
                             val db = FirebaseDatabase.getInstance().reference.child("items")
                             val changedItem = mutableMapOf<String, Any>()
@@ -150,12 +146,11 @@ class ItemActivity : AppCompatActivity() {
                             changedItem["item_thumbnail"] = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).getString("RESOURCE", "icons8_box_48")
                             changedItem["safety_stock"] = (safetyStockET.text.toString().toInt() * unit!!.value).toString()
                             changedItem["stocks"] = rawStock.drop(1).map { it.toString() }
-                            changedItem["unit_id"] = unit!!._id.toString()
+                            changedItem["unit_id"] = unit._id.toString()
                             val itemId = if (act == "NEW") itemsAll.last()._id + 1 else item!!._id
                             db.child(itemId.toString()).setValue(changedItem)
                         }
                     }
-                    finish()
                 }
             }
         }

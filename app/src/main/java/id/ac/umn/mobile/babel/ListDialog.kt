@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,8 +121,14 @@ class ListDialog : DialogFragment() {
                         itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availUnits.filter { it.unitName.toLowerCase().contains(term) }.map { it.unitName })
                     }
                 })
-                itemsLV.setOnItemClickListener { adapterView, _, i, l ->
-
+                itemsLV.setOnItemClickListener { adapterView, _, position, l ->
+                    val unit = data.unitsAll.single { it.unitName == itemsLV.getItemAtPosition(position).toString() }
+                    val intent = Intent(activity, UnitActivity::class.java)
+                    intent.putExtra("OPERATION", "EDIT")
+//                    Log.d("", unit._id.toString())
+                    intent.putExtra("UNIT_ID", unit._id)
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
                 }
             }
             "LOCATIONS" -> {

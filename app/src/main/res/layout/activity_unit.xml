@@ -16,11 +16,11 @@
             android:layout_margin="5dp">
             <TableRow>
                 <TextView
-                    android:id="@+id/activity_item_tv_title"
+                    android:id="@+id/activity_unit_tv_title"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="HARUSNYA UNIT"
+                    android:text="TITLE"
                     android:textAlignment="center"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -34,14 +34,14 @@
                     android:layout_margin="5dp"
                     app:passwordToggleEnabled="true">
                     <EditText
-                        android:id="@+id/activity_item_et_item_name"
+                        android:id="@+id/activity_unit_et_unit_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Item Name"
+                        android:hint="Unit Name"
                         android:inputType="text"/>
                 </android.support.design.widget.TextInputLayout>
                 <Switch
-                    android:id="@+id/activity_item_sw_inactive"
+                    android:id="@+id/activity_unit_sw_inactive"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                     </TableRow>
                     <TableRow>
                         <ImageButton
-                            android:id="@+id/activity_item_ib_item_thumbnail"
+                            android:id="@+id/activity_unit_ib_item_thumbnail"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:background="@android:color/transparent"
@@ -77,23 +77,19 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp">
                     <TableRow>
-                        <TextView
+                        <android.support.design.widget.TextInputLayout
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Default Unit"/>
-                    </TableRow>
-                    <TableRow>
-                        <Spinner
-                            android:id="@+id/activity_item_spn_unit_measure"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content" />
-                        <Spinner
-                            android:id="@+id/activity_item_spn_unit_name"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content" />
+                            app:passwordToggleEnabled="true">
+                            <AutoCompleteTextView
+                                android:id="@+id/activity_unit_actv_unit_measurement"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Unit Measurement"
+                                android:completionThreshold="1"
+                                android:inputType="text"/>
+                        </android.support.design.widget.TextInputLayout>
                     </TableRow>
                     <TableRow>
                         <android.support.design.widget.TextInputLayout
@@ -102,39 +98,37 @@
                             android:layout_height="wrap_content"
                             app:passwordToggleEnabled="true">
                             <EditText
-                                android:id="@+id/activity_item_et_item_safety_stock"
+                                android:id="@+id/activity_unit_et_unit_increment"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Unit Value"
+                                android:hint="Unit Increment"
                                 android:inputType="numberDecimal"/>
                         </android.support.design.widget.TextInputLayout>
                     </TableRow>
                 </TableLayout>
             </TableRow>
-            <TableRow>
+            <TableRow
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp">
                 <TextView
+                    android:text="Unit Value"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/activity_unit_et_unit_value"
+                    android:text="0"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="Item Stock"/>
-            </TableRow>
-            <TableRow>
-
-            </TableRow>
-            <TableRow>
-                <TableLayout
-                    android:id="@+id/activity_item_tl_stock_per_location"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"/>
+                    android:inputType="numberDecimal"/>
             </TableRow>
             <TableRow>
                 <Button
-                    android:id="@+id/activity_item_btn_cancel"
+                    android:id="@+id/activity_unit_btn_cancel"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -144,7 +138,7 @@
                     android:text="@string/password_action_cancel"
                     android:textColor="@android:color/darker_gray"/>
                 <Button
-                    android:id="@+id/activity_item_btn_ok"
+                    android:id="@+id/activity_unit_btn_ok"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -153,6 +147,17 @@
                     android:background="@android:color/transparent"
                     android:text="OK"
                     android:textColor="@color/colorAccent"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_unit_tv_errors"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#ffbaba"
+                    android:textColor="#ff0000"
+                    android:visibility="gone"
+                    android:text="placeholder"/>
             </TableRow>
         </TableLayout>
     </ScrollView>
