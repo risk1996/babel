@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,9 +36,9 @@ class MainModal : BottomSheetDialogFragment() {
                                     val item = itemsActive.single { it._id==itemSpec[0] }
                                     val unitFrom = unitsActive.single { it._id==item.unitId }
                                     val unitTo = unitsActive.single { it._id==itemSpec[2] }
-                                    if(value == "outgoing") incrementStock = itemSpec[1]*(-1)
+                                    if(value == "outgoing") incrementStock = itemSpec[1] * (-1)
                                     else if(value == "incoming") incrementStock = itemSpec[1]
-                                    val updateValue = item.stocks[0] + (incrementStock / unitTo.value * unitFrom.value * unitFrom.value)
+                                    val updateValue = item.stocks[0] + (incrementStock * unitTo.value  * unitTo.increment)
                                     p0!!.child(itemSpec[0].toString()).child("stocks").child("0").value = updateValue.toString()
                                     return Transaction.success(p0)
                                 }

@@ -110,12 +110,12 @@ class InOutFragment : Fragment() {
             holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
             holder.amountNP.value = inOutItems[position].amount
             inOutItems[position].amount = holder.amountNP.value
-            holder.amountNP.setFormatter { DecimalFormat("0.##").format(it.toDouble() * unitFrom.increment) }
+            holder.amountNP.setFormatter { DecimalFormat("0.##").format(it.toDouble() * unitTo.increment) }
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
                 inOutItems[position].amount = numberPicker.value
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                         DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
-                        DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value))),
+                        DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value) * unitTo.increment)),
                         unitFrom.unitName
                 )
             }
@@ -128,7 +128,7 @@ class InOutFragment : Fragment() {
                     inOutItems[position].unitId = unitTo._id
                     holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
                             DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
-                            DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value))),
+                            DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value) * unitTo.increment)),
                             unitFrom.unitName
                     )
                     holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()

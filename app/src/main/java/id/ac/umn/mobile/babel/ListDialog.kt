@@ -98,7 +98,11 @@ class ListDialog : DialogFragment() {
 
             "UNITS" -> {
                 headingTV.text = "MANAGE UNITS"
-                newBtn.setOnClickListener {  }
+                newBtn.setOnClickListener {
+                    val intent = Intent(activity, UnitActivity::class.java)
+                    intent.putExtra("OPERATION", "NEW")
+                    startActivity(intent)
+                }
                 var availUnits = ArrayList<Unit>()
                 val data = object : Data(){
                     override fun onComplete() {

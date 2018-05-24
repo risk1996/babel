@@ -79,18 +79,18 @@ class LoginActivity : AppCompatActivity() {
             prefEd.apply()
 
             val db = FirebaseDatabase.getInstance().reference.child("accounts")
-            val data = object : Data(){
-                override fun onComplete() {
-                    val user = accountsActive.single { it.email==this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("EMAIL", "") }
-                    val lastLoginString = this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("LAST_LOGIN", "")
-                    db.child(user._id.toString()).child("last_login").setValue(lastLoginString)
-                }
-            }
             db.orderByChild("email").equalTo(emailET.text.toString()).addValueEventListener(object : ValueEventListener{
                 override fun onCancelled(p0: DatabaseError?) {}
                 override fun onDataChange(p0: DataSnapshot?) {
                     if(emailErrorTV.visibility == View.VISIBLE || passwordErrorTV.visibility == View.VISIBLE) credentialErrorTV.visibility = View.VISIBLE
                     else{
+                        val data = object : Data(){
+                            override fun onComplete() {
+                                val user = accountsActive.single { it.email==this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("EMAIL", "") }
+                                val lastLoginString = this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("LAST_LOGIN", "")
+                                db.child(user._id.toString()).child("last_login").setValue(lastLoginString)
+                            }
+                        }
                         p0!!
                         if(p0.children.any()){
                             val salt = p0.children.first().child("salt").value.toString()
