@@ -1,5 +1,6 @@
 package id.ac.umn.mobile.babel
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -25,7 +26,7 @@ import java.text.DecimalFormat
 
 
 class ItemActivity : AppCompatActivity() {
-    var listener : SharedPreferences.OnSharedPreferenceChangeListener? = null // TODO("IMPLEMENT LISTENER FROM THUMBNAIL DIALOG")
+    var listener : SharedPreferences.OnSharedPreferenceChangeListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
@@ -73,16 +74,23 @@ class ItemActivity : AppCompatActivity() {
                 val unit = unitsActive.singleOrNull { it._id == item?.unitId }
                 val rawStock = ArrayList<Double>()
                 val stockETs = ArrayList<TextView>()
+                listener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
+                    val pref = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE)
+                    itemThumbnailIB.setImageResource(R.drawable::class.java.getField(pref.getString("RESOURCE", "icons8_box_48").replace("_48","_96")).getInt(null))
+                }
+                getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).registerOnSharedPreferenceChangeListener(listener)
+                val prefEd = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).edit()
                 if (act == "EDIT" || act == "VIEW") {
                     item!!; unit!!
-                    itemThumbnailIB.setImageResource(R.drawable::class.java.getField(item.thumbnail.replace("_48","_96")).getInt(null))
                     itemNameET.setText(item.itemName)
+                    prefEd.putString("RESOURCE", item.thumbnail)
                     inactiveSW.isChecked = item.status == "active"
                     unitMeasureS.setSelection(availMeasure.indexOf(unit.measure))
                     safetyStockET.setText((item.safetyStock * unit.value).toString())
                     rawStock.add(item.safetyStock)
                     stockETs.add(safetyStockET)
-                }
+                } else prefEd.putString("RESOURCE", "icons8_box_48")
+                prefEd.apply()
                 itemThumbnailIB.setOnClickListener {
                     val dialog = ThumbnailDialog()
                     dialog.show(fragmentManager, dialog.tag)
@@ -134,26 +142,17 @@ class ItemActivity : AppCompatActivity() {
                             intent.putExtra("ITEM_ID", item!!._id)
                             startActivity(intent)
                         }
-                        "EDIT" -> {
-                            item!!
+                        "EDIT", "NEW" -> {
                             val db = FirebaseDatabase.getInstance().reference.child("items")
-                            db.child(item._id.toString()).child("item_name").setValue(itemNameET.text.toString())
-                            db.child(item._id.toString()).child("status").setValue(if(inactiveSW.isChecked) "active" else "inactive")
-                            db.child(item._id.toString()).child("safety_stock").setValue((safetyStockET.text.toString().toInt() * unit!!.value).toString())
-                            db.child(item._id.toString()).child("unit_id").setValue(((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString())
-//                        TODO("UPDATE item_thumbnail")
-                        }
-                        "NEW" -> {
-                            val db = FirebaseDatabase.getInstance().reference.child("items")
-                            val newItem = mutableMapOf<String, Any>()
-                            val unitId = unitsActive.singleOrNull { it._id == (unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition }
-                            newItem["item_name"] = itemNameET.text.toString()
-                            newItem["item_thumbnail"] = "icons8_circled_b_48" // TODO("update thumbnail biar gak literal")
-                            newItem["safety_stock"] = (safetyStockET.text.toString().toInt() * unitId!!.value).toString()
-                            newItem["status"] = if(inactiveSW.isChecked) "active" else "inactive"
-                            newItem["stocks"] = rawStock.map { it.toString() }
-                            newItem["unit_id"] = ((unitMeasureS.selectedItemPosition)*100 + 101 + unitNameS.selectedItemPosition).toString()
-                            db.child((itemsAll.last()._id + 1).toString()).setValue(newItem)
+                            val changedItem = mutableMapOf<String, Any>()
+                            changedItem["item_name"] = itemNameET.text.toString()
+                            changedItem["status"] = if(inactiveSW.isChecked) "active" else "inactive"
+                            changedItem["item_thumbnail"] = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).getString("RESOURCE", "icons8_box_48")
+                            changedItem["safety_stock"] = (safetyStockET.text.toString().toInt() * unit!!.value).toString()
+                            changedItem["stocks"] = rawStock.drop(1).map { it.toString() }
+                            changedItem["unit_id"] = unit!!._id.toString()
+                            val itemId = if (act == "NEW") itemsAll.last()._id + 1 else item!!._id
+                            db.child(itemId.toString()).setValue(changedItem)
                         }
                     }
                     finish()
@@ -161,5 +160,11 @@ class ItemActivity : AppCompatActivity() {
             }
         }
         cancelB.setOnClickListener{ finish() }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        val prefEd = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).edit()
+        prefEd.clear()
+        prefEd.apply()
     }
 }

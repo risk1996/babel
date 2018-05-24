@@ -120,9 +120,6 @@
                     android:text="Item Stock"/>
             </TableRow>
             <TableRow>
-
-            </TableRow>
-            <TableRow>
                 <TableLayout
                     android:id="@+id/activity_item_tl_stock_per_location"
                     android:layout_weight="1"

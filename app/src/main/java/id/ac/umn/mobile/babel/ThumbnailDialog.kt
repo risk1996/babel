@@ -1,6 +1,8 @@
 package id.ac.umn.mobile.babel
 
 import android.app.DialogFragment
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,7 +31,10 @@ class ThumbnailDialog : DialogFragment(){
             val btn = view.findViewById<ImageButton>(R.id.dialog_thumbnail_item_bi_item)
             btn.setImageDrawable(resources.getDrawable(R.drawable::class.java.getField(thumbnails[p0]).getInt(null), activity.theme))
             btn.setOnClickListener {
-
+                val prefEd = activity.getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).edit()
+                prefEd.putString("RESOURCE", thumbnails[p0])
+                prefEd.apply()
+                dismissAllowingStateLoss()
             }
             return  view
         }
