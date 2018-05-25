@@ -136,7 +136,6 @@ class ItemActivity : AppCompatActivity() {
                     }
                 }
                 okB.setOnClickListener{
-                    finish()
                     when (act) {
                         "EDIT", "NEW" -> {
                             val db = FirebaseDatabase.getInstance().reference.child("items")
@@ -151,6 +150,7 @@ class ItemActivity : AppCompatActivity() {
                             db.child(itemId.toString()).setValue(changedItem)
                         }
                     }
+                    finish()
                 }
             }
         }

@@ -120,13 +120,13 @@ class UnitActivity : AppCompatActivity() {
                     }
                     if (errorsTV.visibility == View.GONE) {
                         val db = FirebaseDatabase.getInstance().reference.child("units")
-                        val changedItem = mutableMapOf<String, Any>()
-                        changedItem["increment"] = unitIncrementET.text.toString()
-                        changedItem["measure"] = unitMeasureACTV.text.toString()
-                        changedItem["status"] = if(inactiveSW.isChecked) "active" else "inactive"
-                        changedItem["unit_name"] = unitNameET.text.toString()
-                        changedItem["unit_thumbnail"] = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).getString("RESOURCE", "icons8_package_24")
-                        changedItem["val"] = unitValueET.text.toString()
+                        val changedUnit = mutableMapOf<String, Any>()
+                        changedUnit["increment"] = unitIncrementET.text.toString()
+                        changedUnit["measure"] = unitMeasureACTV.text.toString()
+                        changedUnit["status"] = if(inactiveSW.isChecked) "active" else "inactive"
+                        changedUnit["unit_name"] = unitNameET.text.toString()
+                        changedUnit["unit_thumbnail"] = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).getString("RESOURCE", "icons8_package_24")
+                        changedUnit["val"] = unitValueET.text.toString()
                         val unitId = if (unitsAll.distinctBy { it.measure }.singleOrNull { unitMeasureACTV.text.toString().toLowerCase() == it.measure.toLowerCase() } == null){
                             unitsAll.last()._id / 100 * 100 + 101
                         }
@@ -136,7 +136,7 @@ class UnitActivity : AppCompatActivity() {
                             }
                             else unit!!._id
                         }
-                        db.child(unitId.toString()).setValue(changedItem)
+                        db.child(unitId.toString()).setValue(changedUnit)
                         finish()
                     }
                 }

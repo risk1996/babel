@@ -77,7 +77,6 @@ class LoginActivity : AppCompatActivity() {
             prefEd.putString("EMAIL", emailET.text.toString())
             prefEd.putString("LAST_LOGIN", SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
             prefEd.apply()
-
             val db = FirebaseDatabase.getInstance().reference.child("accounts")
             db.orderByChild("email").equalTo(emailET.text.toString()).addValueEventListener(object : ValueEventListener{
                 override fun onCancelled(p0: DatabaseError?) {}

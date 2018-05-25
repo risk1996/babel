@@ -3,6 +3,7 @@ package id.ac.umn.mobile.babel
 import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
+import android.content.Intent
 import android.view.*
 import android.widget.*
 import com.google.firebase.database.FirebaseDatabase
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class UserFragment : Fragment() {
+    var privilege : String = ""
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.fragment_user, container, false)
@@ -24,6 +26,8 @@ class UserFragment : Fragment() {
         val regDateTV = activity.findViewById<TextView>(R.id.fragment_user_tv_reg_date)
         val lastLoginTV = activity.findViewById<TextView>(R.id.fragment_user_tv_last_login)
         val changePassF = activity.findViewById<Button>(R.id.fragment_user_btn_change_password)
+        val otherUsersTR = activity.findViewById<TableRow>(R.id.fragment_user_tr)
+        val otherUsersV = activity.findViewById<View>(R.id.fragment_user_view)
         val otherUsersLV : ListView = activity.findViewById(R.id.fragment_user_lv_other_users)
         val data = object : Data(){
             override fun onComplete() {
@@ -42,12 +46,24 @@ class UserFragment : Fragment() {
                     val acc = ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1)
                     accountsActive.filter { it._id != user._id }.forEach {  acc.add(String.format("%s (%s)", it.name, it.role )) }
                     otherUsersLV.adapter = acc
+                    if((activity as MainActivity).privilege == "User"){
+                        otherUsersTR.visibility = View.GONE
+                        otherUsersV.visibility = View.GONE
+                        otherUsersLV.visibility = View.GONE
+                    }
                 }
             }
         }
         changePassF.setOnClickListener{
             val dialog = ChangePasswordDialog()
             dialog.show(fragmentManager, dialog.tag)
+        }
+        otherUsersLV.setOnItemClickListener { parent, view, position, id ->
+            val user = data.accountsAll.single { String.format("%s (%s)", it.name, it.role)== otherUsersLV.getItemAtPosition(position).toString() }
+            val intent = Intent(activity, UserActivity::class.java)
+            intent.putExtra("OPERATION", "EDIT")
+            intent.putExtra("USER_ID", user._id)
+            startActivity(intent)
         }
     }
 }

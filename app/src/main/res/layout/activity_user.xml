@@ -2,8 +2,201 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_unit_tv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TITLE"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_user_et_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="User Name"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+                <Switch
+                    android:id="@+id/activity_user_sw_inactive"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Active" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_user_tv_dob"
+                    android:layout_margin="8dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textSize="18sp"
+                    android:text="Date Of Birth : 01-01-1970" />
+                <Button
+                    android:id="@+id/activity_user_btn_dob"
+                    android:layout_margin="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="PICK DATE"
+                    />
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_user_et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_user_tv_email_errors"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#ffbaba"
+                    android:textColor="#ff0000"
+                    android:visibility="gone"
+                    android:text="@string/error_invalid_email"/>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_user_et_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:inputType="textPassword" />
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_user_tv_password_error"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#ffbaba"
+                    android:textColor="#ff0000"
+                    android:visibility="gone"
+                    android:text="@string/password_error_password_minimum_length"/>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_user_et_confirm_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword" />
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_user_tv_confirm_password_error"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#ffbaba"
+                    android:textColor="#ff0000"
+                    android:visibility="gone"
+                    android:text="@string/password_error_password_mismatch"/>
+            </TableRow>
+            <TableRow
+                android:layout_margin="15dp">
+                <TextView
+                    android:text="Role"
+                    android:textSize="18sp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <Spinner
+                    android:id="@+id/activity_user_spn_role"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_user_tv_errors"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#ffbaba"
+                    android:textColor="#ff0000"
+                    android:visibility="gone"
+                    android:text="All fields are required"/>
+            </TableRow>
+            <TableRow>
+                <Button
+                    android:id="@+id/activity_user_btn_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:text="@string/password_action_cancel"
+                    android:textColor="@android:color/darker_gray" />
+                <Button
+                    android:id="@+id/activity_user_btn_ok"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:text="OK"
+                    android:textColor="@color/colorAccent" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

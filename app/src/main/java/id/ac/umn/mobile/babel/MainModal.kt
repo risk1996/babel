@@ -54,17 +54,17 @@ class MainModal : BottomSheetDialogFragment() {
         override fun onNoClicked() { Snackbar.make( activity.findViewById(android.R.id.content), "No changes have been made", Snackbar.LENGTH_LONG).show() }
     }
     class QuitDialog : YesNoDialog(){
-        override fun onYesClicked() { activity.finishAndRemoveTask() }
+        override fun onYesClicked() { activity.moveTaskToBack(true) }
         override fun onNoClicked() {}
     }
     class LogOutDialog : YesNoDialog(){
         override fun onYesClicked() { activity.finish(); startActivity(Intent(activity, LoginActivity::class.java)) }
         override fun onNoClicked() {}
     }
-    fun disableButton(btn: Button){
+    private fun disableButton(btn: Button){
         btn.isEnabled = false
         btn.compoundDrawablesRelative.forEach { it?.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP) }
-        btn.setTextColor(Color.GRAY)
+        btn.setTextColor(Color.LTGRAY)
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v : View? = null
@@ -167,6 +167,12 @@ class MainModal : BottomSheetDialogFragment() {
                 val logoutBtn = v.findViewById<Button>(R.id.modal_main_user_btn_logout)
                 val quitBtn = v.findViewById<Button>(R.id.modal_main_user_btn_quit)
                 if (privilege == "User") disableButton(newUserBtn)
+                newUserBtn.setOnClickListener {
+                    val intent = Intent(activity, UserActivity::class.java)
+                    intent.putExtra("OPERATION", "NEW")
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
+                }
                 logoutBtn.setOnClickListener {
                     val dialog = LogOutDialog()
                     dialog.isCancelable = false
@@ -174,6 +180,7 @@ class MainModal : BottomSheetDialogFragment() {
                     dialog.message = "Are you sure you want to log out?"
                     dialog.highlight = dialog.HIGHLIGHT_NO
                     dialog.show(activity!!.fragmentManager, "Dialog Yes No")
+                    dismissAllowingStateLoss()
                 }
                 quitBtn.setOnClickListener {
                     val dialog = QuitDialog()
@@ -182,6 +189,7 @@ class MainModal : BottomSheetDialogFragment() {
                     dialog.message = "Are you sure you want to quit?"
                     dialog.highlight = dialog.HIGHLIGHT_NO
                     dialog.show(activity!!.fragmentManager, "Dialog Yes No")
+                    dismissAllowingStateLoss()
                 }
             }
         }
