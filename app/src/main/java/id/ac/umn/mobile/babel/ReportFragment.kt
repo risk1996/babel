@@ -39,6 +39,8 @@ class ReportFragment : Fragment() {
         val itemStorageTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_item_storage)
         val measureNumTV = activity.findViewById<TextView>(R.id.fragment_report_tv_measure_num)
         val unitNumTV = activity.findViewById<TextView>(R.id.fragment_report_tv_unit_num)
+        val userNumTV = activity.findViewById<TextView>(R.id.fragment_report_tv_user_num)
+        val userRoleTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_user_role)
         val data = object : Data(){
             override fun onComplete() {
                 if(isAdded){
@@ -48,71 +50,50 @@ class ReportFragment : Fragment() {
                     compSiteTV.text = company.site
                     compOfficeMainTV.text = company.officeMain
                     compOfficeSecondaryTV.text = company.officeSecondary
-
                     itemNumTV.text = itemsActive.filter { it.stocks.none { it == .0 } }.count().toString()
                     itemNumLocTL.removeAllViews()
-                    locationsActive.forEach {
-                        val row = TableRow(activity)
-                        val labelTV = TextView(activity)
-                        val valueTV = TextView(activity)
-                        val value = it
-                        labelTV.layoutParams = TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
-                        labelTV.text = String.format("- %s", value.code)
-                        row.addView(labelTV)
-                        valueTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
-                        valueTV.text = itemsActive.filter { it.stocks[locationsActive.indexOf(value)] > 0 }.count().toString()
-                        valueTV.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
-                        valueTV.setTextColor(ContextCompat.getColor(activity, android.R.color.black))
-                        row.addView(valueTV)
-                        itemNumLocTL.addView(row)
+                    locationsActive.forEach { loc ->
+                        tableRowAdd(itemNumLocTL, String.format("- %s", loc.code), itemsActive.filter { it.stocks[locationsActive.indexOf(loc)] > 0 }.count().toString())
                     }
                     itemShortageTV.text = itemsActive.filter { item -> item.stocks.count { it < item.safetyStock } > 0 }.size.toString()
                     itemShortageTL.removeAllViews()
-                    locationsActive.forEach {
-                        val row = TableRow(activity)
-                        val labelTV = TextView(activity)
-                        val valueTV = TextView(activity)
-                        val value = it
-                        labelTV.layoutParams = TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
-                        labelTV.text = String.format("- %s", value.code)
-                        row.addView(labelTV)
-                        valueTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
-                        valueTV.text = itemsActive.filter { it.stocks[locationsActive.indexOf(value)] < it.safetyStock }.count().toString()
-                        valueTV.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
-                        valueTV.setTextColor(ContextCompat.getColor(activity, android.R.color.black))
-                        row.addView(valueTV)
-                        itemShortageTL.addView(row)
+                    locationsActive.forEach { loc ->
+                        tableRowAdd(itemShortageTL, String.format("- %s", loc.code), itemsActive.filter { it.stocks[locationsActive.indexOf(loc)] < it.safetyStock }.count().toString())
                     }
                     itemStorageTL.removeAllViews()
                     locationsActive.forEach { loc ->
-                        val row = TableRow(activity)
-                        val labelTV = TextView(activity)
-                        labelTV.layoutParams = TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
-                        labelTV.text = String.format("- %s", loc.code)
-                        row.addView(labelTV)
-                        itemStorageTL.addView(row)
-                        unitsActive.filter { it.value == 1.0 }.distinctBy { it.measure }.forEach {
-                            val row = TableRow(activity)
-                            val labelTV = TextView(activity)
-                            val valueTV = TextView(activity)
-                            val value = it
-                            labelTV.layoutParams = TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
-                            labelTV.text = String.format("   ▪ %s", it.measure)
-                            row.addView(labelTV)
-                            valueTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
-                            valueTV.text = String.format("%s %s",
-                                    itemsActive.filter { i -> unitsActive.filter { value.measure==it.measure }.singleOrNull { i.unitId==it._id } != null }
+                        tableRowAdd(itemStorageTL, String.format("- %s", loc.code))
+                        unitsActive.filter { it.value == 1.0 }.distinctBy { it.measure }.forEach { unit ->
+                            val value = String.format("%s %s",
+                                    itemsActive.filter { i -> unitsActive.filter { unit.measure==it.measure }.singleOrNull { i.unitId==it._id } != null }
                                             .sumByDouble { it.stocks[locationsAll.indexOf(loc)] }.toString(),
-                                    it.unitName)
-                            valueTV.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
-                            row.addView(valueTV)
-                            itemStorageTL.addView(row)
+                                    unit.unitName)
+                            tableRowAdd(itemStorageTL, String.format("   ▪ %s", unit.measure), value)
                         }
                     }
                     measureNumTV.text = unitsActive.distinctBy { it.measure }.size.toString()
                     unitNumTV.text = unitsActive.size.toString()
+                    userNumTV.text = accountsActive.size.toString()
+                    accountsActive.distinctBy { it.role }.forEach { acc ->
+                        tableRowAdd(userRoleTL, String.format("- %s", acc.role), accountsActive.filter { it.role == acc.role }.size.toString())
+                    }
                 }
             }
         }
+    }
+    fun tableRowAdd(tl: TableLayout, label: String, value: String? = null){
+        val row = TableRow(activity)
+        val labelTV = TextView(activity)
+        labelTV.layoutParams = TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
+        labelTV.text = label
+        row.addView(labelTV)
+        if(value != null){
+            val valueTV = TextView(activity)
+            valueTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
+            valueTV.text = value
+            valueTV.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
+            row.addView(valueTV)
+        }
+        tl.addView(row)
     }
 }
