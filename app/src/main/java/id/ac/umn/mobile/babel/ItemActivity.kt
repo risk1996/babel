@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.InputFilter
@@ -75,6 +76,7 @@ class ItemActivity : AppCompatActivity() {
                 val unit = unitsActive.singleOrNull { it._id == item?.unitId }
                 val rawStock = ArrayList<Double>()
                 val stockETs = ArrayList<TextView>()
+                val textWatchers = ArrayList<TextWatcher>()
                 listener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
                     val pref = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE)
                     itemThumbnailIB.setImageResource(R.drawable::class.java.getField(pref.getString("RESOURCE", "icons8_box_48").replace("_48","_96")).getInt(null))
@@ -111,15 +113,15 @@ class ItemActivity : AppCompatActivity() {
                     rowTR.addView(stockOnLocationET, TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f))
                     stockPerLocationTL.addView(rowTR)
                 }
-                stockETs.forEach {
-                    it.addTextChangedListener(object : TextWatcher{
+                stockETs.forEach { textWatchers.add(
+                    object : TextWatcher{
                         override fun afterTextChanged(p0: Editable?) {}
                         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                             rawStock[stockETs.indexOf(it)] = (if(it.text.toString() != "") it.text.toString().toDouble() else .0) * availUnits[unitNameS.selectedItemPosition].value
                         }
-                    })
-                }
+                    }
+                ) }
                 unitMeasureS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -132,9 +134,15 @@ class ItemActivity : AppCompatActivity() {
                 unitNameS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        stockETs.forEach {it.text = DecimalFormat("0.###############").format(rawStock[stockETs.indexOf(it)] / availUnits[unitNameS.selectedItemPosition].value) }
+                        stockETs.forEach {
+                            it.removeTextChangedListener(textWatchers[stockETs.indexOf(it)])
+                            val df = DecimalFormat(PreferenceManager.getDefaultSharedPreferences(this@ItemActivity)!!.getString("global_item_precision", "0.##"))
+                            it.text = df.format(rawStock[stockETs.indexOf(it)] / availUnits[unitNameS.selectedItemPosition].value)
+                            it.addTextChangedListener(textWatchers[stockETs.indexOf(it)])
+                        }
                     }
                 }
+
                 okB.setOnClickListener{
                     when (act) {
                         "EDIT", "NEW" -> {

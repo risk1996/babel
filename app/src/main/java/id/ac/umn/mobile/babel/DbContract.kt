@@ -22,6 +22,8 @@ class FirebaseDb : Application() {
 }
 abstract class Data{
     var company : Company = Company("", "", "", "", "","", "")
+    var inOutIncomingMax: Int? = null
+    var globalStockPrecision: String? = null
     var accountsAll     = ArrayList<Account>()      ; var accountsActive        = ArrayList<Account>()
     var unitsAll        = ArrayList<Unit>()         ; var unitsActive           = ArrayList<Unit>()
     var itemsAll        = ArrayList<Item>()         ; var itemsActive           = ArrayList<Item>()
@@ -42,6 +44,8 @@ abstract class Data{
                         p0.child("_company").child("company_office_main").value.toString(),
                         p0.child("_company").child("company_office_secondary").value.toString()
                 )
+                inOutIncomingMax = p0.child("_global_pref").child("in_out_incoming_max").value.toString().toInt()
+                globalStockPrecision = p0.child("_global_pref").child("global_stock_precision").value.toString()
                 accountsAll.clear()
                 p0.child("accounts").children.forEach{
                     accountsAll.add(Account(

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Handler
+import android.preference.PreferenceManager
 import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -94,28 +95,31 @@ class InOutFragment : Fragment() {
             val unitAvail = data.unitsActive.filter { it.measure == unitFrom.measure }
             var unitTo: Unit = data.unitsActive.single { it._id == inOutItems[position].unitId }
             val sign = if(activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION", "incoming") == "incoming") 1 else -1
+            val df = DecimalFormat((activity as MainActivity).globalPref!!.getString("global_item_precision", "0.##"))
             holder.removeBtn.setOnClickListener {
                 inOutItems.removeAt(position)
                 notifyDataSetChanged()
             }
             holder.nameTV.text = item.itemName
             holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                    DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
-                    DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
+                    df.format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
+                    df.format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
                     unitFrom.unitName
             )
             holder.thumbnailIV.setImageResource(R.drawable::class.java.getField(item.thumbnail).getInt(null))
             holder.signTV.text = if (sign == 1) "+" else "-"
             holder.amountNP.minValue = 0
-            holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
+            holder.amountNP.maxValue =
+                    if (sign == 1) (activity as MainActivity).globalPref!!.getString("in_out_incoming_max", "999").toInt()
+                    else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
             holder.amountNP.value = inOutItems[position].amount
             inOutItems[position].amount = holder.amountNP.value
-            holder.amountNP.setFormatter { DecimalFormat("0.##").format(it.toDouble() * unitTo.increment) }
+            holder.amountNP.setFormatter { df.format(it.toDouble() * unitTo.increment) }
             holder.amountNP.setOnValueChangedListener { numberPicker, _, _ ->
                 inOutItems[position].amount = numberPicker.value
                 holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                        DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
-                        DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value) * unitTo.increment)),
+                        df.format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
+                        df.format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * numberPicker.value * unitTo.value / unitFrom.value) * unitTo.increment)),
                         unitFrom.unitName
                 )
             }
@@ -127,11 +131,13 @@ class InOutFragment : Fragment() {
                     unitTo = unitAvail[p2]
                     inOutItems[position].unitId = unitTo._id
                     holder.stockTV.text = String.format("%1\$s → %2\$s  %3\$s",
-                            DecimalFormat("0.##").format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
-                            DecimalFormat("0.##").format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value) * unitTo.increment)),
+                            df.format((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value)),
+                            df.format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value) * unitTo.increment)),
                             unitFrom.unitName
                     )
-                    holder.amountNP.maxValue = if (sign == 1) 9999 else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
+                    holder.amountNP.maxValue =
+                            if (sign == 1) (activity as MainActivity).globalPref!!.getString("in_out_incoming_max", "999").toInt()
+                            else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
                 }
             }
         }

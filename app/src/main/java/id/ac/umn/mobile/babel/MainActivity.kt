@@ -6,9 +6,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.design.widget.TabLayout
 import android.view.Menu
 import android.view.MenuItem
+import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
     var privilege : String? = null
@@ -16,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     val inOutFragment = InOutFragment()
     val reportFragment = ReportFragment()
     val userFragment = UserFragment()
+    var globalPref : SharedPreferences? = null
+    var globalListener : SharedPreferences.OnSharedPreferenceChangeListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,6 +34,14 @@ class MainActivity : AppCompatActivity() {
                 privilege = user.role
             }
         }
+        globalPref = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)!!
+        globalListener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
+            val newGlobalPref = mutableMapOf<String, Any>()
+            newGlobalPref["in_out_incoming_max"] = globalPref!!.getString("in_out_incoming_max", "999")
+            newGlobalPref["global_stock_precision"] = globalPref!!.getString("global_stock_precision", "0.##")
+            FirebaseDatabase.getInstance().reference.child("_global_pref").setValue(newGlobalPref)
+        }
+        globalPref!!.registerOnSharedPreferenceChangeListener(globalListener)
         val moreFAB = findViewById<MovableFloatingActionButton>(R.id.activity_main_fab_more)
         moreFAB.setOnClickListener {
             val bottomModal = MainModal()

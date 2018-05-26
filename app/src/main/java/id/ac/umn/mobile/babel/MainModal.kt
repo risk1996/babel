@@ -173,6 +173,9 @@ class MainModal : BottomSheetDialogFragment() {
                     startActivity(intent)
                     dismissAllowingStateLoss()
                 }
+                settingsBtn.setOnClickListener {
+                    startActivity(Intent(activity, SettingsActivity::class.java))
+                }
                 logoutBtn.setOnClickListener {
                     val dialog = LogOutDialog()
                     dialog.isCancelable = false

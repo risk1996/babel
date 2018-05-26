@@ -21,6 +21,20 @@
     </string-array>
 
     <!--Preference Settings-->
+    <string-array name="global_stock_precision_selection">
+        <item>0.#</item>
+        <item>0.##</item>
+        <item>0.###</item>
+        <item>0.####</item>
+        <item>0.#####</item>
+    </string-array>
+    <string-array name="in_out_incoming_max_selection">
+        <item>99</item>
+        <item>999</item>
+        <item>9999</item>
+        <item>99999</item>
+        <item>999999</item>
+    </string-array>
 
     <!-- Login Activity -->
     <string name="activity_login_label">Sign In | &app_name;</string>

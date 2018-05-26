@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:title="Database Host"
-        android:summary="Host of your database server"
-        android:key="db_host"
-        android:inputType="textUri"/>
-    <EditTextPreference
-        android:title="Database Host Port"
-        android:summary="Port used by host of your database server"
-        android:key="db_port"
-        android:inputType="numberDecimal"/>
-    <EditTextPreference
-        android:title="Database Username"
-        android:summary="Username of your database server"
-        android:key="db_username"
-        android:inputType="text"/>
-    <EditTextPreference
-        android:title="Database Password"
-        android:summary="Password to your account of your database server"
-        android:key="db_password"
-        android:inputType="textPassword"/>
-    <EditTextPreference
-        android:title="Database Name"
-        android:summary="Name of your database"
-        android:key="db_name"
-        android:inputType="text"/>
+    <!--<EditTextPreference-->
+        <!--android:title="Database Host"-->
+        <!--android:summary="Host of your database server"-->
+        <!--android:key="db_host"-->
+        <!--android:inputType="textUri"/>-->
+    <!--<EditTextPreference-->
+        <!--android:title="Database Host Port"-->
+        <!--android:summary="Port used by host of your database server"-->
+        <!--android:key="db_port"-->
+        <!--android:inputType="numberDecimal"/>-->
+    <!--<EditTextPreference-->
+        <!--android:title="Database Username"-->
+        <!--android:summary="Username of your database server"-->
+        <!--android:key="db_username"-->
+        <!--android:inputType="text"/>-->
+    <!--<EditTextPreference-->
+        <!--android:title="Database Password"-->
+        <!--android:summary="Password to your account of your database server"-->
+        <!--android:key="db_password"-->
+        <!--android:inputType="textPassword"/>-->
+    <!--<EditTextPreference-->
+        <!--android:title="Database Name"-->
+        <!--android:summary="Name of your database"-->
+        <!--android:key="db_name"-->
+        <!--android:inputType="text"/>-->
+    <ListPreference
+        android:key="global_stock_precision"
+        android:title="Stock Precision"
+        android:summary="Amount of numbers shown behind decimal point"
+        android:entries="@array/global_stock_precision_selection"
+        android:entryValues="@array/global_stock_precision_selection"/>
+    <ListPreference
+        android:key="in_out_incoming_max"
+        android:title="Incoming Item Maximum Amount"
+        android:summary="Maximum allowed item quantity for incoming item"
+        android:entries="@array/in_out_incoming_max_selection"
+        android:entryValues="@array/in_out_incoming_max_selection"/>
 </PreferenceScreen>

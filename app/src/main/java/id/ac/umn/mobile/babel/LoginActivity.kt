@@ -46,7 +46,6 @@ class LoginActivity : AppCompatActivity() {
         val signInBtn = findViewById<Button>(R.id.activity_login_btn_sign_in)
         val pref = getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
 
-
         if(pref.getBoolean("REMEMBER_ME", false)){
             emailET.setText(pref.getString("EMAIL",""))
             passwordET.setText(pref.getString("PASSWORD", ""))
@@ -95,9 +94,17 @@ class LoginActivity : AppCompatActivity() {
                             val salt = p0.children.first().child("salt").value.toString()
                             val password = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((passwordET.text.toString()+salt).toByteArray()))
                             if(p0.children.first().child("password").value.toString().toLowerCase() == password){
-                                finish()
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                 credentialErrorTV.visibility = View.GONE
+                                finish()
+                                val data = object : Data(){
+                                    override fun onComplete() {
+                                        val globalPrefEd = PreferenceManager.getDefaultSharedPreferences(this@LoginActivity).edit()
+                                        globalPrefEd.putString("in_out_incoming_max", inOutIncomingMax!!.toString())
+                                        globalPrefEd.putString("global_stock_precision", globalStockPrecision!!)
+                                        globalPrefEd.apply()
+                                    }
+                                }
                             } else { credentialErrorTV.visibility = View.VISIBLE }
                         } else{ credentialErrorTV.visibility = View.VISIBLE }
                     }

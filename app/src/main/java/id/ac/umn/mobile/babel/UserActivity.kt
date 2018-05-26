@@ -74,25 +74,21 @@ class UserActivity : AppCompatActivity() {
         val data = object : Data(){
             override fun onComplete() {
                 val user = accountsAll.singleOrNull { it._id == userID }
-
                 val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, month)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                     updateDateInView()
                 }
-
                 dobB.setOnClickListener { DatePickerDialog(this@UserActivity,
-                            dateSetListener,
-                            // set DatePickerDialog to point to today's date when it loads up
-                            calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH),
-                            calendar.get(Calendar.DAY_OF_MONTH)).show()
+                        dateSetListener,
+                        // set DatePickerDialog to point to today's date when it loads up
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show()
                 }
-
                 val availRoles = arrayOf("User", "Administrator")
                 roleS.adapter = ArrayAdapter<String>(this@UserActivity, android.R.layout.simple_spinner_dropdown_item, availRoles)
-
                 var regDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("1970-01-01")
                 if (act == "EDIT") {
                     user!!
@@ -102,10 +98,7 @@ class UserActivity : AppCompatActivity() {
                     roleS.setSelection(availRoles.indexOf(user.role))
                     regDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(user.dob)
                     dobTV.text = String.format("Date of birth: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(regDate))
-                } else {
-                    dobTV.text = String.format("Date of birth: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(regDate))
-                }
-
+                } else dobTV.text = String.format("Date of birth: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(regDate))
                 userNameET.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
