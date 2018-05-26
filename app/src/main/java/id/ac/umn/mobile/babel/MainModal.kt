@@ -26,11 +26,11 @@ class MainModal : BottomSheetDialogFragment() {
             if(!itemRaw.contains("")) itemRaw.forEach {
                 var bool = true
                 val itemSpec = it.split(",").map { it.toInt() }
+                val db = FirebaseDatabase.getInstance().reference.child("items")
                 val data = object : Data(){
                     override fun onComplete() {
                         if (bool){
                             bool = false
-                            val db = FirebaseDatabase.getInstance().reference.child("items")
                             db.runTransaction(object : Transaction.Handler{
                                 override fun doTransaction(p0: MutableData?): Transaction.Result {
                                     val item = itemsActive.single { it._id==itemSpec[0] }
@@ -50,6 +50,7 @@ class MainModal : BottomSheetDialogFragment() {
             }
             Snackbar.make( activity.findViewById(android.R.id.content), "Changes have been committed", Snackbar.LENGTH_LONG).show()
             activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().clear().apply()
+            (activity as MainActivity).inOutFragment.loadTransaction()
         }
         override fun onNoClicked() { Snackbar.make( activity.findViewById(android.R.id.content), "No changes have been made", Snackbar.LENGTH_LONG).show() }
     }

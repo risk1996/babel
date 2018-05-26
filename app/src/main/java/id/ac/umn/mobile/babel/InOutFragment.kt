@@ -70,6 +70,7 @@ class InOutFragment : Fragment() {
             val itemSpec = it.split(",").map { it.toInt() }
             inOutItems.add(TransactionItems(itemSpec[0], itemSpec[1], itemSpec[2]))
         }
+        activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items).adapter.notifyDataSetChanged()
     }
     inner class InOutFragmentRVAdapter(private val context : Context, private val data : Data) : RecyclerView.Adapter<InOutFragmentRVAdapter.ViewHolder>(){
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
