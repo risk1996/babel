@@ -41,7 +41,7 @@
                         android:inputType="text"/>
                 </android.support.design.widget.TextInputLayout>
                 <Switch
-                    android:id="@+id/activity_unit_sw_inactive"
+                    android:id="@+id/activity_unit_sw_active"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"

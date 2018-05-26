@@ -74,7 +74,7 @@ class ListDialog : DialogFragment() {
                 val data = object : Data(){
                     override fun onComplete() {
                         availItem = ArrayList(if(inactiveSW.isChecked) itemsAll else itemsActive)
-                        val term = searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()
+                        val term = searchACTV.text.toString().toLowerCase().replace("[^A-Za-z0-9 ]".toRegex(),  "").replace(" ", ".*?").toRegex()
                         itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availItem.filter { it.itemName.toLowerCase().contains(term) }.map { it.itemName })
                     }
                 }
@@ -83,7 +83,7 @@ class ListDialog : DialogFragment() {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        val term = searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()
+                        val term = searchACTV.text.toString().toLowerCase().replace("[^A-Za-z0-9 ]".toRegex(),  "").replace(" ", ".*?").toRegex()
                         itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availItem.filter { it.itemName.toLowerCase().contains(term) }.map { it.itemName })
                     }
                 })

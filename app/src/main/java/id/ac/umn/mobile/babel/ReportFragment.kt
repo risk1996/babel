@@ -13,10 +13,8 @@ import android.widget.*
 //==================================================================================================
 // Report Fragment
 //==================================================================================================
-//
-// Part of Main Activity (first tab), contain about report about item  ,
+// Part of Main Activity (third tab), contain about report about item  ,
 // moreover, admin can also read about item report about item
-//
 //--------------------------------------------------------------------------------------------------
 
 

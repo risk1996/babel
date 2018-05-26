@@ -3,14 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
     <TableRow>
         <Button
             android:id="@+id/modal_main_report_btn_edit_company"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
             android:text="@string/bottom_dialog_report_edit_company"
@@ -21,7 +22,6 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
             android:text="@string/bottom_dialog_report_track_incoming"
@@ -32,7 +32,6 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
             android:text="@string/bottom_dialog_report_track_outgoing"
@@ -43,7 +42,6 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:textColor="@color/colorAccent"
             android:text="@string/bottom_dialog_report_out_of_stock"

@@ -37,7 +37,7 @@ class UnitActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_unit)
         val titleTV = findViewById<TextView>(R.id.activity_unit_tv_title)
-        val inactiveSW = findViewById<Switch>(R.id.activity_unit_sw_inactive)
+        val activeSW = findViewById<Switch>(R.id.activity_unit_sw_active)
         val unitNameET = findViewById<EditText>(R.id.activity_unit_et_unit_name)
         val unitThumbnailIB = findViewById<ImageButton>(R.id.activity_unit_ib_item_thumbnail)
         val unitMeasureACTV = findViewById<AutoCompleteTextView>(R.id.activity_unit_actv_unit_measurement)
@@ -79,7 +79,7 @@ class UnitActivity : AppCompatActivity() {
                     unit!!
                     unitNameET.setText(unit.unitName)
                     prefEd.putString("RESOURCE", unit.unitThumbnail)
-                    inactiveSW.isChecked = unit.status == "active"
+                    activeSW.isChecked = unit.status == "active"
                     unitMeasureACTV.setText(unit.measure)
                     unitIncrementET.setText(unit.increment.toString())
                     unitValueET.setText(unit.value.toString())
@@ -123,7 +123,7 @@ class UnitActivity : AppCompatActivity() {
                         val changedUnit = mutableMapOf<String, Any>()
                         changedUnit["increment"] = unitIncrementET.text.toString()
                         changedUnit["measure"] = unitMeasureACTV.text.toString()
-                        changedUnit["status"] = if(inactiveSW.isChecked) "active" else "inactive"
+                        changedUnit["status"] = if(activeSW.isChecked) "active" else "inactive"
                         changedUnit["unit_name"] = unitNameET.text.toString()
                         changedUnit["unit_thumbnail"] = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).getString("RESOURCE", "icons8_package_24")
                         changedUnit["val"] = unitValueET.text.toString()

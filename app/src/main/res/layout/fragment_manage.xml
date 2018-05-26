@@ -17,7 +17,8 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/manage_prompt_search_items"/>
+                android:hint="@string/manage_prompt_search_items"
+                android:singleLine="true"/>
         </TableRow>
         <TableRow>
             <ScrollView

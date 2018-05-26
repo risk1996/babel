@@ -56,7 +56,8 @@
                     android:id="@+id/dialog_list_actv_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/manage_prompt_search_items"/>
+                    android:hint="@string/manage_prompt_search_items"
+                    android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
         </TableRow>
         <TableRow>

@@ -33,7 +33,7 @@ class ItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
         val titleTV = findViewById<TextView>(R.id.activity_item_tv_title)
-        val inactiveSW = findViewById<Switch>(R.id.activity_item_sw_inactive)
+        val activeSW = findViewById<Switch>(R.id.activity_item_sw_active)
         val itemNameET = findViewById<EditText>(R.id.activity_item_et_item_name)
         val itemThumbnailIB = findViewById<ImageButton>(R.id.activity_item_ib_item_thumbnail)
         val unitMeasureS = findViewById<Spinner>(R.id.activity_item_spn_unit_measure)
@@ -48,6 +48,7 @@ class ItemActivity : AppCompatActivity() {
         when (act) {
             "VIEW" -> {
                 titleTV.text = "VIEW ITEM"
+                activeSW.isEnabled = false
                 itemNameET.isEnabled = false
                 itemThumbnailIB.isEnabled = false
                 itemThumbnailIB.drawable.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
@@ -73,10 +74,11 @@ class ItemActivity : AppCompatActivity() {
                 unitMeasureS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availMeasure)
                 var availUnits = unitsActive.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
                 val item  = itemsAll.singleOrNull { it._id == itemID }
-                val unit = unitsActive.singleOrNull { it._id == item?.unitId }
+                var unit = unitsActive.singleOrNull { it._id == item?.unitId }
                 val rawStock = ArrayList<Double>()
                 val stockETs = ArrayList<TextView>()
                 val textWatchers = ArrayList<TextWatcher>()
+                getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).edit().clear().apply()
                 listener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
                     val pref = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE)
                     itemThumbnailIB.setImageResource(R.drawable::class.java.getField(pref.getString("RESOURCE", "icons8_box_48").replace("_48","_96")).getInt(null))
@@ -87,7 +89,7 @@ class ItemActivity : AppCompatActivity() {
                     item!!; unit!!
                     itemNameET.setText(item.itemName)
                     prefEd.putString("RESOURCE", item.thumbnail)
-                    inactiveSW.isChecked = item.status == "active"
+                    activeSW.isChecked = item.status == "active"
                     unitMeasureS.setSelection(availMeasure.indexOf(unit.measure))
                     safetyStockET.setText((item.safetyStock * unit.value).toString())
                     rawStock.add(item.safetyStock)
@@ -98,6 +100,7 @@ class ItemActivity : AppCompatActivity() {
                     val dialog = ThumbnailDialog()
                     dialog.show(fragmentManager, dialog.tag)
                 }
+                stockPerLocationTL.removeAllViews()
                 locationsActive.forEach {
                     val rowTR = TableRow(this@ItemActivity)
                     val locationTV = TextView(this@ItemActivity)
@@ -118,7 +121,8 @@ class ItemActivity : AppCompatActivity() {
                         override fun afterTextChanged(p0: Editable?) {}
                         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            rawStock[stockETs.indexOf(it)] = (if(it.text.toString() != "") it.text.toString().toDouble() else .0) * availUnits[unitNameS.selectedItemPosition].value
+                            val zero = (it.text.toString() == "") || (it.text.toString() == ".")
+                            rawStock[stockETs.indexOf(it)] = (if(zero) .0 else it.text.toString().toDouble()) * availUnits[unitNameS.selectedItemPosition].value
                         }
                     }
                 ) }
@@ -127,13 +131,14 @@ class ItemActivity : AppCompatActivity() {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         availUnits = unitsActive.filter { it.measure == availMeasure[unitMeasureS.selectedItemPosition] }
                         unitNameS.adapter = ArrayAdapter<String>(this@ItemActivity, android.R.layout.simple_list_item_1, availUnits.map { it.unitName })
-                        if ((act == "VIEW" || act == "EDIT") && unit!!.measure == availMeasure[unitMeasureS.selectedItemPosition]) unitNameS.setSelection(availUnits.indexOf(unit))
+                        if ((act == "VIEW" || act == "EDIT") && unit!!.measure == availMeasure[unitMeasureS.selectedItemPosition]) unitNameS.setSelection(availUnits.indexOf(unit!!))
                         else unitNameS.setSelection(0)
                     }
                 }
                 unitNameS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        unit = availUnits[position]
                         stockETs.forEach {
                             it.removeTextChangedListener(textWatchers[stockETs.indexOf(it)])
                             val df = DecimalFormat(PreferenceManager.getDefaultSharedPreferences(this@ItemActivity)!!.getString("global_item_precision", "0.##"))
@@ -144,30 +149,30 @@ class ItemActivity : AppCompatActivity() {
                 }
 
                 okB.setOnClickListener{
+                    finish()
                     when (act) {
+                        "VIEW" -> {
+                            val intent = Intent(this@ItemActivity, ItemActivity::class.java)
+                            intent.putExtra("OPERATION", "EDIT")
+                            intent.putExtra("ITEM_ID", item!!._id)
+                            startActivity(intent)
+                        }
                         "EDIT", "NEW" -> {
                             val db = FirebaseDatabase.getInstance().reference.child("items")
                             val changedItem = mutableMapOf<String, Any>()
                             changedItem["item_name"] = itemNameET.text.toString()
-                            changedItem["status"] = if(inactiveSW.isChecked) "active" else "inactive"
+                            changedItem["status"] = if(activeSW.isChecked) "active" else "inactive"
                             changedItem["item_thumbnail"] = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).getString("RESOURCE", "icons8_box_48")
-                            changedItem["safety_stock"] = (safetyStockET.text.toString().toInt() * unit!!.value).toString()
+                            changedItem["safety_stock"] = rawStock[0].toString()
                             changedItem["stocks"] = rawStock.drop(1).map { it.toString() }
-                            changedItem["unit_id"] = unit._id.toString()
+                            changedItem["unit_id"] = unit!!._id.toString()
                             val itemId = if (act == "NEW") itemsAll.last()._id + 1 else item!!._id
                             db.child(itemId.toString()).setValue(changedItem)
                         }
                     }
-                    finish()
                 }
             }
         }
         cancelB.setOnClickListener{ finish() }
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        val prefEd = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).edit()
-        prefEd.clear()
-        prefEd.apply()
     }
 }

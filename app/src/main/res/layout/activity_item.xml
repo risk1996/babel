@@ -41,7 +41,7 @@
                         android:inputType="text"/>
                 </android.support.design.widget.TextInputLayout>
                 <Switch
-                    android:id="@+id/activity_item_sw_inactive"
+                    android:id="@+id/activity_item_sw_active"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -89,6 +89,8 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
+                    </TableRow>
+                    <TableRow>
                         <Spinner
                             android:id="@+id/activity_item_spn_unit_name"
                             android:layout_weight="1"

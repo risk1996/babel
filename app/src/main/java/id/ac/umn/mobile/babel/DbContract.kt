@@ -1,12 +1,12 @@
 package id.ac.umn.mobile.babel
 
 import android.app.Application
-import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.lang.Exception
+import kotlin.collections.ArrayList
 
 class Company   (val type: String, val typeShort: String, val name: String, val logo: String, val site: String, val officeMain: String, val officeSecondary: String)
 class Account   (val _id: Int, val status: String, val email: String, val password: String, val salt: String, val name: String, val role: String, val dob: String, val regDate: String, val lastLogin: String)
@@ -14,6 +14,7 @@ class Unit      (val _id: Int, val status: String, val measure: String, val unit
 class Item      (val _id: Int, val status: String, val itemName: String, val stocks: List<Double>, val safetyStock: Double, val unitId: Int, val thumbnail: String)
 class Location  (val _id: Int, val status: String, val code: String, val position: String)
 class ThirdParty(val _id: Int, val status: String, val role: String, val tpName: String)
+class InOut     (val _id: Int, val inOutTime: String, val accountId: Int, val locationId: Int, val thirdPartyId: Int, val inOutDetail: List<Pair<Int, Double>>)
 class FirebaseDb : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -24,11 +25,12 @@ abstract class Data{
     var company : Company = Company("", "", "", "", "","", "")
     var inOutIncomingMax: Int? = null
     var globalStockPrecision: String? = null
-    var accountsAll     = ArrayList<Account>()      ; var accountsActive        = ArrayList<Account>()
-    var unitsAll        = ArrayList<Unit>()         ; var unitsActive           = ArrayList<Unit>()
-    var itemsAll        = ArrayList<Item>()         ; var itemsActive           = ArrayList<Item>()
-    var locationsAll    = ArrayList<Location>()     ; var locationsActive       = ArrayList<Location>()
-    var thirdPartiesAll = ArrayList<ThirdParty>()   ; var thirdPartiesActive    = ArrayList<ThirdParty>()
+    var accountsAll    = ArrayList<Account>()   ; var accountsActive        = ArrayList<Account>()
+    var unitsAll       = ArrayList<Unit>()      ; var unitsActive           = ArrayList<Unit>()
+    var itemsAll       = ArrayList<Item>()      ; var itemsActive           = ArrayList<Item>()
+    var locationsAll   = ArrayList<Location>()  ; var locationsActive       = ArrayList<Location>()
+    var thirdPartiesAll= ArrayList<ThirdParty>(); var thirdPartiesActive    = ArrayList<ThirdParty>()
+    var transactions   = ArrayList<InOut>()
     init {
         val db = FirebaseDatabase.getInstance().reference
         db.addValueEventListener(object : ValueEventListener {
@@ -108,6 +110,16 @@ abstract class Data{
                     ))
                 }
                 thirdPartiesActive = ArrayList(thirdPartiesAll.filter { it.status == "active" })
+                p0.child("transaction_header").children.forEach {
+                    transactions.add(InOut(
+                            it.key.toInt(),
+                            it.child("io_time").value.toString(),
+                            it.child("account_id").value.toString().toInt(),
+                            it.child("location_id").value.toString().toInt(),
+                            it.child("third_party_id").value.toString().toInt(),
+                            it.child("io_detail").children.map { Pair(it.child("item_id").toString().toInt(), it.child("io_qty").toString().toDouble()) }
+                    ))
+                }
                 try{ onComplete() }
                 catch (e : Exception){ e.printStackTrace() }
             }

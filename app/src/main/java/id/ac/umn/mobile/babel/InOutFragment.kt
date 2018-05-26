@@ -137,9 +137,10 @@ class InOutFragment : Fragment() {
                             df.format(((item.stocks[locationsSpn.selectedItemPosition] / unitFrom.value) + (sign * holder.amountNP.value * unitTo.value / unitFrom.value) * unitTo.increment)),
                             unitFrom.unitName
                     )
+                    val inOutIncomingMax = (activity as MainActivity).globalPref!!.getString("in_out_incoming_max", "999").toDouble()
                     holder.amountNP.maxValue =
-                            if (sign == 1) (activity as MainActivity).globalPref!!.getString("in_out_incoming_max", "999").toInt()
-                            else (item.stocks[locationsSpn.selectedItemPosition] / unitTo.value).toInt()
+                            if (sign == 1) inOutIncomingMax.toInt()
+                            else Math.min(item.stocks[locationsSpn.selectedItemPosition] / unitTo.increment / unitTo.value, inOutIncomingMax).toInt()
                 }
             }
         }

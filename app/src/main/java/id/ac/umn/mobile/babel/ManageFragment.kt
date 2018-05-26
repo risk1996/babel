@@ -39,7 +39,8 @@ class ManageFragment : Fragment() {
         val data = object : Data(){ // populate RecyclerView after data has been loaded
             override fun onComplete() {
                 filterItems.clear()
-                itemsActive.filter { it.itemName.toLowerCase().contains(searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()) }.forEach { filterItems.add(it._id) }
+                val term = searchET.text.toString().toLowerCase().replace("[^A-Za-z0-9 ]".toRegex(),  "").replace(" ", ".*?").toRegex()
+                itemsActive.filter { it.itemName.toLowerCase().contains(term) }.forEach { filterItems.add(it._id) }
                 itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0) filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }
         }
@@ -49,7 +50,7 @@ class ManageFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 filterItems.clear()
-                val term = searchET.text.toString().toLowerCase().replace(" ", ".*?").toRegex()
+                val term = searchET.text.toString().toLowerCase().replace("[^A-Za-z0-9 ]".toRegex(),  "").replace(" ", ".*?").toRegex()
                 data.itemsActive.filter { it.itemName.toLowerCase().contains(term) }.forEach { filterItems.add(it._id) }
                 itemsRV.layoutManager = GridLayoutManager(activity, if(filterItems.size>0)filterItems.size else 1, GridLayoutManager.HORIZONTAL, false)
             }

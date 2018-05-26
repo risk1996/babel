@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
     override fun onResume() {
+        super.onResume()
         val tabsTL = findViewById<TabLayout>(R.id.activity_main_tl_tabs)
         when(tabsTL!!.selectedTabPosition){
             0 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, manageFragment).commit()
@@ -69,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             2 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, reportFragment).commit()
             3 -> fragmentManager.beginTransaction().replace(R.id.activity_main_fl_frame, userFragment).commit()
         }
-        super.onResume()
     }
     override fun onPause() {
         super.onPause()
