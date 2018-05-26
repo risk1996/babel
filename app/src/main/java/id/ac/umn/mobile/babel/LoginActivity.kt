@@ -82,29 +82,25 @@ class LoginActivity : AppCompatActivity() {
                 override fun onDataChange(p0: DataSnapshot?) {
                     if(emailErrorTV.visibility == View.VISIBLE || passwordErrorTV.visibility == View.VISIBLE) credentialErrorTV.visibility = View.VISIBLE
                     else{
-                        val data = object : Data(){
-                            override fun onComplete() {
-                                val user = accountsActive.single { it.email==this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("EMAIL", "") }
-                                val lastLoginString = this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("LAST_LOGIN", "")
-                                db.child(user._id.toString()).child("last_login").setValue(lastLoginString)
-                            }
-                        }
                         p0!!
                         if(p0.children.any()){
                             val salt = p0.children.first().child("salt").value.toString()
                             val password = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((passwordET.text.toString()+salt).toByteArray()))
                             if(p0.children.first().child("password").value.toString().toLowerCase() == password){
-                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                                credentialErrorTV.visibility = View.GONE
-                                finish()
                                 val data = object : Data(){
                                     override fun onComplete() {
+                                        val user = accountsActive.single { it.email==this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("EMAIL", "") }
+                                        val lastLoginString = this@LoginActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("LAST_LOGIN", "")
+                                        db.child(user._id.toString()).child("last_login").setValue(lastLoginString)
                                         val globalPrefEd = PreferenceManager.getDefaultSharedPreferences(this@LoginActivity).edit()
                                         globalPrefEd.putString("in_out_incoming_max", inOutIncomingMax!!.toString())
                                         globalPrefEd.putString("global_stock_precision", globalStockPrecision!!)
                                         globalPrefEd.apply()
                                     }
                                 }
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                credentialErrorTV.visibility = View.GONE
+                                finish()
                             } else { credentialErrorTV.visibility = View.VISIBLE }
                         } else{ credentialErrorTV.visibility = View.VISIBLE }
                     }

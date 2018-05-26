@@ -41,7 +41,7 @@ class ListDialog : DialogFragment() {
                  var availItems = ArrayList<Item>()
                  val data = object : Data(){
                      override fun onComplete() {
-                         availItems = ArrayList(itemsActive.filter { if (presentItems != null) presentItems!!.indexOf(it._id) < 0 else true })
+                         availItems = ArrayList(itemsActive.filter { if (presentItems != null) presentItems.indexOf(it._id) < 0 else true })
                          itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availItems.map { it.itemName })
                      }
                  }
@@ -53,7 +53,7 @@ class ListDialog : DialogFragment() {
                          itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availItems.filter { it.itemName.toLowerCase().contains(term) }.map { it.itemName })
                      }
                  })
-                 itemsLV.setOnItemClickListener { parent, view, position, id ->
+                 itemsLV.setOnItemClickListener { parent, _, position, id ->
                      val item = data.itemsActive.single { it.itemName == itemsLV.getItemAtPosition(position).toString() }
                      val prefEd = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
                      prefEd.putString("ITEMS", pref.getString("ITEMS", "").plus(String.format("%s%d,%d,%d", if(pref.getString("ITEMS", "") == "")"" else ";", item._id, 0, item.unitId)))
