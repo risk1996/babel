@@ -32,7 +32,7 @@
                             android:src="@drawable/icons8_organization_24"/>
                         <TextView
                             android:layout_weight="1"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
                             android:text="@string/report_company_head"
@@ -164,7 +164,7 @@
                             android:src="@drawable/icons8_box_24"/>
                         <TextView
                             android:layout_weight="1"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
                             android:text="@string/report_item_head"
@@ -268,7 +268,7 @@
                             android:src="@drawable/icons8_length_24"/>
                         <TextView
                             android:layout_weight="1"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
                             android:text="Units"
@@ -280,6 +280,22 @@
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:background="@android:color/darker_gray"/>
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Number of measures:"/>
+                        <TextView
+                            android:id="@+id/fragment_report_tv_measure_num"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="viewEnd"
+                            android:text="@string/report_placeholder"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"/>
                     </TableRow>
                     <TableRow>
                         <TextView
@@ -321,11 +337,11 @@
                             android:src="@drawable/icons8_user_account_24"/>
                         <TextView
                             android:layout_weight="1"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="24sp"
                             android:text="Users"
-                            android:textColor="@android:color/black"/>
+                            android:textColor="@android:color/black"
+                            android:textSize="24sp" />
                     </TableRow>
                     <TableRow>
                         <View

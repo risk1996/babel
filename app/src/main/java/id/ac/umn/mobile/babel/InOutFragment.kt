@@ -98,6 +98,7 @@ class InOutFragment : Fragment() {
             val df = DecimalFormat((activity as MainActivity).globalPref!!.getString("global_item_precision", "0.##"))
             holder.removeBtn.setOnClickListener {
                 inOutItems.removeAt(position)
+                saveTransaction()
                 notifyDataSetChanged()
             }
             holder.nameTV.text = item.itemName

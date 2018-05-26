@@ -37,6 +37,8 @@ class ReportFragment : Fragment() {
         val itemShortageTV = activity.findViewById<TextView>(R.id.fragment_report_tv_item_shortage)
         val itemShortageTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_item_shortage_loc)
         val itemStorageTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_item_storage)
+        val measureNumTV = activity.findViewById<TextView>(R.id.fragment_report_tv_measure_num)
+        val unitNumTV = activity.findViewById<TextView>(R.id.fragment_report_tv_unit_num)
         val data = object : Data(){
             override fun onComplete() {
                 if(isAdded){
@@ -48,6 +50,7 @@ class ReportFragment : Fragment() {
                     compOfficeSecondaryTV.text = company.officeSecondary
 
                     itemNumTV.text = itemsActive.filter { it.stocks.none { it == .0 } }.count().toString()
+                    itemNumLocTL.removeAllViews()
                     locationsActive.forEach {
                         val row = TableRow(activity)
                         val labelTV = TextView(activity)
@@ -64,6 +67,7 @@ class ReportFragment : Fragment() {
                         itemNumLocTL.addView(row)
                     }
                     itemShortageTV.text = itemsActive.filter { item -> item.stocks.count { it < item.safetyStock } > 0 }.size.toString()
+                    itemShortageTL.removeAllViews()
                     locationsActive.forEach {
                         val row = TableRow(activity)
                         val labelTV = TextView(activity)
@@ -79,25 +83,34 @@ class ReportFragment : Fragment() {
                         row.addView(valueTV)
                         itemShortageTL.addView(row)
                     }
-//                    units.filter { it.value == 1.0 }.distinctBy { it.measure }.forEach {
-//                        val row = TableRow(activity)
-//                        val labelTV = TextView(activity)
-//                        val valueTV = TextView(activity)
-//                        val value = it
-//                        labelTV.layoutParams = TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
-//                        labelTV.text = String.format("- %s", it.measure)
-//                        row.addView(labelTV)
-//                        valueTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
-//                        valueTV.text = String.format("%s %s",
-//                                items.filter { i -> units.filter { value.measure==it.measure }.singleOrNull { i.unit_id==it._id } != null }
-//                                        .sumByDouble { i -> i.stock/units.single { it._id==i.unit_id }.value }.toString(),
-//                                it.unit_name
-//                        )
-//                        valueTV.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
-//                        valueTV.setTextColor(ContextCompat.getColor(activity, android.R.color.black))
-//                        row.addView(valueTV)
-//                        itemStorageTL.addView(row)
-//                    }
+                    itemStorageTL.removeAllViews()
+                    locationsActive.forEach { loc ->
+                        val row = TableRow(activity)
+                        val labelTV = TextView(activity)
+                        labelTV.layoutParams = TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
+                        labelTV.text = String.format("- %s", loc.code)
+                        row.addView(labelTV)
+                        itemStorageTL.addView(row)
+                        unitsActive.filter { it.value == 1.0 }.distinctBy { it.measure }.forEach {
+                            val row = TableRow(activity)
+                            val labelTV = TextView(activity)
+                            val valueTV = TextView(activity)
+                            val value = it
+                            labelTV.layoutParams = TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
+                            labelTV.text = String.format("   ▪ %s", it.measure)
+                            row.addView(labelTV)
+                            valueTV.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
+                            valueTV.text = String.format("%s %s",
+                                    itemsActive.filter { i -> unitsActive.filter { value.measure==it.measure }.singleOrNull { i.unitId==it._id } != null }
+                                            .sumByDouble { it.stocks[locationsAll.indexOf(loc)] }.toString(),
+                                    it.unitName)
+                            valueTV.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
+                            row.addView(valueTV)
+                            itemStorageTL.addView(row)
+                        }
+                    }
+                    measureNumTV.text = unitsActive.distinctBy { it.measure }.size.toString()
+                    unitNumTV.text = unitsActive.size.toString()
                 }
             }
         }
