@@ -1,80 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<TableLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
-    <TableLayout
-        android:id="@+id/dialog_list_tl_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp">
-        <TableRow android:gravity="center">
-            <TextView
-                android:id="@+id/dialog_list_tv_heading"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="15dp">
+    <TableRow android:gravity="center">
+        <TextView
+            android:id="@+id/dialog_list_tv_heading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:textSize="22sp"
+            android:textColor="@android:color/black"
+            android:text="@string/dialog_heading"/>
+    </TableRow>
+    <TableRow>
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+    </TableRow>
+    <TableRow android:id="@+id/dialog_list_tr_operations">
+        <Switch
+            android:id="@+id/dialog_list_sw_inactive"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/action_show_inactive"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"/>
+        <Button
+            android:id="@+id/dialog_list_btn_new"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/colorAccent"
+            android:text="@string/action_new"/>
+    </TableRow>
+    <TableRow>
+        <android.support.design.widget.TextInputLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
+            <AutoCompleteTextView
+                android:id="@+id/dialog_list_actv_search"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:textSize="22sp"
-                android:textColor="@android:color/black"
-                android:text="@string/dialog_heading"/>
-        </TableRow>
-        <TableRow>
-            <View
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
-        </TableRow>
-        <TableRow android:id="@+id/dialog_list_tr_operations">
-            <Switch
-                android:id="@+id/dialog_list_sw_inactive"
-                android:layout_weight="2"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Show inactive"/>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/darker_gray"/>
-            <Button
-                android:id="@+id/dialog_list_btn_new"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColor="@color/colorAccent"
-                android:text="@string/action_new"/>
-        </TableRow>
-        <TableRow>
-            <android.support.design.widget.TextInputLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true">
-                <AutoCompleteTextView
-                    android:id="@+id/dialog_list_actv_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/manage_prompt_search_items"
-                    android:singleLine="true"/>
-            </android.support.design.widget.TextInputLayout>
-        </TableRow>
-        <TableRow>
-            <ListView
-                android:id="@+id/dialog_list_lv_filtered_search"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
-        </TableRow>
-        <!--<TableRow-->
-            <!--android:id="@+id/dialog_list_tr3"-->
-            <!--android:visibility="gone">-->
-            <!--<ImageView-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/icons8_water_bottle_96"/>-->
-        <!--</TableRow>-->
-    </TableLayout>
-</RelativeLayout>
+                android:hint="@string/manage_prompt_search_items"
+                android:singleLine="true"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+        </android.support.design.widget.TextInputLayout>
+    </TableRow>
+    <TableRow>
+        <ListView
+            android:id="@+id/dialog_list_lv_filtered_search"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+    </TableRow>
+</TableLayout>

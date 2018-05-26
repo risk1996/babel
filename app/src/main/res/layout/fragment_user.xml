@@ -23,7 +23,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Example"
+                        android:text="@string/user_name"
                         android:textSize="36sp"
                         android:textColor="@android:color/black"/>
                 </TableRow>
@@ -33,7 +33,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="example@example.com"
+                        android:text="@string/user_email"
                         android:textSize="14sp"/>
                 </TableRow>
                 <TableRow>
@@ -42,27 +42,61 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Role"
+                        android:text="@string/user_role"
                         android:textSize="18sp"
                         android:textColor="@android:color/black"/>
                 </TableRow>
                 <TableRow>
-                    <TextView
-                        android:id="@+id/fragment_user_tv_reg_date"
+                    <TableLayout
                         android:layout_weight="1"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="1 Jan 1970"
-                        android:textSize="14sp"/>
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/fragment_user_tv_last_login"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="1 Jan 1970"
-                        android:textSize="14sp"/>
+                        android:layout_height="wrap_content">
+                        <TableRow>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/user_label_dob" />
+                            <TextView
+                                android:id="@+id/fragment_user_tv_dob_date"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="@string/user_dob"
+                                android:textSize="14sp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"/>
+                        </TableRow>
+                        <TableRow>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/user_label_reg_date"/>
+                            <TextView
+                                android:id="@+id/fragment_user_tv_reg_date"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="@string/user_reg_date"
+                                android:textSize="14sp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"/>
+                        </TableRow>
+                        <TableRow>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/user_label_last_login"/>
+                            <TextView
+                                android:id="@+id/fragment_user_tv_last_login"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="@string/user_last_login"
+                                android:textSize="14sp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"/>
+                        </TableRow>
+                    </TableLayout>
                 </TableRow>
             </TableLayout>
         </TableRow>
@@ -91,7 +125,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:text="Other Users"/>
+                android:text="@string/user_other_user_head"/>
         </TableRow>
         <TableRow>
             <View

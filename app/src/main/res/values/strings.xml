@@ -91,6 +91,10 @@
     <string name="bottom_dialog_report_out_of_stock">OOS</string>
 
     <!--User Fragment-->
+    <string name="user_label_dob">Date of birth:</string>
+    <string name="user_label_reg_date">Registered since:</string>
+    <string name="user_label_last_login">Last login:</string>
+    <string name="user_other_user_head">Other Users</string>
     <string name="bottom_dialog_user_new_user">New</string>
     <string name="bottom_dialog_user_settings">Settings</string>
     <string name="bottom_dialog_user_logout">Logout</string>
@@ -118,12 +122,19 @@
     <string name="action_yes">Yes</string>
     <string name="action_no">No</string>
     <string name="action_new">New</string>
+    <string name="action_show_inactive">Active</string>
 
     <!--Placeholders-->
     <string name="item_name">&lt;ITEM NAME&gt;</string>
     <string name="item_stock">&lt;ITEM STOCK&gt;</string>
     <string name="item_location">&lt;ITEM LOCATION&gt;</string>
     <string name="report_placeholder">&lt;REPORT PLACEHOLDER&gt;</string>
+    <string name="user_name">&lt;USERNAME&gt;</string>
+    <string name="user_email">&lt;EMAIL&gt;</string>
+    <string name="user_role">&lt;ROLE&gt;</string>
+    <string name="user_dob">&lt;DOB&gt;</string>
+    <string name="user_reg_date">&lt;REGISTER DATE&gt;</string>
+    <string name="user_last_login">&lt;LAST LOGIN&gt;</string>
     <string name="dialog_heading">&lt;DIALOG HEADING&gt;</string>
     <string name="dialog_message">&lt;DIALOG MESSAGE&gt;</string>
 </resources>

@@ -66,10 +66,6 @@ class UserActivity : AppCompatActivity() {
             }
             else -> { finish() }
         }
-        fun updateDateInView() {
-            val myFormat = "dd MMM yyyy" // mention the format you need
-            dobTV!!.text = String.format("Date of birth: %s", SimpleDateFormat(myFormat, Locale.getDefault()).format(calendar.time))
-        }
 
         val data = object : Data(){
             override fun onComplete() {
@@ -78,7 +74,7 @@ class UserActivity : AppCompatActivity() {
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, month)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    updateDateInView()
+                    dobTV!!.text = String.format("Date of birth: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(calendar.time))
                 }
                 dobB.setOnClickListener { DatePickerDialog(this@UserActivity,
                         dateSetListener,
