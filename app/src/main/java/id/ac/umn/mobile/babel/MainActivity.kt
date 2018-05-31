@@ -14,6 +14,9 @@ import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
     var privilege : String? = null
+    var accountID : String? = null
+    var locationID : String? = null
+    var thirdPartyID : String? = null
     val manageFragment = ManageFragment()
     val inOutFragment = InOutFragment()
     val reportFragment = ReportFragment()
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             override fun onComplete() {
                 val user = accountsActive.single { it.email==this@MainActivity.getSharedPreferences("LOGIN", Context.MODE_PRIVATE).getString("EMAIL", "") }
                 privilege = user.role
+                accountID = user._id.toString()
             }
         }
         globalPref = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)!!
@@ -46,6 +50,9 @@ class MainActivity : AppCompatActivity() {
         moreFAB.setOnClickListener {
             val bottomModal = MainModal()
             bottomModal.privilege = privilege!!
+            bottomModal.accountID = accountID!!
+            bottomModal.locationID = locationID!!
+            bottomModal.thirdPartyID = thirdPartyID!!
             bottomModal.show(supportFragmentManager, bottomModal.tag)
         }
         tabsTL.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{

@@ -43,6 +43,9 @@ class InOutFragment : Fragment() {
                 directionTV.text = if(act == "incoming") "←" else "→"
                 purposeSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item,
                         thirdPartiesActive.filter { act=="incoming" && it.role=="S" || act=="outgoing" && it.role=="C" }.map { it.tpName })
+
+                (activity as MainActivity).locationID = locationsSpn.selectedItem.toString()
+                (activity as MainActivity).thirdPartyID = purposeSpn.selectedItem.toString()
             }
         }}
         listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged(); data.onComplete() }

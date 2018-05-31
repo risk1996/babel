@@ -121,7 +121,7 @@ abstract class Data{
                     ))
                 }
                 try{ onComplete() }
-                catch (e : Exception){ e.printStackTrace() }
+                catch (e : Exception){ /*e.printStackTrace()*/ }
             }
         })
     }

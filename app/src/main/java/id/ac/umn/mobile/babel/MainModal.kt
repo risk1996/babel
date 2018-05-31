@@ -15,39 +15,63 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainModal : BottomSheetDialogFragment() {
     var privilege : String = ""
+    var accountID : String = ""
+    var locationID : String = ""
+    var thirdPartyID : String = ""
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
+        var history : List<Pair<Int, Double>> = mutableListOf()
         override fun onYesClicked() {
             val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
             val itemRaw = pref.getString("ITEMS", "").split(";")
             if(!itemRaw.contains("")) itemRaw.forEach {
                 var bool = true
                 val itemSpec = it.split(",").map { it.toInt() }
-                val db = FirebaseDatabase.getInstance().reference.child("items")
                 val data = object : Data(){
                     override fun onComplete() {
                         if (bool){
                             bool = false
+
+                            val item = itemsActive.single { it._id==itemSpec[0] }
+                            val unitFrom = unitsActive.single { it._id==item.unitId }
+                            val unitTo = unitsActive.single { it._id==itemSpec[2] }
+//                            val accountID = accountsActive.single { it._id== }
+//                            val locationID = locationsActive.single { it._id== }
+//                            val thirdPartyID = thirdPartiesActive.single { it._id== }
+
+                            if(value == "outgoing") incrementStock = itemSpec[1] * (-1)
+                            else if(value == "incoming") incrementStock = itemSpec[1]
+                            val updateValue = item.stocks[0] + (incrementStock * unitTo.value * unitTo.increment)
+                            history += Pair(itemSpec[0], (incrementStock * unitTo.value * unitTo.increment))
+
+                            val db = FirebaseDatabase.getInstance().reference.child("items")
                             db.runTransaction(object : Transaction.Handler{
                                 override fun doTransaction(p0: MutableData?): Transaction.Result {
-                                    val item = itemsActive.single { it._id==itemSpec[0] }
-                                    val unitFrom = unitsActive.single { it._id==item.unitId }
-                                    val unitTo = unitsActive.single { it._id==itemSpec[2] }
-                                    if(value == "outgoing") incrementStock = itemSpec[1] * (-1)
-                                    else if(value == "incoming") incrementStock = itemSpec[1]
-                                    val updateValue = item.stocks[0] + (incrementStock * unitTo.value  * unitTo.increment)
                                     p0!!.child(itemSpec[0].toString()).child("stocks").child("0").value = updateValue.toString()
                                     return Transaction.success(p0)
                                 }
                                 override fun onComplete(p0: DatabaseError?, p1: Boolean, p2: DataSnapshot?) {  }
                             })
+
+                            val db2 = FirebaseDatabase.getInstance().reference.child("inout")
+                            val inoutHistory = mutableMapOf<String, Any>()
+                            inoutHistory["in_out_time"] = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                            inoutHistory["account_id"] = accountID
+                            inoutHistory["location_id"] = locationID
+                            inoutHistory["third_party_id"] = thirdPartyID
+                            inoutHistory["in_out_detail"] = history
+                            val transactionID = if (transactions.count() == 0) 1 else transactions.last()._id + 1 // masih ngaco buat add new ID
+                            db2.child(transactionID.toString()).setValue(inoutHistory)
                         }
                     }
                 }
             }
+
             Snackbar.make( activity.findViewById(android.R.id.content), "Changes have been committed", Snackbar.LENGTH_LONG).show()
             activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().clear().apply()
             (activity as MainActivity).inOutFragment.loadTransaction()
@@ -131,6 +155,7 @@ class MainModal : BottomSheetDialogFragment() {
                     dismissAllowingStateLoss()
                 }
                 addItemBtn.setOnClickListener {
+                    (activity as MainActivity).inOutFragment.saveTransaction()
                     val dialog = ListDialog()
                     dialog.content = "IN OUT ITEM"
                     dialog.show(activity!!.fragmentManager, dialog.tag)
@@ -146,6 +171,9 @@ class MainModal : BottomSheetDialogFragment() {
                         dialog.heading = "Commit Changes"
                         dialog.message = "Are you sure you want to commit?"
                         dialog.value = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
+                        dialog.accountID = accountID
+                        dialog.locationID = locationID
+                        dialog.thirdPartyID = thirdPartyID
                         dialog.highlight = dialog.HIGHLIGHT_NO
                         dialog.show(activity!!.fragmentManager, "Dialog Yes No")
                     }

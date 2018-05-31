@@ -7,6 +7,7 @@ import android.content.Intent
 import android.view.*
 import android.widget.*
 import com.google.firebase.database.FirebaseDatabase
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -23,6 +24,7 @@ class UserFragment : Fragment() {
         val nameTV = activity.findViewById<TextView>(R.id.fragment_user_tv_name)
         val emailTV = activity.findViewById<TextView>(R.id.fragment_user_tv_email)
         val roleTV = activity.findViewById<TextView>(R.id.fragment_user_tv_role)
+        val dobTV = activity.findViewById<TextView>(R.id.fragment_user_tv_dob_date)
         val regDateTV = activity.findViewById<TextView>(R.id.fragment_user_tv_reg_date)
         val lastLoginTV = activity.findViewById<TextView>(R.id.fragment_user_tv_last_login)
         val changePassF = activity.findViewById<Button>(R.id.fragment_user_btn_change_password)
@@ -37,11 +39,14 @@ class UserFragment : Fragment() {
                     emailTV.text = user.email
                     roleTV.text = user.role
 
+                    val dob = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(user.dob)
+                    dobTV.text = String.format("%1\$s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(dob))
+
                     val regDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(user.regDate)
-                    regDateTV.text = String.format("Registered since: %1\$s", SimpleDateFormat("E, dd MM yyyy", Locale.getDefault()).format(regDate))
+                    regDateTV.text = String.format("%1\$s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(regDate))
 
                     val lastLogin = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(user.lastLogin)
-                    lastLoginTV.text = String.format("Last login: %1\$s", SimpleDateFormat("E, dd MM yyyy", Locale.getDefault()).format(lastLogin))
+                    lastLoginTV.text = String.format("%1\$s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(lastLogin))
 
                     val acc = ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1)
                     accountsActive.filter { it._id != user._id }.forEach {  acc.add(String.format("%s (%s)", it.name, it.role )) }
