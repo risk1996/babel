@@ -17,6 +17,7 @@ import android.widget.Toast
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainModal : BottomSheetDialogFragment() {
     var privilege : String = ""
@@ -25,7 +26,7 @@ class MainModal : BottomSheetDialogFragment() {
     var thirdPartyID : String = ""
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
-        var history : List<Pair<Int, Double>> = mutableListOf()
+        val history = ArrayList<Pair<Int, Double>>()
         override fun onYesClicked() {
             val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
             val itemRaw = pref.getString("ITEMS", "").split(";")
@@ -40,10 +41,6 @@ class MainModal : BottomSheetDialogFragment() {
                             val item = itemsActive.single { it._id==itemSpec[0] }
                             val unitFrom = unitsActive.single { it._id==item.unitId }
                             val unitTo = unitsActive.single { it._id==itemSpec[2] }
-//                            val accountID = accountsActive.single { it._id== }
-//                            val locationID = locationsActive.single { it._id== }
-//                            val thirdPartyID = thirdPartiesActive.single { it._id== }
-
                             if(value == "outgoing") incrementStock = itemSpec[1] * (-1)
                             else if(value == "incoming") incrementStock = itemSpec[1]
                             val updateValue = item.stocks[0] + (incrementStock * unitTo.value * unitTo.increment)
@@ -60,11 +57,11 @@ class MainModal : BottomSheetDialogFragment() {
 
                             val db2 = FirebaseDatabase.getInstance().reference.child("inout")
                             val inoutHistory = mutableMapOf<String, Any>()
-                            inoutHistory["in_out_time"] = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                            inoutHistory["io_time"] = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                             inoutHistory["account_id"] = accountID
                             inoutHistory["location_id"] = locationID
                             inoutHistory["third_party_id"] = thirdPartyID
-                            inoutHistory["in_out_detail"] = history
+                            inoutHistory["io_detail"] = history
                             val transactionID = if (transactions.count() == 0) 1 else transactions.last()._id + 1 // masih ngaco buat add new ID
                             db2.child(transactionID.toString()).setValue(inoutHistory)
                         }
