@@ -5,5 +5,120 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ThirdPartyActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_third_party_tv_title"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="TITLE"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_third_party_et_unit_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Third Party Name"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+                <Switch
+                    android:id="@+id/activity_third_party_sw_active"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:checked="true"
+                    android:text="Active"/>
+            </TableRow>
 
+
+            <TableRow>
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+                    <TableRow>
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Third Party Role"/>
+                    </TableRow>
+                    <RadioGroup
+                        android:id="@+id/activity_third_party_rg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/activity_third_party_rb_customer"
+                            android:text="Customer"
+                            android:checked="true"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+                        <RadioButton
+                            android:id="@+id/activity_third_party_rb_supplier"
+                            android:text="Supplier"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+                    </RadioGroup>
+                </TableLayout>
+            </TableRow>
+
+
+            <TableRow>
+                <Button
+                    android:id="@+id/activity_third_party_btn_cancel"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/password_action_cancel"
+                    android:textColor="@android:color/darker_gray"/>
+                <Button
+                    android:id="@+id/activity_third_party_btn_ok"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:background="@android:color/transparent"
+                    android:text="OK"
+                    android:textColor="@color/colorAccent"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_third_party_tv_errors"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#ffbaba"
+                    android:textColor="#ff0000"
+                    android:visibility="gone"
+                    android:text="placeholder"/>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -18,6 +18,7 @@ import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MainModal : BottomSheetDialogFragment() {
     var privilege : String = ""
@@ -26,7 +27,7 @@ class MainModal : BottomSheetDialogFragment() {
     var thirdPartyID : String = ""
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
-        val history = ArrayList<Pair<Int, Double>>()
+        val history = mutableMapOf<String, Any>()
         override fun onYesClicked() {
             val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
             val itemRaw = pref.getString("ITEMS", "").split(";")
@@ -44,7 +45,7 @@ class MainModal : BottomSheetDialogFragment() {
                             if(value == "outgoing") incrementStock = itemSpec[1] * (-1)
                             else if(value == "incoming") incrementStock = itemSpec[1]
                             val updateValue = item.stocks[0] + (incrementStock * unitTo.value * unitTo.increment)
-                            history += Pair(itemSpec[0], (incrementStock * unitTo.value * unitTo.increment))
+                            history[itemSpec[0].toString()] = (incrementStock * unitTo.value * unitTo.increment)
 
                             val db = FirebaseDatabase.getInstance().reference.child("items")
                             db.runTransaction(object : Transaction.Handler{
