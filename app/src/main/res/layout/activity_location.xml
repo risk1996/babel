@@ -5,5 +5,101 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LocationActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_location_tv_title"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="TITLE"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_location_et_location_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Location Code"
+                        android:inputType="textCapCharacters"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+                <Switch
+                    android:id="@+id/activity_location_sw_active"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:checked="true"
+                    android:text="Active"/>
+            </TableRow>
 
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_location_et_location_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Location Name"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+
+            <TableRow android:paddingTop="10dp">
+                <Button
+                    android:id="@+id/activity_location_btn_cancel"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/password_action_cancel"
+                    android:textColor="@android:color/darker_gray"/>
+                <Button
+                    android:id="@+id/activity_location_btn_ok"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:background="@android:color/transparent"
+                    android:text="OK"
+                    android:textColor="@color/colorAccent"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_location_tv_errors"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#ffbaba"
+                    android:textColor="#ff0000"
+                    android:visibility="gone"
+                    android:text="placeholder"/>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>
