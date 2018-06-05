@@ -69,6 +69,7 @@ class ListDialog : DialogFragment() {
                     val intent = Intent(activity, ItemActivity::class.java)
                     intent.putExtra("OPERATION", "NEW")
                     startActivity(intent)
+                    dismissAllowingStateLoss()
                 }
                 var availItem = ArrayList<Item>()
                 val data = object : Data(){
@@ -103,6 +104,7 @@ class ListDialog : DialogFragment() {
                     val intent = Intent(activity, UnitActivity::class.java)
                     intent.putExtra("OPERATION", "NEW")
                     startActivity(intent)
+                    dismissAllowingStateLoss()
                 }
                 var availUnits = ArrayList<Unit>()
                 val data = object : Data(){
@@ -158,7 +160,12 @@ class ListDialog : DialogFragment() {
 
             "THIRD PARTIES" -> {
                 headingTV.text = "MANAGE THIRD PARTIES"
-                newBtn.setOnClickListener {  }
+                newBtn.setOnClickListener {
+                    val intent = Intent(activity, ThirdPartyActivity::class.java)
+                    intent.putExtra("OPERATION", "NEW")
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
+                }
                 var availThirdParty = ArrayList<ThirdParty>()
                 val data = object : Data(){
                     override fun onComplete() {
@@ -176,8 +183,14 @@ class ListDialog : DialogFragment() {
                         itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availThirdParty.filter { it.tpName.toLowerCase().contains(term) }.map { it.tpName })
                     }
                 })
-                itemsLV.setOnItemClickListener { adapterView, _, i, l ->
-
+                itemsLV.setOnItemClickListener { adapterView, _, position, l ->
+                    val unit = data.thirdPartiesAll.single { it.tpName == itemsLV.getItemAtPosition(position).toString() }
+                    val intent = Intent(activity, UnitActivity::class.java)
+                    intent.putExtra("OPERATION", "EDIT")
+//                    Log.d("", unit._id.toString())
+                    intent.putExtra("THIRD_PARTY_ID", unit._id)
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
                 }
             }
             else -> dismissAllowingStateLoss()

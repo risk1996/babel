@@ -51,8 +51,12 @@ class MainActivity : AppCompatActivity() {
             val bottomModal = MainModal()
             bottomModal.privilege = privilege!!
             bottomModal.accountID = accountID!!
-            bottomModal.locationID = locationID!!
-            bottomModal.thirdPartyID = thirdPartyID!!
+
+            if (tabsTL.selectedTabPosition == 1){
+                bottomModal.locationID = locationID!!
+                bottomModal.thirdPartyID = thirdPartyID!!
+            }
+
             bottomModal.show(supportFragmentManager, bottomModal.tag)
         }
         tabsTL.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{

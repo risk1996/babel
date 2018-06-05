@@ -32,7 +32,7 @@
                     android:layout_margin="5dp"
                     app:passwordToggleEnabled="true">
                     <EditText
-                        android:id="@+id/activity_third_party_et_unit_name"
+                        android:id="@+id/activity_third_party_et_third_party_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Third Party Name"
