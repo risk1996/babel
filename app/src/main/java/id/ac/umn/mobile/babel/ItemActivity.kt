@@ -149,7 +149,6 @@ class ItemActivity : AppCompatActivity() {
                 }
 
                 okB.setOnClickListener{
-                    finish()
                     when (act) {
                         "VIEW" -> {
                             val intent = Intent(this@ItemActivity, ItemActivity::class.java)
@@ -170,6 +169,7 @@ class ItemActivity : AppCompatActivity() {
                             db.child(itemId.toString()).setValue(changedItem)
                         }
                     }
+                    finish()
                 }
             }
         }

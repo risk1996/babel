@@ -85,8 +85,16 @@
                     </RadioGroup>
                 </TableLayout>
             </TableRow>
-
-
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_third_party_tv_errors"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#ffbaba"
+                    android:textColor="#ff0000"
+                    android:visibility="gone" />
+            </TableRow>
             <TableRow>
                 <Button
                     android:id="@+id/activity_third_party_btn_cancel"
@@ -108,17 +116,6 @@
                     android:background="@android:color/transparent"
                     android:text="OK"
                     android:textColor="@color/colorAccent"/>
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:id="@+id/activity_third_party_tv_errors"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="#ffbaba"
-                    android:textColor="#ff0000"
-                    android:visibility="gone"
-                    android:text="placeholder"/>
             </TableRow>
         </TableLayout>
     </ScrollView>

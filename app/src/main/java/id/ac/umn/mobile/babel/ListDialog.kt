@@ -185,7 +185,7 @@ class ListDialog : DialogFragment() {
                 })
                 itemsLV.setOnItemClickListener { adapterView, _, position, l ->
                     val unit = data.thirdPartiesAll.single { it.tpName == itemsLV.getItemAtPosition(position).toString() }
-                    val intent = Intent(activity, UnitActivity::class.java)
+                    val intent = Intent(activity, ThirdPartyActivity::class.java)
                     intent.putExtra("OPERATION", "EDIT")
 //                    Log.d("", unit._id.toString())
                     intent.putExtra("THIRD_PARTY_ID", unit._id)
