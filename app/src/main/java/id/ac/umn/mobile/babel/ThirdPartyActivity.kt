@@ -16,7 +16,9 @@ class ThirdPartyActivity : AppCompatActivity() {
         val titleTV = findViewById<TextView>(R.id.activity_third_party_tv_title)
         val thirdPartyNameET = findViewById<EditText>(R.id.activity_third_party_et_third_party_name)
         val activeSW = findViewById<Switch>(R.id.activity_third_party_sw_active)
-        val roleS = findViewById<RadioGroup>(R.id.activity_third_party_rg)
+        val roleRG = findViewById<RadioGroup>(R.id.activity_third_party_rg)
+        val roleCRB = findViewById<RadioButton>(R.id.activity_third_party_rb_customer)
+        val roleSRB = findViewById<RadioButton>(R.id.activity_third_party_rb_supplier)
         val errorsTV = findViewById<TextView>(R.id.activity_third_party_tv_errors)
         val cancelB = findViewById<Button>(R.id.activity_third_party_btn_cancel)
         val okB = findViewById<Button>(R.id.activity_third_party_btn_ok)
@@ -25,6 +27,8 @@ class ThirdPartyActivity : AppCompatActivity() {
 
         when (act) {
             "EDIT" -> {
+                roleCRB.isEnabled = false
+                roleSRB.isEnabled = false
                 titleTV.text = "EDIT THIRD PARTY"
                 okB.text = "Confirm Edit"
             }
@@ -42,7 +46,7 @@ class ThirdPartyActivity : AppCompatActivity() {
                     thirdParty!!
                     thirdPartyNameET.setText(thirdParty.tpName)
                     activeSW.isChecked = thirdParty.status == "active"
-                    if(thirdParty.role=="S") roleS.check(R.id.activity_third_party_rb_supplier) else roleS.check(R.id.activity_third_party_rb_customer)
+                    if(thirdParty.role=="S") roleRG.check(R.id.activity_third_party_rb_supplier) else roleRG.check(R.id.activity_third_party_rb_customer)
                 }
                 thirdPartyNameET.addTextChangedListener(object : TextWatcher{
                     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -63,7 +67,7 @@ class ThirdPartyActivity : AppCompatActivity() {
                     if (errorsTV.visibility == View.GONE) {
                         val db = FirebaseDatabase.getInstance().reference.child("third_parties")
                         val changedTp = mutableMapOf<String, Any>()
-                        changedTp["role"] = findViewById<RadioButton>(roleS.checkedRadioButtonId).text.toString().substring(0,1)
+                        changedTp["role"] = findViewById<RadioButton>(roleRG.checkedRadioButtonId).text.toString().substring(0,1)
                         changedTp["status"] = if(activeSW.isChecked) "active" else "inactive"
                         changedTp["tp_name"] = thirdPartyNameET.text.toString()
                         val itemId = if (act == "NEW") thirdPartiesAll.last()._id + 1 else thirdParty!!._id
