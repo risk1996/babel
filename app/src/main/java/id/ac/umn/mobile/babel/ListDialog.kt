@@ -127,7 +127,6 @@ class ListDialog : DialogFragment() {
                     val unit = data.unitsAll.single { it.unitName == itemsLV.getItemAtPosition(position).toString() }
                     val intent = Intent(activity, UnitActivity::class.java)
                     intent.putExtra("OPERATION", "EDIT")
-//                    Log.d("", unit._id.toString())
                     intent.putExtra("UNIT_ID", unit._id)
                     startActivity(intent)
                     dismissAllowingStateLoss()
@@ -135,7 +134,12 @@ class ListDialog : DialogFragment() {
             }
             "LOCATIONS" -> {
                 headingTV.text = "MANAGE LOCATIONS"
-                newBtn.setOnClickListener {  }
+                newBtn.setOnClickListener {
+                    val intent = Intent(activity, LocationActivity::class.java)
+                    intent.putExtra("OPERATION", "NEW")
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
+                }
                 var availLocation = ArrayList<Location>()
                 val data = object : Data(){
                     override fun onComplete() {
@@ -153,8 +157,13 @@ class ListDialog : DialogFragment() {
                         itemsLV.adapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, availLocation.filter { it.position.toLowerCase().contains(term) }.map { it.position })
                     }
                 })
-                itemsLV.setOnItemClickListener { adapterView, _, i, l ->
-
+                itemsLV.setOnItemClickListener { adapterView, _, position, l ->
+                    val unit = data.locationsAll.single { it.position == itemsLV.getItemAtPosition(position).toString() }
+                    val intent = Intent(activity, LocationActivity::class.java)
+                    intent.putExtra("OPERATION", "EDIT")
+                    intent.putExtra("LOCATION_ID", unit._id)
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
                 }
             }
 
@@ -187,7 +196,6 @@ class ListDialog : DialogFragment() {
                     val unit = data.thirdPartiesAll.single { it.tpName == itemsLV.getItemAtPosition(position).toString() }
                     val intent = Intent(activity, ThirdPartyActivity::class.java)
                     intent.putExtra("OPERATION", "EDIT")
-//                    Log.d("", unit._id.toString())
                     intent.putExtra("THIRD_PARTY_ID", unit._id)
                     startActivity(intent)
                     dismissAllowingStateLoss()

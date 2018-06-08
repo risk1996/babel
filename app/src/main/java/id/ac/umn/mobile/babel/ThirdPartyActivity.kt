@@ -60,9 +60,9 @@ class ThirdPartyActivity : AppCompatActivity() {
                     }
                 })
                 okB.setOnClickListener {
-                    if (thirdPartiesAll.firstOrNull { it.tpName.toLowerCase() == thirdPartyNameET.text.toString().toLowerCase() } != null){
+                    if (thirdPartiesAll.firstOrNull { it.tpName.toLowerCase() == thirdPartyNameET.text.toString().toLowerCase() } != null && act == "NEW"){
                         errorsTV.visibility = View.VISIBLE
-                        errorsTV.text = "Unit Name already exists in another Unit Measurement"
+                        errorsTV.text = "Third Party Name already exists"
                     }
                     if (errorsTV.visibility == View.GONE) {
                         val db = FirebaseDatabase.getInstance().reference.child("third_parties")
@@ -72,8 +72,8 @@ class ThirdPartyActivity : AppCompatActivity() {
                         changedTp["tp_name"] = thirdPartyNameET.text.toString()
                         val itemId = if (act == "NEW") thirdPartiesAll.last()._id + 1 else thirdParty!!._id
                         db.child(itemId.toString()).setValue(changedTp)
+                        finish()
                     }
-                    finish()
                 }
             }
         }

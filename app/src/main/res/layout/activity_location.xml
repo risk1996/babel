@@ -97,8 +97,7 @@
                     android:layout_height="wrap_content"
                     android:background="#ffbaba"
                     android:textColor="#ff0000"
-                    android:visibility="gone"
-                    android:text="placeholder"/>
+                    android:visibility="gone" />
             </TableRow>
         </TableLayout>
     </ScrollView>

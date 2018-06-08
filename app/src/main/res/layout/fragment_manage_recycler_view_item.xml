@@ -20,6 +20,7 @@
                     android:id="@+id/fragment_manage_recycler_view_iv_thumbnail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:scaleType="fitXY"
                     android:src="@drawable/icons8_box_48"/>
                 <TableLayout
