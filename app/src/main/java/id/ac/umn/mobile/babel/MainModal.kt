@@ -23,14 +23,14 @@ import kotlin.collections.HashMap
 class MainModal : BottomSheetDialogFragment() {
     var privilege : String = ""
     var accountID : String = ""
-    var locationID : String = ""
-    var thirdPartyID : String = ""
     class CommitDialog : YesNoDialog(){
         var incrementStock = 0
         val history = mutableMapOf<String, Any>()
         override fun onYesClicked() {
             val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
             val itemRaw = pref.getString("ITEMS", "").split(";")
+            val locationID = pref.getString("LOCATION", "")
+            val thirdPartyID = pref.getString("THIRD_PARTY", "")
             if(!itemRaw.contains("")) itemRaw.forEach {
                 var bool = true
                 val itemSpec = it.split(",").map { it.toInt() }
@@ -44,13 +44,13 @@ class MainModal : BottomSheetDialogFragment() {
                             val unitTo = unitsActive.single { it._id==itemSpec[2] }
                             if(value == "outgoing") incrementStock = itemSpec[1] * (-1)
                             else if(value == "incoming") incrementStock = itemSpec[1]
-                            val updateValue = item.stocks[0] + (incrementStock * unitTo.value * unitTo.increment)
+                            val updateValue = item.stocks[locationID.toInt()] + (incrementStock * unitTo.value * unitTo.increment)
                             history[itemSpec[0].toString()] = (incrementStock * unitTo.value * unitTo.increment)
 
                             val db = FirebaseDatabase.getInstance().reference.child("items")
                             db.runTransaction(object : Transaction.Handler{
                                 override fun doTransaction(p0: MutableData?): Transaction.Result {
-                                    p0!!.child(itemSpec[0].toString()).child("stocks").child("0").value = updateValue.toString()
+                                    p0!!.child(itemSpec[0].toString()).child("stocks").child(locationID).value = updateValue.toString()
                                     return Transaction.success(p0)
                                 }
                                 override fun onComplete(p0: DatabaseError?, p1: Boolean, p2: DataSnapshot?) {  }
@@ -170,8 +170,8 @@ class MainModal : BottomSheetDialogFragment() {
                         dialog.message = "Are you sure you want to commit?"
                         dialog.value = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
                         dialog.accountID = accountID
-                        dialog.locationID = locationID
-                        dialog.thirdPartyID = thirdPartyID
+//                        dialog.locationID = locationID
+//                        dialog.thirdPartyID = thirdPartyID
                         dialog.highlight = dialog.HIGHLIGHT_NO
                         dialog.show(activity!!.fragmentManager, "Dialog Yes No")
                     }

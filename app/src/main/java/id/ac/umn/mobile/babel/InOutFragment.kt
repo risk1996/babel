@@ -10,6 +10,7 @@ import android.preference.PreferenceManager
 import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,8 +45,8 @@ class InOutFragment : Fragment() {
                 purposeSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item,
                         thirdPartiesActive.filter { act=="incoming" && it.role=="S" || act=="outgoing" && it.role=="C" }.map { it.tpName })
 
-                (activity as MainActivity).locationID = locationsSpn.selectedItemId.toString()
-                (activity as MainActivity).thirdPartyID = purposeSpn.selectedItemId.toString()
+                locationsSpn.setSelection(pref.getString("LOCATION", "0").toInt())
+                purposeSpn.setSelection(pref.getString("THIRD_PARTY", "0").toInt())
             }
         }}
         listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged(); data.onComplete() }
@@ -62,7 +63,11 @@ class InOutFragment : Fragment() {
     }
     fun saveTransaction(){
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
+        val locationsID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations).selectedItemId.toString()
+        val purposeID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose).selectedItemId.toString()
         pref.putString("ITEMS", inOutItems.joinToString(";") { String.format("%d,%d,%d", it.itemId, it.amount, it.unitId) })
+        pref.putString("LOCATION", locationsID)
+        pref.putString("THIRD_PARTY", purposeID)
         pref.apply()
     }
     fun loadTransaction(){

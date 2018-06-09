@@ -15,8 +15,8 @@ import com.google.firebase.database.*
 class MainActivity : AppCompatActivity() {
     var privilege : String? = null
     var accountID : String? = null
-    var locationID : String? = null
-    var thirdPartyID : String? = null
+//    var locationID : String? = null
+//    var thirdPartyID : String? = null
     val manageFragment = ManageFragment()
     val inOutFragment = InOutFragment()
     val reportFragment = ReportFragment()
@@ -52,10 +52,10 @@ class MainActivity : AppCompatActivity() {
             bottomModal.privilege = privilege!!
             bottomModal.accountID = accountID!!
 
-            if (tabsTL.selectedTabPosition == 1){
-                bottomModal.locationID = locationID!!
-                bottomModal.thirdPartyID = thirdPartyID!!
-            }
+//            if (tabsTL.selectedTabPosition == 1){
+//                bottomModal.locationID = locationID!!
+//                bottomModal.thirdPartyID = thirdPartyID!!
+//            }
 
             bottomModal.show(supportFragmentManager, bottomModal.tag)
         }
