@@ -47,6 +47,35 @@ class InOutFragment : Fragment() {
 
                 locationsSpn.setSelection(pref.getString("LOCATION", "0").toInt())
                 purposeSpn.setSelection(pref.getString("THIRD_PARTY", "0").toInt())
+
+                locationsSpn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                        val pref2 = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
+                        val locationsID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations).selectedItemId.toString()
+                        val purposeID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose).selectedItemId.toString()
+                        pref2.putString("LOCATION", locationsID)
+                        pref2.putString("THIRD_PARTY", purposeID)
+                        pref2.apply()
+
+                        loadTransaction()
+                    }
+                }
+                purposeSpn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                        val pref2 = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
+                        val locationsID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations).selectedItemId.toString()
+                        val purposeID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose).selectedItemId.toString()
+                        pref2.putString("LOCATION", locationsID)
+                        pref2.putString("THIRD_PARTY", purposeID)
+                        pref2.apply()
+
+                        loadTransaction()
+                    }
+                }
             }
         }}
         listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged(); data.onComplete() }
@@ -63,11 +92,7 @@ class InOutFragment : Fragment() {
     }
     fun saveTransaction(){
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
-        val locationsID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations).selectedItemId.toString()
-        val purposeID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose).selectedItemId.toString()
         pref.putString("ITEMS", inOutItems.joinToString(";") { String.format("%d,%d,%d", it.itemId, it.amount, it.unitId) })
-        pref.putString("LOCATION", locationsID)
-        pref.putString("THIRD_PARTY", purposeID)
         pref.apply()
     }
     fun loadTransaction(){
