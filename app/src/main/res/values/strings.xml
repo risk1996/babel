@@ -79,12 +79,15 @@
     <string name="report_company_site">Company website:</string>
     <string name="report_company_main_office">Company main office:</string>
     <string name="report_company_secondary_office">Company secondary office:</string>
-    <string name="report_company_detail">Company Details</string>
     <string name="report_item_head">Item Report</string>
     <string name="report_item_item_num">Number of items:</string>
     <string name="report_item_item_shortage">Number of shortage items:</string>
     <string name="report_item_item_storage">Storage summary:</string>
-    <string name="report_item_item_detail">Item Details</string>
+    <string name="report_unit_head">Units</string>
+    <string name="report_unit_measure_num">Number of measures:</string>
+    <string name="report_unit_unit_num">Number of units:</string>
+    <string name="report_user_head">Users</string>
+    <string name="report_user_user_num">Number of users:</string>
     <string name="bottom_dialog_report_edit_company">Edit</string>
     <string name="bottom_dialog_report_track_incoming">Track In</string>
     <string name="bottom_dialog_report_track_outgoing">Track Out</string>

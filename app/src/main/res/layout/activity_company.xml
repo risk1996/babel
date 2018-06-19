@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CompanyActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_company_tv_title"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="TITLE"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_company_et_company_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Company Name"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_company_et_company_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Company Status"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_company_et_company_status_short"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Company Status Short"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_company_et_company_site"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Company Website"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_company_et_company_office_main"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Company Main Office"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:passwordToggleEnabled="true">
+                    <EditText
+                        android:id="@+id/activity_company_et_company_office_secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Company Secondary Office"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "/>
+                </android.support.design.widget.TextInputLayout>
+            </TableRow>
+            <TableRow>
+                <Button
+                    android:id="@+id/activity_company_btn_cancel"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/password_action_cancel"
+                    android:textColor="@android:color/darker_gray"/>
+                <Button
+                    android:id="@+id/activity_company_btn_ok"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:background="@android:color/transparent"
+                    android:text="OK"
+                    android:textColor="@color/colorAccent"/>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

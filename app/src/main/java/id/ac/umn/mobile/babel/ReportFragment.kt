@@ -13,8 +13,8 @@ import android.widget.*
 //==================================================================================================
 // Report Fragment
 //==================================================================================================
-// Part of Main Activity (third tab), contain about report about item  ,
-// moreover, admin can also read about item report about item
+// Part of Main Activity (third tab), containing report about company, item, units, & users,
+// moreover, admin can also change company information and track activities involving third party.
 //--------------------------------------------------------------------------------------------------
 
 
@@ -37,6 +37,7 @@ class ReportFragment : Fragment() {
         val itemStorageTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_item_storage)
         val measureNumTV = activity.findViewById<TextView>(R.id.fragment_report_tv_measure_num)
         val unitNumTV = activity.findViewById<TextView>(R.id.fragment_report_tv_unit_num)
+        val unitMeasureTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_unit_measure)
         val userNumTV = activity.findViewById<TextView>(R.id.fragment_report_tv_user_num)
         val userRoleTL = activity.findViewById<TableLayout>(R.id.fragment_report_tl_user_role)
         val data = object : Data(){
@@ -71,6 +72,9 @@ class ReportFragment : Fragment() {
                     }
                     measureNumTV.text = unitsActive.distinctBy { it.measure }.size.toString()
                     unitNumTV.text = unitsActive.size.toString()
+                    unitsActive.distinctBy { it.measure }.forEach { measure ->
+                        tableRowAdd(unitMeasureTL, String.format("- %s", measure.measure), unitsActive.filter { it.measure == measure.measure }.size.toString())
+                    }
                     userNumTV.text = accountsActive.size.toString()
                     accountsActive.distinctBy { it.role }.forEach { acc ->
                         tableRowAdd(userRoleTL, String.format("- %s", acc.role), accountsActive.filter { it.role == acc.role }.size.toString())

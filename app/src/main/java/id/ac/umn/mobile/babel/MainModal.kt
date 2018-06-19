@@ -186,6 +186,10 @@ class MainModal : BottomSheetDialogFragment() {
                 val trackOutgoingBtn = v.findViewById<Button>(R.id.modal_main_report_btn_track_outgoing)
                 val outOfStockBtn = v.findViewById<Button>(R.id.modal_main_report_btn_out_of_stock)
                 if (privilege == "User") disableButton(editCompanyBtn)
+                editCompanyBtn.setOnClickListener{
+                    startActivity(Intent(activity, CompanyActivity::class.java))
+                    dismissAllowingStateLoss()
+                }
             }
             3 -> {
                 v = inflater.inflate(R.layout.modal_main_user, container, false)!!

@@ -139,16 +139,6 @@
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
                     </TableRow>
-                    <TableRow>
-                        <Button
-                            android:id="@+id/fragment_report_btn_comp_details"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:textColor="@color/colorAccent"
-                            android:text="@string/report_company_detail"/>
-                    </TableRow>
                 </TableLayout>
             </TableRow>
             <TableRow>
@@ -243,16 +233,6 @@
                             android:layout_marginStart="24dp">
                         </TableLayout>
                     </TableRow>
-                    <TableRow>
-                        <Button
-                            android:id="@+id/fragment_report_btn_item_details"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:textColor="@color/colorAccent"
-                            android:text="@string/report_item_item_detail"/>
-                    </TableRow>
                 </TableLayout>
             </TableRow>
             <TableRow>
@@ -271,7 +251,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
-                            android:text="Units"
+                            android:text="@string/report_unit_head"
                             android:textColor="@android:color/black"/>
                     </TableRow>
                     <TableRow>
@@ -286,7 +266,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Number of measures:"/>
+                            android:text="@string/report_unit_measure_num"/>
                         <TextView
                             android:id="@+id/fragment_report_tv_measure_num"
                             android:layout_weight="1"
@@ -302,7 +282,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Number of units:"/>
+                            android:text="@string/report_unit_unit_num"/>
                         <TextView
                             android:id="@+id/fragment_report_tv_unit_num"
                             android:layout_weight="1"
@@ -339,7 +319,7 @@
                             android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Users"
+                            android:text="@string/report_user_head"
                             android:textColor="@android:color/black"
                             android:textSize="24sp" />
                     </TableRow>
@@ -355,7 +335,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Number of users:"/>
+                            android:text="@string/report_user_user_num"/>
                         <TextView
                             android:id="@+id/fragment_report_tv_user_num"
                             android:layout_weight="1"
