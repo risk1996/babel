@@ -48,12 +48,10 @@ class UserFragment : Fragment() {
                     lastLoginTV.text = String.format("%1\$s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(lastLogin))
                     val acc = ArrayList<HashMap<String, String>>()
                     accountsActive.filter { it._id != user._id }.forEach {
-                        Toast.makeText(activity, "TEST 123", Toast.LENGTH_SHORT).show()
                         val hm = HashMap<String, String>()
                         hm["nameRole"] = String.format("%s (%s)", it.name, it.role)
                         val lastLogin = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(it.lastLogin)
                         hm["lastLogin"] = String.format("Last login: %s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(lastLogin))
-                        Toast.makeText(activity, SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(lastLogin), Toast.LENGTH_SHORT).show()
                         acc.add(hm)
                     }
                     otherUsersLV.adapter = SimpleAdapter(activity, acc, android.R.layout.simple_list_item_2, arrayOf("nameRole", "lastLogin"), intArrayOf(android.R.id.text1, android.R.id.text2))
