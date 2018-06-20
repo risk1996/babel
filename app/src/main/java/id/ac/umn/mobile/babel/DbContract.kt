@@ -6,6 +6,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 
 class Company   (val type: String, val typeShort: String, val name: String, val logo: String, val site: String, val officeMain: String, val officeSecondary: String)
@@ -14,7 +16,7 @@ class Unit      (val _id: Int, val status: String, val measure: String, val unit
 class Item      (val _id: Int, val status: String, val itemName: String, val stocks: List<Double>, val safetyStock: Double, val unitId: Int, val thumbnail: String)
 class Location  (val _id: Int, val status: String, val code: String, val position: String)
 class ThirdParty(val _id: Int, val status: String, val role: String, val tpName: String)
-class InOut     (val _id: Int, val inOutTime: String, val accountId: Int, val locationId: Int, val thirdPartyId: Int, val inOutDetail: List<Pair<Int, Double>>)
+class InOut     (val _id: Int, val inOutTime: Date, val accountId: Int, val locationId: Int, val thirdPartyId: Int, val inOutDetail: List<Pair<Int, Double>>)
 class FirebaseDb : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -110,14 +112,14 @@ abstract class Data{
                     ))
                 }
                 thirdPartiesActive = ArrayList(thirdPartiesAll.filter { it.status == "active" })
-                p0.child("transaction_header").children.forEach {
+                p0.child("inout").children.forEach {
                     transactions.add(InOut(
                             it.key.toInt(),
-                            it.child("io_time").value.toString(),
+                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(it.child("io_time").value.toString()),
                             it.child("account_id").value.toString().toInt(),
                             it.child("location_id").value.toString().toInt(),
                             it.child("third_party_id").value.toString().toInt(),
-                            it.child("io_detail").children.map { Pair(it.child("item_id").toString().toInt(), it.child("io_qty").toString().toDouble()) }
+                            it.child("io_detail").children.map { Pair(it.key.toInt(), it.value.toString().toDouble()) }
                     ))
                 }
                 try{ onComplete() }

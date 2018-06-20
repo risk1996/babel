@@ -38,7 +38,6 @@ class MainModal : BottomSheetDialogFragment() {
                     override fun onComplete() {
                         if (bool){
                             bool = false
-
                             val item = itemsActive.single { it._id==itemSpec[0] }
                             val unitFrom = unitsActive.single { it._id==item.unitId }
                             val unitTo = unitsActive.single { it._id==itemSpec[2] }
@@ -142,6 +141,7 @@ class MainModal : BottomSheetDialogFragment() {
                     if(act == "incoming") snack = "Activity did not change"
                     else activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("ACTION", "incoming").apply()
                     Snackbar.make(activity!!.findViewById(android.R.id.content), snack, Snackbar.LENGTH_LONG).show()
+                    activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("THIRD_PARTY", "0").apply()
                     dismissAllowingStateLoss()
                 }
                 outgoingBtn.setOnClickListener {
@@ -150,6 +150,7 @@ class MainModal : BottomSheetDialogFragment() {
                     if(act == "outgoing") snack = "Activity did not change"
                     else activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("ACTION", "outgoing").apply()
                     Snackbar.make(activity!!.findViewById(android.R.id.content), snack, Snackbar.LENGTH_LONG).show()
+                    activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("THIRD_PARTY", "0").apply()
                     dismissAllowingStateLoss()
                 }
                 addItemBtn.setOnClickListener {
@@ -188,6 +189,18 @@ class MainModal : BottomSheetDialogFragment() {
                 if (privilege == "User") disableButton(editCompanyBtn)
                 editCompanyBtn.setOnClickListener{
                     startActivity(Intent(activity, CompanyActivity::class.java))
+                    dismissAllowingStateLoss()
+                }
+                trackIncomingBtn.setOnClickListener {
+                    val intent = Intent(activity, TrackActivity::class.java)
+                    intent.putExtra("OPERATION", "INCOMING")
+                    startActivity(intent)
+                    dismissAllowingStateLoss()
+                }
+                trackOutgoingBtn.setOnClickListener {
+                    val intent = Intent(activity, TrackActivity::class.java)
+                    intent.putExtra("OPERATION", "OUTGOING")
+                    startActivity(intent)
                     dismissAllowingStateLoss()
                 }
             }

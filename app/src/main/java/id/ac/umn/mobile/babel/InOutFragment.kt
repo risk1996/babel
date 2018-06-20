@@ -32,9 +32,7 @@ class InOutFragment : Fragment() {
         val directionTV = activity.findViewById<TextView>(R.id.fragment_in_out_tv_direction)
         val purposeSpn = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose)
         val itemsRV = activity.findViewById<RecyclerView>(R.id.fragment_in_out_items_rv_items)
-
         val pref = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE)
-
         val data = object : Data(){override fun onComplete() {
             if(isAdded){
                 loadTransaction()
@@ -44,38 +42,22 @@ class InOutFragment : Fragment() {
                 directionTV.text = if(act == "incoming") "←" else "→"
                 purposeSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item,
                         thirdPartiesActive.filter { act=="incoming" && it.role=="S" || act=="outgoing" && it.role=="C" }.map { it.tpName })
-
                 locationsSpn.setSelection(pref.getString("LOCATION", "0").toInt())
                 purposeSpn.setSelection(pref.getString("THIRD_PARTY", "0").toInt())
-
-                locationsSpn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                val spinnerOnSelectedItemListener = object : AdapterView.OnItemSelectedListener{
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
-                        val pref2 = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
-                        val locationsID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations).selectedItemId.toString()
-                        val purposeID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose).selectedItemId.toString()
-                        pref2.putString("LOCATION", locationsID)
-                        pref2.putString("THIRD_PARTY", purposeID)
-                        pref2.apply()
-
+                        val prefEd = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
+                        val locationsID = locationsAll.single { it.code == activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations).selectedItem.toString() }._id.toString()
+                        val purposeID = thirdPartiesAll.single { it.tpName == activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose).selectedItem.toString() }._id.toString()
+                        prefEd.putString("LOCATION", locationsID)
+                        prefEd.putString("THIRD_PARTY", purposeID)
+                        prefEd.apply()
                         loadTransaction()
                     }
                 }
-                purposeSpn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
-                        val pref2 = activity.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit()
-                        val locationsID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_locations).selectedItemId.toString()
-                        val purposeID = activity.findViewById<Spinner>(R.id.fragment_in_out_spn_purpose).selectedItemId.toString()
-                        pref2.putString("LOCATION", locationsID)
-                        pref2.putString("THIRD_PARTY", purposeID)
-                        pref2.apply()
-
-                        loadTransaction()
-                    }
-                }
+                locationsSpn.onItemSelectedListener = spinnerOnSelectedItemListener
+                purposeSpn.onItemSelectedListener = spinnerOnSelectedItemListener
             }
         }}
         listener = SharedPreferences.OnSharedPreferenceChangeListener{ _, _ -> itemsRV.adapter.notifyDataSetChanged(); data.onComplete() }

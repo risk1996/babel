@@ -29,7 +29,8 @@
         <activity android:name=".LocationActivity" />
         <activity android:name=".ThirdPartyActivity" />
         <activity android:name=".UserActivity" />
-        <activity android:name=".CompanyActivity"></activity>
+        <activity android:name=".CompanyActivity" />
+        <activity android:name=".TrackActivity"></activity>
     </application>
 
 </manifest>

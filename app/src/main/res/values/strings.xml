@@ -117,6 +117,9 @@
     <!--Thumbnail Dialog-->
     <string name="thumbnail_title">Select Thumbnail</string>
 
+    <!--Track Activity-->
+    <string name="track_separator">-</string>
+
     <!--About Activity-->
     <string name="about_developers">Developers:</string>
     <string name="about_credits">Made Possible by:</string>
@@ -132,6 +135,12 @@
     <string name="item_stock">&lt;ITEM STOCK&gt;</string>
     <string name="item_location">&lt;ITEM LOCATION&gt;</string>
     <string name="report_placeholder">&lt;REPORT PLACEHOLDER&gt;</string>
+    <string name="track_start_date">&lt;START DATE&gt;</string>
+    <string name="track_end_date">&lt;END DATE&gt;</string>
+    <string name="track_activity_date">&lt;ACTIVITY DATE&gt;</string>
+    <string name="track_activity_location">&lt;ACTIVITY LOCATION&gt;</string>
+    <string name="track_activity_purpose">&lt;ACTIVITY PURPOSE&gt;</string>
+    <string name="track_activity_accountable">&lt;ACTIVITY ACCOUNTABLE&gt;</string>
     <string name="user_name">&lt;USERNAME&gt;</string>
     <string name="user_email">&lt;EMAIL&gt;</string>
     <string name="user_role">&lt;ROLE&gt;</string>

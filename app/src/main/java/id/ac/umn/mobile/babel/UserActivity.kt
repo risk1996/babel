@@ -74,7 +74,7 @@ class UserActivity : AppCompatActivity() {
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, month)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    dobTV!!.text = String.format("Date of birth: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(calendar.time))
+                    dobTV!!.text = String.format("DOB: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(calendar.time))
                 }
                 dobB.setOnClickListener { DatePickerDialog(this@UserActivity,
                         dateSetListener,
@@ -93,8 +93,8 @@ class UserActivity : AppCompatActivity() {
                     emailET.setText(user.email)
                     roleS.setSelection(availRoles.indexOf(user.role))
                     regDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(user.dob)
-                    dobTV.text = String.format("Date of birth: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(regDate))
-                } else dobTV.text = String.format("Date of birth: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(regDate))
+                    dobTV.text = String.format("DOB: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(regDate))
+                } else dobTV.text = String.format("DOB: %s", SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(regDate))
                 userNameET.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}

@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class UserFragment : Fragment() {
     var privilege : String = ""
@@ -30,7 +32,7 @@ class UserFragment : Fragment() {
         val changePassF = activity.findViewById<Button>(R.id.fragment_user_btn_change_password)
         val otherUsersTR = activity.findViewById<TableRow>(R.id.fragment_user_tr)
         val otherUsersV = activity.findViewById<View>(R.id.fragment_user_view)
-        val otherUsersLV : ListView = activity.findViewById(R.id.fragment_user_lv_other_users)
+        val otherUsersLV = activity.findViewById<ListView>(R.id.fragment_user_lv_other_users)
         val data = object : Data(){
             override fun onComplete() {
                 if(isAdded){
@@ -38,19 +40,23 @@ class UserFragment : Fragment() {
                     nameTV.text = user.name
                     emailTV.text = user.email
                     roleTV.text = user.role
-
                     val dob = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(user.dob)
                     dobTV.text = String.format("%1\$s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(dob))
-
                     val regDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(user.regDate)
                     regDateTV.text = String.format("%1\$s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(regDate))
-
                     val lastLogin = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(user.lastLogin)
                     lastLoginTV.text = String.format("%1\$s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(lastLogin))
-
-                    val acc = ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1)
-                    accountsActive.filter { it._id != user._id }.forEach {  acc.add(String.format("%s (%s)", it.name, it.role )) }
-                    otherUsersLV.adapter = acc
+                    val acc = ArrayList<HashMap<String, String>>()
+                    accountsActive.filter { it._id != user._id }.forEach {
+                        Toast.makeText(activity, "TEST 123", Toast.LENGTH_SHORT).show()
+                        val hm = HashMap<String, String>()
+                        hm["nameRole"] = String.format("%s (%s)", it.name, it.role)
+                        val lastLogin = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(it.lastLogin)
+                        hm["lastLogin"] = String.format("Last login: %s", SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(lastLogin))
+                        Toast.makeText(activity, SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault()).format(lastLogin), Toast.LENGTH_SHORT).show()
+                        acc.add(hm)
+                    }
+                    otherUsersLV.adapter = SimpleAdapter(activity, acc, android.R.layout.simple_list_item_2, arrayOf("nameRole", "lastLogin"), intArrayOf(android.R.id.text1, android.R.id.text2))
                     if((activity as MainActivity).privilege == "User"){
                         otherUsersTR.visibility = View.GONE
                         otherUsersV.visibility = View.GONE
