@@ -40,10 +40,10 @@ class InOutFragment : Fragment() {
                 locationsSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, locationsActive.map { it.code })
                 val act = pref.getString("ACTION","incoming")
                 directionTV.text = if(act == "incoming") "←" else "→"
-                purposeSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item,
-                        thirdPartiesActive.filter { act=="incoming" && it.role=="S" || act=="outgoing" && it.role=="C" }.map { it.tpName })
-                locationsSpn.setSelection(pref.getString("LOCATION", "0").toInt())
-                purposeSpn.setSelection(pref.getString("THIRD_PARTY", "0").toInt())
+                val availPurposes = thirdPartiesActive.filter { act=="incoming" && it.role=="S" || act=="outgoing" && it.role=="C" }
+                purposeSpn.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, availPurposes.map { it.tpName })
+                locationsSpn.setSelection(locationsActive.indexOf(locationsActive.single { it._id == pref.getString("LOCATION", locationsActive.first()._id.toString()).toInt() }))
+                purposeSpn.setSelection(availPurposes.indexOf(availPurposes.single { it._id == pref.getString("THIRD_PARTY", availPurposes.first()._id.toString()).toInt() }))
                 val spinnerOnSelectedItemListener = object : AdapterView.OnItemSelectedListener{
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

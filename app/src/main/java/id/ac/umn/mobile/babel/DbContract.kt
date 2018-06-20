@@ -65,6 +65,7 @@ abstract class Data{
                             it.child("last_login").value.toString()
                     ))
                 }
+                accountsAll.sortBy { it.name }
                 accountsActive = ArrayList(accountsAll.filter { it.status == "active" })
                 unitsAll.clear()
                 p0.child("units").children.forEach{
@@ -78,6 +79,7 @@ abstract class Data{
                             it.child("unit_thumbnail").value.toString()
                     ))
                 }
+                unitsAll.sortBy { it.measure }
                 unitsActive = ArrayList(unitsAll.filter { it.status == "active" })
                 itemsAll.clear()
                 p0.child("items").children.forEach{
@@ -91,6 +93,7 @@ abstract class Data{
                             it.child("item_thumbnail").value.toString()
                     ))
                 }
+                itemsAll.sortBy { it.itemName }
                 itemsActive = ArrayList(itemsAll.filter { it.status == "active" })
                 locationsAll.clear()
                 p0.child("locations").children.forEach {
@@ -101,6 +104,7 @@ abstract class Data{
                             it.child("position").value.toString()
                     ))
                 }
+                locationsAll.sortBy { it.code }
                 locationsActive = ArrayList(locationsAll.filter { it.status == "active" })
                 thirdPartiesAll.clear()
                 p0.child("third_parties").children.forEach {
@@ -111,6 +115,7 @@ abstract class Data{
                             it.child("tp_name").value.toString()
                     ))
                 }
+                thirdPartiesAll.sortBy { it.tpName }
                 thirdPartiesActive = ArrayList(thirdPartiesAll.filter { it.status == "active" })
                 p0.child("inout").children.forEach {
                     transactions.add(InOut(

@@ -137,20 +137,20 @@ class MainModal : BottomSheetDialogFragment() {
                 val commitBtn = v.findViewById<Button>(R.id.modal_main_in_out_btn_commit)
                 incomingBtn.setOnClickListener {
                     val act = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
+                    activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().remove("THIRD_PARTY").apply()
                     var snack = "Activity changed to incoming item(s)"
                     if(act == "incoming") snack = "Activity did not change"
                     else activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("ACTION", "incoming").apply()
                     Snackbar.make(activity!!.findViewById(android.R.id.content), snack, Snackbar.LENGTH_LONG).show()
-                    activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("THIRD_PARTY", "0").apply()
                     dismissAllowingStateLoss()
                 }
                 outgoingBtn.setOnClickListener {
                     val act = activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).getString("ACTION","incoming")
+                    activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().remove("THIRD_PARTY").apply()
                     var snack = "Activity changed to outgoing item(s)"
                     if(act == "outgoing") snack = "Activity did not change"
                     else activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("ACTION", "outgoing").apply()
                     Snackbar.make(activity!!.findViewById(android.R.id.content), snack, Snackbar.LENGTH_LONG).show()
-                    activity!!.getSharedPreferences("ACTIVE_TRANSACTION", Context.MODE_PRIVATE).edit().putString("THIRD_PARTY", "0").apply()
                     dismissAllowingStateLoss()
                 }
                 addItemBtn.setOnClickListener {

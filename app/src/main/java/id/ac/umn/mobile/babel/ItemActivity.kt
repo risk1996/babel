@@ -84,6 +84,7 @@ class ItemActivity : AppCompatActivity() {
                     itemThumbnailIB.setImageResource(R.drawable::class.java.getField(pref.getString("RESOURCE", "icons8_box_48").replace("_48","_96")).getInt(null))
                 }
                 getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).registerOnSharedPreferenceChangeListener(listener)
+                stockETs.add(safetyStockET)
                 val prefEd = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).edit()
                 if (act == "EDIT" || act == "VIEW") {
                     item!!; unit!!
@@ -93,8 +94,11 @@ class ItemActivity : AppCompatActivity() {
                     unitMeasureS.setSelection(availMeasure.indexOf(unit.measure))
                     safetyStockET.setText((item.safetyStock * unit.value).toString())
                     rawStock.add(item.safetyStock)
-                    stockETs.add(safetyStockET)
-                } else prefEd.putString("RESOURCE", "icons8_box_48")
+                } else {
+                    prefEd.putString("RESOURCE", "icons8_box_48")
+                    safetyStockET.setText("0.0")
+                    rawStock.add(0.0)
+                }
                 prefEd.apply()
                 itemThumbnailIB.setOnClickListener {
                     val dialog = ThumbnailDialog()
@@ -147,7 +151,6 @@ class ItemActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 okB.setOnClickListener{
                     when (act) {
                         "VIEW" -> {
