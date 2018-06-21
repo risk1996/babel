@@ -203,6 +203,12 @@ class MainModal : BottomSheetDialogFragment() {
                     startActivity(intent)
                     dismissAllowingStateLoss()
                 }
+                outOfStockBtn.setOnClickListener {
+                    val dialog = ListDialog()
+                    dialog.content = "OOS"
+                    dialog.show(activity!!.fragmentManager, dialog.tag)
+                    dismissAllowingStateLoss()
+                }
             }
             3 -> {
                 v = inflater.inflate(R.layout.modal_main_user, container, false)!!

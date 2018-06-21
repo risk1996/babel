@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import java.text.DecimalFormat
 
 //==================================================================================================
 // List Dialog
@@ -61,6 +62,36 @@ class ListDialog : DialogFragment() {
                      Snackbar.make( activity.findViewById(android.R.id.content), "Item has been added", Snackbar.LENGTH_LONG).show()
                      dismiss()
                  }
+            }
+
+            "OOS" -> {
+                headingTV.text = "OUT OF STOCK ITEMS"
+                operationsTR.visibility = View.GONE
+                val data = object : Data(){
+                    override fun onComplete() {
+                        val term = searchACTV.text.toString().toLowerCase().replace(" ", ".*?").toRegex()
+                        var oosItems = ArrayList<HashMap<String, String>>()
+                        val availItems = ArrayList(itemsActive.filter { item -> item.stocks.any { it < item.safetyStock } }.filter { it.itemName.toLowerCase().contains(term) })
+                        availItems.forEach { item ->
+                            val unit = unitsAll.single { it._id == item.unitId }
+                            val hm = HashMap<String, String>()
+                            hm["itemName"] = item.itemName
+                            var oosLoc = ""
+                            val dec = DecimalFormat("0.##")
+                            item.stocks.forEachIndexed { index, d ->
+                                if(d < item.safetyStock) oosLoc += String.format(", %s (%s/%s %s)", locationsAll[index].code, dec.format(d/unit.value), dec.format(item.safetyStock/unit.value), unit.unitName)
+                            }
+                            hm["oosLoc"] = oosLoc.drop(2)
+                            oosItems.add(hm)
+                        }
+                        itemsLV.adapter = SimpleAdapter(activity, oosItems, android.R.layout.simple_list_item_2, arrayOf("itemName", "oosLoc"), intArrayOf(android.R.id.text1, android.R.id.text2))
+                    }
+                }
+                searchACTV.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(p0: Editable?) {}
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { data.onComplete() }
+                })
             }
 
             "ITEM" -> {
