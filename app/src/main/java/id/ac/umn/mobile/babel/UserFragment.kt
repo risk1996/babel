@@ -68,7 +68,7 @@ class UserFragment : Fragment() {
             dialog.show(fragmentManager, dialog.tag)
         }
         otherUsersLV.setOnItemClickListener { parent, view, position, id ->
-            val user = data.accountsAll.single { String.format("%s (%s)", it.name, it.role)== otherUsersLV.getItemAtPosition(position).toString() }
+            val user = data.accountsAll.single { String.format("%s (%s)", it.name, it.role) == otherUsersLV.getItemAtPosition(position).toString().substringBefore(", lastLogin=").substringAfter("{nameRole=") }
             val intent = Intent(activity, UserActivity::class.java)
             intent.putExtra("OPERATION", "EDIT")
             intent.putExtra("USER_ID", user._id)
