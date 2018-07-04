@@ -108,7 +108,7 @@ class UnitActivity : AppCompatActivity() {
                 }) }
 
                 okB.setOnClickListener{
-                    if (unitsAll.firstOrNull { it.unitName.toLowerCase() == unitNameET.text.toString().toLowerCase() } != null){
+                    if (act == "NEW" && unitsAll.firstOrNull { it.unitName.toLowerCase() == unitNameET.text.toString().toLowerCase() } != null){
                         errorsTV.visibility = View.VISIBLE
                         errorsTV.text = String.format("Unit Name already exists in another Unit Measurement")
                     }

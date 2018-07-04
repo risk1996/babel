@@ -60,7 +60,7 @@ class ThirdPartyActivity : AppCompatActivity() {
                     }
                 })
                 okB.setOnClickListener {
-                    if (thirdPartiesAll.firstOrNull { it.tpName.toLowerCase() == thirdPartyNameET.text.toString().toLowerCase() } != null && act == "NEW"){
+                    if (act == "NEW" && thirdPartiesAll.firstOrNull { it.tpName.toLowerCase() == thirdPartyNameET.text.toString().toLowerCase() } != null){
                         errorsTV.visibility = View.VISIBLE
                         errorsTV.text = "Third Party Name already exists"
                     }
