@@ -128,11 +128,11 @@ class UnitActivity : AppCompatActivity() {
                         changedUnit["unit_thumbnail"] = getSharedPreferences("THUMBNAIL", Context.MODE_PRIVATE).getString("RESOURCE", "icons8_package_24")
                         changedUnit["val"] = unitValueET.text.toString()
                         val unitId = if (unitsAll.distinctBy { it.measure }.singleOrNull { unitMeasureACTV.text.toString().toLowerCase() == it.measure.toLowerCase() } == null){
-                            unitsAll.last()._id / 100 * 100 + 101
+                            unitsAll.maxBy { it._id }!!._id / 100 * 100 + 101
                         }
                         else {
                             if ( unitsAll.singleOrNull { unitNameET.text.toString().toLowerCase() == it.unitName.toLowerCase() } == null){
-                                unitsAll.last { unitMeasureACTV.text.toString().toLowerCase() == it.measure.toLowerCase() }._id + 1
+                                unitsAll.filter { unitMeasureACTV.text.toString().toLowerCase() == it.measure.toLowerCase() }.maxBy { it._id }!!._id + 1
                             }
                             else unit!!._id
                         }

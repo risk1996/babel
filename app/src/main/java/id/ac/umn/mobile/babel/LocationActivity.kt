@@ -85,7 +85,7 @@ class LocationActivity : AppCompatActivity() {
                         changedLoc["code"] = locationCodeET.text.toString()
                         changedLoc["status"] = if(activeSW.isChecked) "active" else "inactive"
                         changedLoc["position"] = locationNameET.text.toString()
-                        val itemId = if (act == "NEW") locationsAll.last()._id + 1 else location!!._id
+                        val itemId = if (act == "NEW") locationsAll.count() else location!!._id
                         db.child(itemId.toString()).setValue(changedLoc)
 
                         if (act == "NEW"){

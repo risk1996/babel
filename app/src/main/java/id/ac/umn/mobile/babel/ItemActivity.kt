@@ -168,7 +168,7 @@ class ItemActivity : AppCompatActivity() {
                             changedItem["safety_stock"] = rawStock[0].toString()
                             changedItem["stocks"] = rawStock.drop(1).map { it.toString() }
                             changedItem["unit_id"] = unit!!._id.toString()
-                            val itemId = if (act == "NEW") itemsAll.last()._id + 1 else item!!._id
+                            val itemId = if (act == "NEW") itemsAll.count() else item!!._id
                             db.child(itemId.toString()).setValue(changedItem)
                         }
                     }

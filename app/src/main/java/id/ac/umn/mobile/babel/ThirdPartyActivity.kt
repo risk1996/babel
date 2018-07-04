@@ -70,8 +70,8 @@ class ThirdPartyActivity : AppCompatActivity() {
                         changedTp["role"] = findViewById<RadioButton>(roleRG.checkedRadioButtonId).text.toString().substring(0,1)
                         changedTp["status"] = if(activeSW.isChecked) "active" else "inactive"
                         changedTp["tp_name"] = thirdPartyNameET.text.toString()
-                        val itemId = if (act == "NEW") thirdPartiesAll.last()._id + 1 else thirdParty!!._id
-                        db.child(itemId.toString()).setValue(changedTp)
+                        val thirdPartyId = if (act == "NEW") thirdPartiesAll.count() else thirdParty!!._id
+                        db.child(thirdPartyId.toString()).setValue(changedTp)
                         finish()
                     }
                 }

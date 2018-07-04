@@ -143,15 +143,15 @@ class UserActivity : AppCompatActivity() {
                         val changedUser = mutableMapOf<String, Any>()
                         changedUser["dob"] = String.format("%s", SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(regDate))
                         changedUser["email"] = emailET.text.toString()
-                        changedUser["last_login"] = if (act == "NEW") "" else user!!.lastLogin
+                        changedUser["last_login"] = if (act == "NEW") SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()) else user!!.lastLogin
                         changedUser["name"] = userNameET.text.toString()
                         changedUser["password"] = Hex.bytesToStringLowercase(MessageDigest.getInstance("SHA-256").digest((passwordET.text.toString() + salt).toByteArray()))
                         changedUser["reg_date"] = if (act == "NEW") SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()) else user!!.regDate
                         changedUser["role"] = roleS.selectedItem.toString()
                         changedUser["salt"] = salt
                         changedUser["status"] = if (inactiveSW.isChecked) "active" else "inactive"
-                        val itemId = if (act == "NEW") accountsAll.last()._id + 1 else user!!._id
-                        db.child(itemId.toString()).setValue(changedUser)
+                        val userId = if (act == "NEW") accountsAll.count() else user!!._id
+                        db.child(userId.toString()).setValue(changedUser)
                         finish()
                     }
                 }
